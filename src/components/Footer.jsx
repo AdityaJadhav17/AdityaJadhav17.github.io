@@ -1,4 +1,6 @@
 import './Footer.css'
+import { FaGithub, FaLinkedin } from "react-icons/fa"
+import { MdEmail } from "react-icons/md"
 
 const Footer = () => {
   const currentYear = new Date().getFullYear()
@@ -6,28 +8,28 @@ const Footer = () => {
   const socialLinks = [
     {
       name: 'GitHub',
-      url: 'https://github.com/yourusername',
-      icon: '📂',
+      url: 'https://github.com/AdityaJadhav17',
+      icon: <FaGithub />,
       label: 'GitHub Profile'
     },
     {
       name: 'LinkedIn',
-      url: 'https://linkedin.com/in/yourusername',
-      icon: '💼',
+      url: 'https://www.linkedin.com/in/aditya-jadhav-06484123a/',
+      icon: <FaLinkedin />,
       label: 'LinkedIn Profile'
     },
     {
       name: 'Email',
-      url: 'mailto:aditya.jadhav@example.com',
-      icon: '📧',
+      url: 'mailto:aditya.jadhav7910@gmail.com',
+      icon: <MdEmail />,
       label: 'Send Email'
-    },
-    {
+    }
+    /*{
       name: 'Twitter',
       url: 'https://twitter.com/yourusername',
-      icon: '🐦',
+      icon: <FaTwitter />,
       label: 'Twitter Profile'
-    }
+    }*/
   ]
 
   return (
@@ -89,4 +91,4 @@ const Footer = () => {
   )
 }
 
-export default Footer 
+export default Footer
