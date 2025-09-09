@@ -6,6 +6,7 @@
 .resume-content {
   max-width: 1000px;
   margin: 0 auto;
+  padding: 0 1.5rem; /* ADDED: breathing room on large screens */
 }
 
 .resume-info {
@@ -34,6 +35,16 @@
   gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+/* CHANGED: CTA emphasis */
+.resume-actions .btn-primary {
+  background-color: var(--primary-color);
+  border: none;
+}
+
+.resume-actions .btn-primary:hover {
+  background-color: var(--accent-color);
 }
 
 .resume-embed {
@@ -81,6 +92,13 @@
   min-height: 600px;
 }
 
+/* ADDED: Hide embedded viewer on mobile */
+@media (max-width: 768px) {
+  .resume-embed {
+    display: none;
+  }
+}
+
 .resume-highlights {
   margin-top: 3rem;
 }
@@ -110,6 +128,13 @@
 .highlight-item:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* ADDED: icon animation */
+.highlight-item:hover .highlight-icon {
+  color: var(--primary-color);
+  transform: scale(1.05);
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .highlight-icon {
@@ -212,4 +237,4 @@
   .highlight-item p {
     font-size: 0.85rem;
   }
-} 
+}
