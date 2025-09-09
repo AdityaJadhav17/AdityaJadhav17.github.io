@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import './Contact.css'
+import { MdEmail, MdLocationOn } from 'react-icons/md'
+import { FaBriefcase } from 'react-icons/fa'
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +11,7 @@ const Contact = () => {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
+  const [showError, setShowError] = useState(false) // CHANGED: error state
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -21,19 +24,30 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setShowError(false)
 
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    try {
+      // CHANGED: send form data to Formspree
+      const res = await fetch("https://formspree.io/f/xblawgak", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      })
 
-    // Here you would typically send the form data to your backend
-    console.log('Form submitted:', formData)
+      if (!res.ok) throw new Error("Form submission failed")
+
+      setShowSuccess(true)
+      setFormData({ name: '', email: '', message: '' })
+      setTimeout(() => setShowSuccess(false), 5000)
+
+    } catch (err) {
+      console.error(err)
+      setShowError(true) // CHANGED: show error
+    }
 
     setIsSubmitting(false)
-    setShowSuccess(true)
-    setFormData({ name: '', email: '', message: '' })
-
-    // Hide success message after 5 seconds
-    setTimeout(() => setShowSuccess(false), 5000)
   }
 
   return (
@@ -52,23 +66,27 @@ const Contact = () => {
             
             <div className="contact-details">
               <div className="contact-item">
-                <span className="contact-icon">📧</span>
+                <span className="contact-icon"><MdEmail /></span>
                 <div>
                   <h4>Email</h4>
-                  <p>aditya.jadhav@example.com</p>
+                  <p>
+                    <a href="mailto:aditya.jadhav7910@gmail.com">
+                      aditya.jadhav7910@gmail.com
+                    </a>
+                  </p>
                 </div>
               </div>
-              
+
               <div className="contact-item">
-                <span className="contact-icon">📍</span>
+                <span className="contact-icon"><MdLocationOn /></span>
                 <div>
                   <h4>Location</h4>
                   <p>San Diego, CA</p>
                 </div>
               </div>
-              
+
               <div className="contact-item">
-                <span className="contact-icon">💼</span>
+                <span className="contact-icon"><FaBriefcase /></span>
                 <div>
                   <h4>Available For</h4>
                   <p>Internships, Projects, Collaborations</p>
@@ -133,6 +151,13 @@ const Contact = () => {
                 <p>Thank you for your message! I'll get back to you soon.</p>
               </div>
             )}
+
+            {showError && ( // CHANGED: error feedback
+              <div className="error-message">
+                <span>❌</span>
+                <p>Oops! Something went wrong. Please try again later.</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -140,4 +165,4 @@ const Contact = () => {
   )
 }
 
-export default Contact 
+export default Contact
