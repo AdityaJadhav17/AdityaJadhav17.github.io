@@ -74,7 +74,7 @@ const Footer = () => {
         <div className="footer-bottom">
           <div className="footer-info">
             <p>&copy; {currentYear} Aditya Jadhav. All rights reserved.</p>
-            <p>Built with React & ❤️</p>
+            <p>Built with React</p>
           </div>
           
           <div className="footer-actions">
