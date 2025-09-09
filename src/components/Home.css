@@ -30,32 +30,33 @@
 
 .profile-image {
   flex-shrink: 0;
+  position: relative;
 }
 
-.profile-placeholder {
+/* ✅ Updated: real profile photo */
+.profile-photo {
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 3rem;
+  object-fit: cover;
+  display: block;
   box-shadow: var(--shadow);
   transition: var(--transition);
+  border: 4px solid transparent;
+  background-image: linear-gradient(var(--bg-color), var(--bg-color)), 
+    linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  background-origin: border-box;
+  background-clip: content-box, border-box;
 }
 
-.profile-placeholder:hover {
+.profile-photo:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
-.profile-placeholder p {
-  font-size: 0.8rem;
-  margin-top: 0.5rem;
-  text-align: center;
+/* ❌ Remove placeholder entirely */
+.profile-placeholder {
+  display: none;
 }
 
 .hero-text {
@@ -161,10 +162,9 @@
     gap: 1.5rem;
   }
 
-  .profile-placeholder {
+  .profile-photo {
     width: 150px;
     height: 150px;
-    font-size: 2rem;
   }
 
   .hero-title {
@@ -198,9 +198,8 @@
     font-size: 1rem;
   }
 
-  .profile-placeholder {
+  .profile-photo {
     width: 120px;
     height: 120px;
-    font-size: 1.5rem;
   }
-} 
+}
