@@ -157,6 +157,27 @@
   font-weight: 500;
 }
 
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: #f8d7da; /* light red */
+  color: #721c24;            /* dark red text */
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  animation: slideIn 0.3s ease-out;
+}
+
+.error-message span {
+  font-size: 1.2rem;
+}
+
+.error-message p {
+  margin: 0;
+  font-weight: 500;
+}
+
 @keyframes slideIn {
   from {
     opacity: 0;
