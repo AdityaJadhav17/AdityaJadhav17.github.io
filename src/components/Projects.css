@@ -55,9 +55,9 @@
 .project-image img {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* Keeps full image visible */
-  border-radius: 8px;
+  object-fit: cover;
 }
+
 
 .project-content {
   padding: 1.5rem;
