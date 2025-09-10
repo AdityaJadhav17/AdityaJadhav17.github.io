@@ -33,8 +33,8 @@ const Projects = () => {
         'CNN-based image classifier for bird species from forest imagery. Includes data cleaning, augmentation, and evaluation.',
       image: '/bird-classifier.png',
       tech: ['Python', 'PyTorch', 'OpenCV'],
-      github: 'https://github.com/YOUR_USERNAME/bird-forest-classifier',
-      demo: 'https://youtu.be/YOUR_YOUTUBE_ID_BIRD', // unlisted YouTube
+      github: 'https://github.com/AdityaJadhav17/bird-classifier-forest',
+      demo: null, 
       featured: false
     },
     {
@@ -45,7 +45,7 @@ const Projects = () => {
       image: '/tictactoe-cpp.png',
       tech: ['C++', 'STL', 'OOP'],
       github: 'https://github.com/AdityaJadhav17/CS1B-SU24/tree/main/assignments/a02-tic-tac-toe',
-      demo: 'https://youtu.be/BMScGt6v5dc', // unlisted YouTube
+      demo: 'https://youtu.be/BMScGt6v5dc', 
       featured: false
     },
     {
@@ -55,8 +55,8 @@ const Projects = () => {
         'Deployed a conversational AI using IBM Cloud Watson services. Intent design, context handling, and deployment. Demo only.',
       image: '/ibm-chat.png',
       tech: ['IBM Cloud', 'Watson Assistant', 'Node.js'],
-      github: null, // no repo
-      demo: 'https://youtu.be/9sRefMjn5Es', // unlisted YouTube
+      github: null, 
+      demo: 'https://youtu.be/9sRefMjn5Es', 
       featured: false
     }
   ]
