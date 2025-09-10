@@ -1,8 +1,8 @@
 import './Home.css'
 
 const Home = () => {
-  // CHANGED: Use a public-file path for your photo (put the image in /public)
-  const profileSrc = "/aditya-profile.jpeg" // e.g., /public/aditya-profile.jpg
+
+  const profileSrc = "/aditya-profile.jpeg" 
 
   return (
     <section id="home" className="home">
@@ -10,11 +10,10 @@ const Home = () => {
         <div className="home-content">
           <div className="profile-section">
             <div className="profile-image">
-              {/* CHANGED: replaced placeholder with your real profile picture */}
               <img
                 src={profileSrc}
                 alt="Aditya Jadhav headshot"
-                className="profile-photo" // CHANGED
+                className="profile-photo"
                 loading="eager"
                 width={200}
                 height={200}
@@ -26,12 +25,10 @@ const Home = () => {
                 Hi, I'm <span className="highlight">Aditya Jadhav</span>
               </h1>
 
-              {/* CHANGED: new subtitle with anticipated graduation */}
               <h2 className="hero-subtitle">
-                B.S. Computer Science @ UC San Diego (Anticipated June 2027)
+                Web Development Intern at NutrifitWorld
               </h2>
 
-              {/* CHANGED: sharper positioning — AI/ML + Cloud/Security + experience */}
               <p className="hero-description">
                 Aspiring <strong>AI/ML</strong> engineer with interests in <strong>Cloud</strong> and <strong>Security</strong>. 
                 Experience in modern <strong>web development</strong>, <strong>AI-powered</strong> applications, and <strong>cybersecurity</strong> projects.
@@ -52,7 +49,7 @@ const Home = () => {
                     document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })
                   }
                 >
-                  Contact Me {/* CHANGED: clearer CTA text */}
+                  Contact Me
                 </button>
               </div>
             </div>
