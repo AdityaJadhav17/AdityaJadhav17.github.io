@@ -1,65 +1,62 @@
 import './Projects.css'
+import { FaGithub, FaYoutube } from "react-icons/fa";
+import { FiExternalLink } from "react-icons/fi";
 
 const Projects = () => {
   const projects = [
     {
-      id: 1,
-      title: "Portfolio Website",
-      description: "A modern, responsive portfolio website built with React and CSS. Features smooth scrolling navigation, dark mode toggle, and contact form functionality.",
-      image: "/project-placeholder.jpg", // Replace with actual project image
-      tech: ["React", "JavaScript", "CSS", "HTML"],
-      github: "https://github.com/yourusername/portfolio",
-      demo: "https://your-portfolio-demo.com",
+      id: 'portfolio',
+      title: 'Portfolio Website',
+      description:
+        'A modern, responsive portfolio built with React and CSS. Smooth scrolling, dark mode, and a contact form.',
+      image: '/thumb-portfolio.png',
+      tech: ['React', 'JavaScript', 'CSS'],
+      github: 'https://github.com/AdityaJadhav17/AdityaJadhav17.github.io',
+      demo: null, 
       featured: true
     },
     {
-      id: 2,
-      title: "Task Management App",
-      description: "A full-stack task management application with user authentication, CRUD operations, and real-time updates.",
-      image: "/project-placeholder.jpg", // Replace with actual project image
-      tech: ["React", "Node.js", "MongoDB", "Express"],
-      github: "https://github.com/yourusername/task-app",
-      demo: "https://task-app-demo.com",
+      id: 'sim2real',
+      title: 'Synthetic-to-Real Object Detection',
+      description:
+        'Kaggle competition: object detection pipeline trained on synthetic soup-can images to generalize to real-world photos. Final LB: 0.9175 (public) / 0.90738 (private).',
+      image: '/thumb-sim2real.png',
+      tech: ['Python', 'PyTorch', 'YOLOv8', 'Albumentations'],
+      github: 'https://github.com/AdityaJadhav17/Synthetic-to-Real-Object-Detection',
+      demo: 'https://www.kaggle.com/competitions/synthetic-2-real-object-detection-challenge',
       featured: true
     },
     {
-      id: 3,
-      title: "Weather Dashboard",
-      description: "A weather application that displays current weather conditions and forecasts using external APIs.",
-      image: "/project-placeholder.jpg", // Replace with actual project image
-      tech: ["JavaScript", "HTML", "CSS", "Weather API"],
-      github: "https://github.com/yourusername/weather-app",
-      demo: "https://weather-app-demo.com",
+      id: 'bird-classifier',
+      title: 'Bird Classifier in a Forest',
+      description:
+        'CNN-based image classifier for bird species from forest imagery. Includes data cleaning, augmentation, and evaluation.',
+      image: '/thumb-bird-classifier.png',
+      tech: ['Python', 'PyTorch', 'OpenCV'],
+      github: 'https://github.com/YOUR_USERNAME/bird-forest-classifier',
+      demo: 'https://youtu.be/YOUR_YOUTUBE_ID_BIRD', // unlisted YouTube
       featured: false
     },
     {
-      id: 4,
-      title: "E-commerce Platform",
-      description: "A complete e-commerce solution with product catalog, shopping cart, and payment integration.",
-      image: "/project-placeholder.jpg", // Replace with actual project image
-      tech: ["React", "Node.js", "Stripe", "PostgreSQL"],
-      github: "https://github.com/yourusername/ecommerce",
-      demo: "https://ecommerce-demo.com",
-      featured: true
-    },
-    {
-      id: 5,
-      title: "Chat Application",
-      description: "Real-time chat application with user authentication, message history, and file sharing capabilities.",
-      image: "/project-placeholder.jpg", // Replace with actual project image
-      tech: ["React", "Socket.io", "Node.js", "MongoDB"],
-      github: "https://github.com/yourusername/chat-app",
-      demo: "https://chat-app-demo.com",
+      id: 'tictactoe-cpp',
+      title: 'Tic Tac Toe (C++)',
+      description:
+        'CLI game with clean OOP design, board evaluation, and replay support. Includes a demo video.',
+      image: '/thumb-tictactoe-cpp.png',
+      tech: ['C++', 'STL', 'OOP'],
+      github: 'https://github.com/AdityaJadhav17/CS1B-SU24/tree/main/assignments/a02-tic-tac-toe',
+      demo: 'https://youtu.be/YOUR_YOUTUBE_ID_TICTACTOE', // unlisted YouTube
       featured: false
     },
     {
-      id: 6,
-      title: "Data Visualization Tool",
-      description: "Interactive data visualization dashboard for analyzing and presenting complex datasets.",
-      image: "/project-placeholder.jpg", // Replace with actual project image
-      tech: ["React", "D3.js", "Python", "Pandas"],
-      github: "https://github.com/yourusername/data-viz",
-      demo: "https://data-viz-demo.com",
+      id: 'ibm-chat',
+      title: 'AI Chat Assistant (IBM Cloud)',
+      description:
+        'Deployed a conversational AI using IBM Cloud Watson services. Intent design, context handling, and deployment. Demo only.',
+      image: '/thumb-ibm-chat.png',
+      tech: ['IBM Cloud', 'Watson Assistant', 'Node.js'],
+      github: null, // no repo
+      demo: 'https://youtu.be/9sRefMjn5Es', // unlisted YouTube
       featured: false
     }
   ]
@@ -68,47 +65,66 @@ const Projects = () => {
     <section id="projects" className="projects">
       <div className="container">
         <h2 className="section-title">My Projects</h2>
-        
+
         <div className="projects-grid">
           {projects.map((project) => (
-            <div key={project.id} className={`project-card ${project.featured ? 'featured' : ''}`}>
+            <div
+              key={project.id}
+              className={`project-card ${project.featured ? 'featured' : ''}`}
+            >
               <div className="project-image">
-                {/* Replace with actual project images */}
-                <div className="project-placeholder">
-                  <span>📱</span>
-                  <p>Project Screenshot</p>
-                </div>
+                {project.image ? (
+                  <img
+                    src={project.image}
+                    alt={`${project.title} screenshot`}
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none'
+                    }}
+                  />
+                ) : (
+                  <div className="project-placeholder">
+                    <span>📱</span>
+                    <p>Project Screenshot</p>
+                  </div>
+                )}
               </div>
-              
+
               <div className="project-content">
                 <h3 className="project-title">{project.title}</h3>
                 <p className="project-description">{project.description}</p>
-                
+
                 <div className="project-tech">
-                  {project.tech.map((tech, index) => (
-                    <span key={index} className="tech-tag">
-                      {tech}
-                    </span>
+                  {project.tech.map((t) => (
+                    <span key={t} className="tech-tag">{t}</span>
                   ))}
                 </div>
-                
+
                 <div className="project-links">
-                  <a 
-                    href={project.github} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="project-link github"
-                  >
-                    <span>📂</span> GitHub
-                  </a>
-                  <a 
-                    href={project.demo} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="project-link demo"
-                  >
-                    <span>🌐</span> Live Demo
-                  </a>
+                  {project.github && (
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="project-link github"
+                    >
+                      <FaGithub /> GitHub
+                    </a>
+                  )}
+                  {project.demo && (
+                    <a
+                      href={project.demo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="project-link demo"
+                    >
+                      {project.demo.includes("youtu") ? (
+                        <FaYoutube />
+                      ) : (
+                        <FiExternalLink />
+                      )}{" "}
+                      Live Demo
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
@@ -119,4 +135,4 @@ const Projects = () => {
   )
 }
 
-export default Projects 
+export default Projects
