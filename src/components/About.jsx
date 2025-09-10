@@ -2,13 +2,14 @@ import './About.css'
 
 const About = () => {
   const technicalSkills = [
-    'JavaScript', 'React', 'Node.js', 'Python', 'Java', 'HTML/CSS',
-    'Git', 'SQL', 'MongoDB', 'REST APIs', 'TypeScript', 'Next.js'
+    'Python', 'C++', 'Java', 'JavaScript', 'React', 'HTML/CSS',
+    'PyTorch', 'TensorFlow', 'NumPy', 'FastAI', 'OpenCV', 'YOLOv8',
+    'Node.js', 'SQL', 'Git', 'Cloud Platforms (IBM, AWS)'
   ]
 
   const softSkills = [
-    'Problem Solving', 'Team Collaboration', 'Communication', 'Time Management',
-    'Adaptability', 'Critical Thinking', 'Leadership', 'Project Management'
+    'Problem Solving', 'Team Collaboration', 'Leadership',
+    'Communication', 'Adaptability', 'Critical Thinking', 'Creativity'
   ]
 
   return (
@@ -19,18 +20,25 @@ const About = () => {
         <div className="about-content">
           <div className="about-text">
             <h3>Background</h3>
-            <p>
-              I'm a junior Computer Science student with a passion for technology and innovation. 
-              My journey in tech began with curiosity about how things work, which led me to pursue 
-              a degree in Computer Science. I enjoy tackling complex problems and turning ideas into 
-              reality through code.
-            </p>
-            
-            <p>
-              Currently, I'm focused on expanding my knowledge in software development, 
-              learning new technologies, and building projects that make a difference. 
-              I believe in continuous learning and staying updated with the latest industry trends.
-            </p>
+              <p>
+                I’ve always been curious about how things work, and that curiosity naturally pulled me
+                into tech. Over the last couple of years, I’ve gone from experimenting with small coding
+                projects to building full AI pipelines, interactive web apps, and even leading workshops
+                for other students.
+              </p>
+  
+              <p>
+                A big part of my journey has been learning by doing—whether it was training a bird
+                classifier on thousands of rainforest images, creating a responsive portfolio site,
+                or running my college AI Club. Each project taught me something new and pushed me
+                to take on bigger challenges.
+              </p>
+
+              <p>
+                What excites me most now is finding ways to use AI/ML and software development to
+                solve real problems. I enjoy collaborating with others, sharing ideas, and building
+                things that make an impact, while always staying open to learning something new.
+              </p>
           </div>
 
           <div className="skills-section">
@@ -60,8 +68,8 @@ const About = () => {
           <div className="education-section">
             <h3>Education</h3>
             <div className="education-item">
-              <h4>Bachelor of Science in Computer Science</h4>
-              <p>Currently pursuing my degree with focus on software engineering and web development</p>
+              <h4>Bachelor of Science in Computer Science at UC San Diego</h4>
+              <p>Currently pursuing my degree with focus on software engineering, AI/ML, and cloud systems and security.</p>
             </div>
           </div>
         </div>
@@ -70,4 +78,4 @@ const About = () => {
   )
 }
 
-export default About 
+export default About
