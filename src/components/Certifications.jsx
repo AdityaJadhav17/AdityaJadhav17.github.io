@@ -4,58 +4,48 @@ const Certifications = () => {
   const certifications = [
     {
       id: 1,
-      name: "AWS Certified Cloud Practitioner",
-      issuer: "Amazon Web Services",
-      year: "2024",
-      badge: "https://images.credly.com/size/680x680/images/00634f82-b07f-4bbd-a6bb-53de397fc3a6/image.png",
-      credentialId: "ABC123456",
-      validUntil: "2027"
+      name: "Code Generation and Optimization Using IBM Granite",
+      issuer: "IBM SkillsBuild",
+      year: "2025",
+      badge: "/certs/code-generation-ibm.pdf", // local PDF
+      link: "/certs/code-generation-ibm.pdf",
+      verify: "https://www.credly.com/badges/b414adea-8ca1-45f2-adbe-7feb64c95470/public_url"
     },
     {
       id: 2,
-      name: "Google Cloud Platform Fundamentals",
-      issuer: "Google Cloud",
-      year: "2024",
-      badge: "https://images.credly.com/size/680x680/images/be8fcaeb-c769-4858-b567-ffaaa73ce8d9/image.png",
-      credentialId: "GCP789012",
-      validUntil: "2026"
+      name: "Cybersecurity Fundamentals",
+      issuer: "IBM SkillsBuild",
+      year: "2025",
+      badge: "/certs/cybersecurity-fundamentals.pdf", // local PDF
+      link: "/certs/cybersecurity-fundamentals.pdf",
+      verify: "https://www.credly.com/badges/507ef381-fd3b-4fd3-ad51-73a4b833382b/public_url"
     },
     {
       id: 3,
-      name: "Microsoft Azure Fundamentals",
-      issuer: "Microsoft",
-      year: "2023",
-      badge: "https://images.credly.com/size/680x680/images/be8fcaeb-c769-4858-b567-ffaaa73ce8d9/image.png",
-      credentialId: "AZURE345678",
-      validUntil: "2026"
+      name: "Data Classification and Summarization Using IBM Granite",
+      issuer: "IBM SkillsBuild",
+      year: "2025",
+      badge: "/certs/data-classification-ibm.pdf", // local PDF
+      link: "/certs/data-classification-ibm.pdf",
+      verify: "https://www.credly.com/badges/c4c60ccc-efec-4752-8cbf-dee061d4f490/public_url"
     },
-    {
-      id: 4,
-      name: "React Developer Certification",
-      issuer: "Meta",
-      year: "2024",
-      badge: "https://images.credly.com/size/680x680/images/be8fcaeb-c769-4858-b567-ffaaa73ce8d9/image.png",
-      credentialId: "REACT901234",
-      validUntil: "2027"
-    },
-    {
-      id: 5,
-      name: "Python Programming Certification",
-      issuer: "Coursera",
-      year: "2023",
-      badge: null,
-      credentialId: "PYTHON567890",
-      validUntil: "2026"
-    },
-    {
-      id: 6,
-      name: "Data Science Professional",
-      issuer: "IBM",
-      year: "2024",
-      badge: "https://images.credly.com/size/680x680/images/be8fcaeb-c769-4858-b567-ffaaa73ce8d9/image.png",
-      credentialId: "DS123456",
-      validUntil: "2027"
-    }
+
+    // Commented out unused certs
+    // {
+    //   id: 4,
+    //   name: "AWS Certified Cloud Practitioner",
+    //   ...
+    // },
+    // {
+    //   id: 5,
+    //   name: "Google Cloud Platform Fundamentals",
+    //   ...
+    // },
+    // {
+    //   id: 6,
+    //   name: "Microsoft Azure Fundamentals",
+    //   ...
+    // }
   ]
 
   return (
@@ -67,21 +57,6 @@ const Certifications = () => {
           {certifications.map((cert) => (
             <div key={cert.id} className="certification-card">
               <div className="certification-header">
-                {cert.badge ? (
-                  <img 
-                    src={cert.badge} 
-                    alt={`${cert.name} badge`}
-                    className="certification-badge"
-                    onError={(e) => {
-                      e.target.style.display = 'none'
-                    }}
-                  />
-                ) : (
-                  <div className="certification-placeholder">
-                    <span>🏆</span>
-                  </div>
-                )}
-                
                 <div className="certification-info">
                   <h3 className="certification-name">{cert.name}</h3>
                   <p className="certification-issuer">{cert.issuer}</p>
@@ -89,22 +64,23 @@ const Certifications = () => {
                 </div>
               </div>
               
-              <div className="certification-details">
-                <p className="credential-id">
-                  <strong>Credential ID:</strong> {cert.credentialId}
-                </p>
-                <p className="valid-until">
-                  <strong>Valid Until:</strong> {cert.validUntil}
-                </p>
-              </div>
-              
               <div className="certification-actions">
-                <button className="btn btn-outline">
+                <a 
+                  href={cert.link} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="btn btn-outline"
+                >
                   View Certificate
-                </button>
-                <button className="btn btn-outline">
+                </a>
+                <a 
+                  href={cert.verify} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="btn btn-outline"
+                >
                   Verify
-                </button>
+                </a>
               </div>
             </div>
           ))}
@@ -114,4 +90,4 @@ const Certifications = () => {
   )
 }
 
-export default Certifications 
+export default Certifications
