@@ -21,14 +21,14 @@ const About = () => {
           <div className="about-text">
             <h3>Background</h3>
               <p>
-                I’ve always been curious about how things work, and that curiosity naturally pulled me
+                I’ve always been curious about how technology powered the modern world, and that curiosity naturally pulled me
                 into tech. Over the last couple of years, I’ve gone from experimenting with small coding
                 projects to building full AI pipelines, interactive web apps, and even leading workshops
                 for other students.
               </p>
   
               <p>
-                A big part of my journey has been learning by doing—whether it was training a bird
+                A big part of my journey has been learning by doing, whether it was training a bird
                 classifier on thousands of rainforest images, creating a responsive portfolio site,
                 or running my college AI Club. Each project taught me something new and pushed me
                 to take on bigger challenges.
