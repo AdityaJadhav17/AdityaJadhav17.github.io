@@ -9,7 +9,7 @@ const Projects = () => {
       title: 'Portfolio Website',
       description:
         'A modern, responsive portfolio built with React and CSS. Smooth scrolling, dark mode, and a contact form.',
-      image: '/thumb-portfolio.png',
+      image: '/portfolio.png',
       tech: ['React', 'JavaScript', 'CSS'],
       github: 'https://github.com/AdityaJadhav17/AdityaJadhav17.github.io',
       demo: null, 
@@ -19,8 +19,8 @@ const Projects = () => {
       id: 'sim2real',
       title: 'Synthetic-to-Real Object Detection',
       description:
-        'Kaggle competition: object detection pipeline trained on synthetic soup-can images to generalize to real-world photos. Final LB: 0.9175 (public) / 0.90738 (private).',
-      image: '/thumb-sim2real.png',
+        'Kaggle competition: object detection pipeline trained on synthetic cheerio box images to generalize to real-world photos. Final mAP score 0.9175',
+      image: '/sim2real.png',
       tech: ['Python', 'PyTorch', 'YOLOv8', 'Albumentations'],
       github: 'https://github.com/AdityaJadhav17/Synthetic-to-Real-Object-Detection',
       demo: 'https://www.kaggle.com/competitions/synthetic-2-real-object-detection-challenge',
@@ -31,7 +31,7 @@ const Projects = () => {
       title: 'Bird Classifier in a Forest',
       description:
         'CNN-based image classifier for bird species from forest imagery. Includes data cleaning, augmentation, and evaluation.',
-      image: '/thumb-bird-classifier.png',
+      image: '/bird-classifier.png',
       tech: ['Python', 'PyTorch', 'OpenCV'],
       github: 'https://github.com/YOUR_USERNAME/bird-forest-classifier',
       demo: 'https://youtu.be/YOUR_YOUTUBE_ID_BIRD', // unlisted YouTube
@@ -42,10 +42,10 @@ const Projects = () => {
       title: 'Tic Tac Toe (C++)',
       description:
         'CLI game with clean OOP design, board evaluation, and replay support. Includes a demo video.',
-      image: '/thumb-tictactoe-cpp.png',
+      image: '/tictactoe-cpp.png',
       tech: ['C++', 'STL', 'OOP'],
       github: 'https://github.com/AdityaJadhav17/CS1B-SU24/tree/main/assignments/a02-tic-tac-toe',
-      demo: 'https://youtu.be/YOUR_YOUTUBE_ID_TICTACTOE', // unlisted YouTube
+      demo: 'https://youtu.be/BMScGt6v5dc', // unlisted YouTube
       featured: false
     },
     {
@@ -53,7 +53,7 @@ const Projects = () => {
       title: 'AI Chat Assistant (IBM Cloud)',
       description:
         'Deployed a conversational AI using IBM Cloud Watson services. Intent design, context handling, and deployment. Demo only.',
-      image: '/thumb-ibm-chat.png',
+      image: '/ibm-chat.png',
       tech: ['IBM Cloud', 'Watson Assistant', 'Node.js'],
       github: null, // no repo
       demo: 'https://youtu.be/9sRefMjn5Es', // unlisted YouTube
