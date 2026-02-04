@@ -9,7 +9,7 @@ const Projects = () => {
       title: 'AI-Powered Travel Planning Platform',
       description:
         'Multi-Agent AI platform that generates personalized travel itineraries using autonomous agents, microservices, and real-time data integration.',
-      image: '',
+      image: '/travel-agntcy.png',
       tech: ['Python','React', 'TypeScript', 'FastAPI', 'LangGraph', 'Docker', 'NATS', 'ClickHouse', 'Grafana', 'AWS'],
        github: 'https://github.com/AdityaJadhav17/Travel-Agntcy',
       demo: 'https://youtu.be/T0EkJ9J_IQU', 
