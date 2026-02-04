@@ -2,7 +2,7 @@ import './Home.css'
 
 const Home = () => {
 
-  const profileSrc = "/aditya-profile.jpeg" 
+  const profileSrc = "/aditya-profile.jpg" 
 
   return (
     <section id="home" className="home">
@@ -26,7 +26,7 @@ const Home = () => {
               </h1>
 
               <h2 className="hero-subtitle">
-                Web Development Intern at NutrifitWorld
+                IT Security Programmer at UC San Diego
               </h2>
 
               <p className="hero-description">
