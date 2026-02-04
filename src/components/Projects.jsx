@@ -4,15 +4,15 @@ import { FiExternalLink } from "react-icons/fi";
 
 const Projects = () => {
   const projects = [
-    {
-      id: 'portfolio',
-      title: 'Portfolio Website',
+      {
+      id: 'travel-agntcy',
+      title: 'AI-Powered Travel Planning Platform',
       description:
-        'A modern, responsive portfolio built with React and CSS. Smooth scrolling, dark mode, and a contact form.',
-      image: '/portfolio.png',
-      tech: ['React', 'JavaScript', 'CSS'],
-      github: 'https://github.com/AdityaJadhav17/AdityaJadhav17.github.io',
-      demo: null, 
+        'Multi-Agent AI platform that generates personalized travel itineraries using autonomous agents, microservices, and real-time data integration.',
+      image: '',
+      tech: ['Python','React', 'TypeScript', 'FastAPI', 'LangGraph', 'Docker', 'NATS', 'ClickHouse', 'Grafana', 'AWS'],
+       github: 'https://github.com/AdityaJadhav17/Travel-Agntcy',
+      demo: 'https://youtu.be/T0EkJ9J_IQU', 
       featured: true
     },
     {
@@ -25,6 +25,17 @@ const Projects = () => {
       github: 'https://github.com/AdityaJadhav17/Synthetic-to-Real-Object-Detection',
       demo: 'https://www.kaggle.com/competitions/synthetic-2-real-object-detection-challenge',
       featured: true
+    },
+    {
+      id: 'portfolio',
+      title: 'Portfolio Website',
+      description:
+        'A modern, responsive portfolio built with React and CSS. Smooth scrolling, dark mode, and a contact form.',
+      image: '/portfolio.png',
+      tech: ['React', 'JavaScript', 'CSS'],
+      github: 'https://github.com/AdityaJadhav17/AdityaJadhav17.github.io',
+      demo: null, 
+      featured: false
     },
     {
       id: 'bird-classifier',
