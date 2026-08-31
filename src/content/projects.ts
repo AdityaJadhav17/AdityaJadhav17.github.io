@@ -114,6 +114,12 @@ export const projects: Project[] = [
     stack: ['Python', 'PyTorch', 'OpenCV'],
     // No numeric result was supplied for this project. Left absent rather
     // than invented. Do not add one without owner confirmation.
+    image: {
+      src: '/bird-classifier.webp',
+      width: 512,
+      height: 288,
+      alt: 'A common kingfisher perched on a branch against a blurred green background, one of the test images used to evaluate the classifier',
+    },
     links: {
       github: 'https://github.com/AdityaJadhav17/bird-classifier-forest',
     },
