@@ -10,11 +10,11 @@ import Contact from './components/Contact'
 import Footer from './components/Footer'
 
 function App() {
-  const [darkMode, setDarkMode] = useState(false)
-  const [activeSection, setActiveSection] = useState('home')
+  const [darkMode, setDarkMode] = useState<boolean>(false)
+  const [activeSection, setActiveSection] = useState<string>('home')
 
   // Handle smooth scrolling for navigation
-  const scrollToSection = (sectionId) => {
+  const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' })

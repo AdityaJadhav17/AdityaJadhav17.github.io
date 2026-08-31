@@ -38,7 +38,7 @@ const Home = () => {
                 <button
                   className="btn btn-primary"
                   onClick={() =>
-                    document.getElementById('projects').scrollIntoView({ behavior: 'smooth' })
+                    document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })
                   }
                 >
                   View My Work
@@ -46,7 +46,7 @@ const Home = () => {
                 <button
                   className="btn btn-secondary"
                   onClick={() =>
-                    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })
+                    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
                   }
                 >
                   Contact Me

@@ -1,3 +1,4 @@
+import type { SyntheticEvent } from 'react'
 import './Certifications.css'
 
 const Certifications = () => {
@@ -45,8 +46,8 @@ const Certifications = () => {
                     src={cert.badge} 
                     alt={`${cert.name} badge`}
                     className="certification-badge"
-                    onError={(e) => {
-                      e.target.style.display = 'none'
+                    onError={(e: SyntheticEvent<HTMLImageElement>) => {
+                      e.currentTarget.style.display = 'none'
                     }}
                   />
                 ) : (

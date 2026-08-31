@@ -1,7 +1,14 @@
 import { useState } from 'react'
 import './Navbar.css'
 
-const Navbar = ({ activeSection, scrollToSection, darkMode, toggleDarkMode }) => {
+type NavbarProps = {
+  activeSection: string
+  scrollToSection: (id: string) => void
+  darkMode: boolean
+  toggleDarkMode: () => void
+}
+
+const Navbar = ({ activeSection, scrollToSection, darkMode, toggleDarkMode }: NavbarProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const navItems = [
@@ -13,7 +20,7 @@ const Navbar = ({ activeSection, scrollToSection, darkMode, toggleDarkMode }) =>
     { id: 'contact', label: 'Contact' }
   ]
 
-  const handleNavClick = (sectionId) => {
+  const handleNavClick = (sectionId: string) => {
     scrollToSection(sectionId)
     setIsMobileMenuOpen(false)
   }

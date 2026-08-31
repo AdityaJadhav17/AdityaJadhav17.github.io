@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type ChangeEvent, type FormEvent } from 'react'
 import './Contact.css'
 import { MdEmail, MdLocationOn } from 'react-icons/md'
 import { FaBriefcase } from 'react-icons/fa'
@@ -13,7 +13,7 @@ const Contact = () => {
   const [showSuccess, setShowSuccess] = useState(false)
   const [showError, setShowError] = useState(false) // CHANGED: error state
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
@@ -21,7 +21,7 @@ const Contact = () => {
     }))
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
     setShowError(false)
@@ -132,7 +132,7 @@ const Contact = () => {
                   onChange={handleInputChange}
                   required
                   placeholder="Your message..."
-                  rows="5"
+                  rows={5}
                 />
               </div>
 
