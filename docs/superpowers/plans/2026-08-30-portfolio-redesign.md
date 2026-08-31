@@ -453,10 +453,22 @@ npm install -D vitest jsdom @testing-library/react @testing-library/jest-dom
 Add to `package.json` scripts: `"test": "vitest run"`. Add to `vite.config.ts`:
 
 ```ts
-/// <reference types="vitest" />
+// import defineConfig from vitest/config, NOT from vite — under Vitest 4 the
+// `/// <reference types="vitest" />` triple-slash pattern no longer typechecks.
+import { defineConfig } from 'vitest/config'
+
 // inside defineConfig:
-test: { environment: 'jsdom', globals: true },
+test: {
+  environment: 'jsdom',
+  globals: true,
+  setupFiles: ['./src/test-setup.ts'],
+},
 ```
+
+`setupFiles` is required, not optional. `@testing-library/jest-dom` is installed
+above but registers nothing on its own; without a setup file importing
+`@testing-library/jest-dom/vitest`, Task 10's matchers (`toBeInTheDocument`,
+`toHaveTextContent`, `toHaveValue`) fail on resolution three tasks after the cause.
 
 - [ ] **Step 2: Write the failing test**
 
