@@ -3,6 +3,8 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Hero } from '@/components/sections/Hero'
 import { Work } from '@/components/sections/Work'
 import { Experience } from '@/components/sections/Experience'
+import { About } from '@/components/sections/About'
+import { Certifications } from '@/components/sections/Certifications'
 
 const SECTION_IDS = ['home', 'work', 'experience', 'about', 'certifications', 'contact']
 
@@ -15,7 +17,9 @@ export default function App() {
         <Hero />
         <Work />
         <Experience />
-        {/* about, certifications, contact land in Task 9 */}
+        <About />
+        <Certifications />
+        {/* contact lands in Task 10 */}
       </main>
     </>
   )
