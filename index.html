@@ -4,12 +4,33 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate icon" href="/favicon.svg" />
-    <link rel="mask-icon" href="/favicon.svg" color="#2563EB" />
+    <link rel="mask-icon" href="/favicon.svg" color="#60A5FA" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Aditya Jadhav — Software Engineer</title>
+    <!--
+      Metadata block (through the JSON-LD script below): duplicates content that
+      lives in src/content/site.ts, because static HTML cannot import TypeScript
+      and this markup must be present before any script runs. Specifically:
+        - site.roles      -> the description/og:description/twitter:description
+                              copy ("Software Engineering Intern @ Lumulus
+                              Technologies, IT Security Programmer @ UC San
+                              Diego") and the JSON-LD "jobTitle" array.
+        - site.social      -> the JSON-LD "sameAs" array (GitHub, LinkedIn).
+        - site.education.institution -> the JSON-LD "affiliation.name"
+                              ("UC San Diego").
+      The <title> itself ("Software Engineer") is a deliberate editorial
+      condensation, not a verbatim copy of site.roles — leave it as-is even
+      though it doesn't match those strings exactly.
+      When site.ts changes (e.g. the Lumulus internship ends), update every
+      tag above by hand. Keep the three description copies identical to each
+      other and at or under 160 characters. Keep the two theme-color values
+      in sync with --color-background in src/styles/theme.css, and the
+      favicon/mask-icon color in sync with --color-accent (dark theme, since
+      the favicon is built on the dark palette).
+    -->
     <meta
       name="description"
-      content="Aditya Jadhav — Software Engineering Intern @ Lumulus Technologies, IT Security Programmer @ UC San Diego. Portfolio of projects, experience, and certifications."
+      content="Aditya Jadhav — Software Engineering Intern @ Lumulus Technologies, IT Security Programmer @ UC San Diego. Portfolio of projects, experience, certifications."
     />
     <link rel="canonical" href="https://adityajadhav17.github.io/" />
 
@@ -21,7 +42,7 @@
     <meta property="og:title" content="Aditya Jadhav — Software Engineer" />
     <meta
       property="og:description"
-      content="Aditya Jadhav — Software Engineering Intern @ Lumulus Technologies, IT Security Programmer @ UC San Diego. Portfolio of projects, experience, and certifications."
+      content="Aditya Jadhav — Software Engineering Intern @ Lumulus Technologies, IT Security Programmer @ UC San Diego. Portfolio of projects, experience, certifications."
     />
     <meta property="og:url" content="https://adityajadhav17.github.io/" />
     <meta property="og:image" content="https://adityajadhav17.github.io/og-image.png" />
@@ -32,7 +53,7 @@
     <meta name="twitter:title" content="Aditya Jadhav — Software Engineer" />
     <meta
       name="twitter:description"
-      content="Aditya Jadhav — Software Engineering Intern @ Lumulus Technologies, IT Security Programmer @ UC San Diego. Portfolio of projects, experience, and certifications."
+      content="Aditya Jadhav — Software Engineering Intern @ Lumulus Technologies, IT Security Programmer @ UC San Diego. Portfolio of projects, experience, certifications."
     />
     <meta name="twitter:image" content="https://adityajadhav17.github.io/og-image.png" />
 
