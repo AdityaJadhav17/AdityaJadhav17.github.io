@@ -14,8 +14,19 @@ const SOCIAL_ICONS: Record<string, typeof FaGithub> = {
 
 // Icon-only links get the same "expand the hit area without growing the
 // glyph" treatment as Navbar's mobile-menu trigger: a before-pseudo-element
-// inset -8px on every side brings a 32px visual button to a 48px hit area,
-// clearing the 44x44 CSS px minimum for icon-only controls on mobile.
+// inset -8px on every side. Measured (not assumed) rendered size is 46x46,
+// not the naively-expected 48x48 — inset on an absolutely-positioned
+// pseudo-element resolves against the button's padding box, so its 1px
+// border eats 1px off each side before the -8px inset adds it back. 46px
+// still clears the 44x44 CSS px minimum for icon-only controls on mobile.
+//
+// RULING AR: the container gap must be >= this pseudo-element's growth
+// (8px per side = 16px total) or adjacent hit areas overlap, making a tap
+// near the boundary ambiguous — WCAG 2.5.8's spacing exception does not
+// apply once targets actually overlap. gap-4 (16px) was verified by
+// measuring each ::before's derived rect and by elementFromPoint hit-
+// testing across the boundary: a clean handoff with a couple px of
+// clearance, not an overlap (see task-10-report.md, RULING AR fix).
 const ICON_LINK_CLASS = 'relative before:absolute before:-inset-2 before:content-[\'\']'
 
 export function Footer() {
@@ -30,7 +41,7 @@ export function Footer() {
             <p className="mt-1 text-sm text-muted-foreground">{site.tagline}</p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-4">
             <Button asChild variant="outline" size="icon" className={ICON_LINK_CLASS}>
               <a href={`mailto:${site.email}`} aria-label="Email me">
                 <Mail aria-hidden="true" className="size-4" />
