@@ -34,3 +34,6 @@ Thumbs.db
 
 # Claude Code agent tooling (local only)
 .claude/
+
+# SDD scratch workspace (local only)
+.superpowers/
