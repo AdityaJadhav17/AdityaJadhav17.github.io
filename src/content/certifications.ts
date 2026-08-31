@@ -1,5 +1,4 @@
-// Certifications. Sourced from task-7-content.md — unchanged from the
-// previous site content.
+// Certifications. Unchanged from the previous site content.
 
 export type Certification = {
   id: string

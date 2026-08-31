@@ -13,10 +13,10 @@ type ProjectCardProps = {
 // MASTER.md's typography rule (tech tags, metrics, dates). `result` is
 // optional (bird-classifier has none) and the card must read as complete
 // without it; `project.image` is optional (watchtower, talk-to-robot) and
-// falls back to a typographic treatment built entirely from design tokens
-// — no AI-generated art.
+// falls back to a typographic treatment built entirely from design tokens,
+// with no AI-generated art.
 export function ProjectCard({ project, className }: ProjectCardProps) {
-  // RULING AM: apply RULING AJ's split consistently — every links.github
+  // Apply the brand-mark split consistently: every links.github
   // points at GitHub, so the code link always gets the real GitHub mark.
   // A demo link only gets the YouTube mark when it actually is one
   // (travel-agntcy's is youtu.be; sim2real's is a Kaggle URL and stays

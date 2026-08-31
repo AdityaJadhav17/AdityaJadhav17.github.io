@@ -2,8 +2,8 @@ import { site } from '@/content/site'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
 import { cn } from '@/lib/utils'
 
-// Skills list per task-7-content.md's "About section prose" note — carried
-// over unchanged from the previous site's technical skills.
+// Skills list carried over unchanged from the previous site's technical
+// skills.
 const SKILLS = [
   'Python',
   'C++',
@@ -27,19 +27,19 @@ const SKILLS = [
 
 // The previous About.tsx carried three paragraphs; every claim below traces
 // to one of them. Dropped, not reworded: the AI Club mention only (now its
-// own Experience entry). RULING AO: "leading workshops for other students"
-// is a distinct claim from a different sentence in the original prose (an
+// own Experience entry). "Leading workshops for other students" is a
+// distinct claim from a different sentence in the original prose (an
 // organizational role vs. a teaching activity) and is kept.
 const ABOUT_PARAGRAPH =
   "I've always been curious about how technology powers the world, and that curiosity pulled " +
-  "me into tech — from small coding projects to building full AI pipelines, interactive web " +
-  'apps, and leading workshops for other students. I learn by doing, whether it was training a ' +
-  'bird classifier on thousands of rainforest images or building a responsive portfolio site, ' +
-  'and each project has pushed me to take on bigger challenges. What excites me most now is ' +
-  'using AI/ML and software development to solve real problems — collaborating with others, ' +
-  'sharing ideas, and staying open to learning something new.'
+  "me into tech. I went from small coding projects to building full AI pipelines, interactive " +
+  'web apps, and leading workshops for other students. I learn by doing, whether it was ' +
+  'training a bird classifier on thousands of rainforest images or building a responsive ' +
+  'portfolio site, and each project has pushed me to take on bigger challenges. What excites ' +
+  'me most now is using AI/ML and software development to solve real problems. I like ' +
+  'collaborating with others, sharing ideas, and staying open to learning something new.'
 
-// About — one condensed paragraph (was three), skills as font-mono tags
+// About: one condensed paragraph (was three), skills as font-mono tags
 // matching ProjectCard's stack-tag treatment, and education pulled from
 // site.ts rather than hardcoded.
 export function About() {

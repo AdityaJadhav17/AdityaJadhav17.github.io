@@ -3,8 +3,8 @@ import { FaGithub, FaLinkedin } from 'react-icons/fa'
 import { Button } from '@/components/ui/button'
 import { site } from '@/content/site'
 
-// RULING AJ: lucide-react ships no brand/logo marks (Github/Linkedin/Youtube
-// all resolve undefined) — official brand glyphs come from react-icons,
+// lucide-react ships no brand/logo marks (Github/Linkedin/Youtube all
+// resolve undefined), so official brand glyphs come from react-icons,
 // already a dependency (Footer.tsx, Contact.tsx). Lucide stays the icon set
 // for every non-brand UI icon (Download, MapPin, above). ExternalLink is
 // kept as the fallback glyph for a social label this map doesn't recognize,
@@ -14,9 +14,9 @@ const SOCIAL_ICONS: Record<string, typeof FaGithub> = {
   LinkedIn: FaLinkedin,
 }
 
-// Hero — name, both current roles (folded into `site.tagline`, the
+// Hero: name, both current roles (folded into `site.tagline`, the
 // one-line positioning statement), résumé download, and social links.
-// `min-h-dvh` per the design brief — never `100vh`, which excludes mobile
+// `min-h-dvh` per the design brief, never `100vh`, which excludes mobile
 // browser chrome and causes a jump on load.
 export function Hero() {
   return (

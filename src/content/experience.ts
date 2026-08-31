@@ -1,9 +1,9 @@
-// Work/leadership experience, newest first. Sourced from task-7-content.md.
+// Work/leadership experience, newest first.
 //
 // The Lumulus Technologies entry is governed by a signed NDA: the company
 // name and job title are cleared, the technical substance is not. Only the
-// highlights explicitly permitted in task-7-content.md are used, in
-// approximately their given wording. Do not add detail beyond that list.
+// highlights explicitly permitted by the owner are used, in approximately
+// their given wording. Do not add detail beyond that list.
 
 export type Experience = {
   organization: string
@@ -31,7 +31,7 @@ export const experience: Experience[] = [
     role: 'IT Security Programmer',
     start: 'Dec 2025',
     end: 'Jun 2027 (expected)',
-    location: 'Hybrid — Torrey Pines Center South',
+    location: 'Hybrid, Torrey Pines Center South',
     // Scope-derived from the role description, since concrete accomplishment
     // detail is not yet available. Replace with real accomplishments once
     // the owner updates his résumé.

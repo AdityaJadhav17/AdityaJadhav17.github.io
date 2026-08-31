@@ -33,8 +33,8 @@ type NavLinkProps = {
   variant?: 'desktop' | 'mobile'
 } & Omit<ComponentProps<'a'>, 'href' | 'children'>
 
-// Shared by the desktop list and the mobile Sheet list (RULING AG) — the
-// only difference between the two is mobile's row padding/hover fill.
+// Shared by the desktop list and the mobile Sheet list. The only difference
+// between the two is mobile's row padding/hover fill.
 const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(function NavLink(
   { id, label, active, variant = 'desktop', className, ...props },
   ref,
@@ -45,7 +45,7 @@ const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(function NavLink(
       href={`#${id}`}
       aria-current={active ? 'page' : undefined}
       className={cn(
-        // Nav is Archivo per MASTER.md:91 ("Heading Font: ... nav") — RULING AE.
+        // Nav is Archivo per MASTER.md's "Heading Font: ... nav" entry.
         'font-heading text-sm font-medium transition-colors',
         active ? 'text-accent hover:text-accent' : 'text-muted-foreground hover:text-foreground',
         variant === 'mobile' && 'rounded-md px-3 py-2 hover:bg-muted',

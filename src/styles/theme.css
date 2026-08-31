@@ -1,5 +1,5 @@
 /*
-  Contrast audit (Task 4, Step 3, revised in fix round 1) — WCAG relative-luminance formula,
+  Contrast audit (revised in fix round 1): WCAG relative-luminance formula,
   computed with a standalone script (not estimated). Ratios rounded to 2 decimals.
 
   LIGHT theme
@@ -36,30 +36,30 @@
   input             #71717A on background #09090B                  4.12:1   need 3.0:1   PASS
   input             #71717A on card       #18181B                  3.67:1   need 3.0:1   PASS
 
-  ** `--color-border` is decorative separation (card/section dividers) — content and
+  ** `--color-border` is decorative separation (card/section dividers): content and
      components remain identifiable without it, so it falls outside WCAG 1.4.11's scope and
      its sub-3:1 contrast against `background` is an accepted, owner-approved trade, not a
      defect. This differs from `--color-input`, which draws the boundary that identifies a
-     form control / the outline `Button` variant and IS covered by 1.4.11 — that token was
+     form control / the outline `Button` variant and IS covered by 1.4.11; that token was
      changed (see below) rather than left as-is.
 
   `--color-input` fix (fix round 1): was #E4E4E7 (light) / #3F3F46 (dark), both FAILing 1.4.11
-  at 1.22:1 / 1.91:1 against background. Introduced under Ruling M by assumption (mapped to
+  at 1.22:1 / 1.91:1 against background. Introduced by assumption (mapped to
   `--color-border`'s value) rather than by owner approval, so unlike `--color-border` this was
-  this task's call to correct. Set to #71717A (Tailwind zinc-500) in BOTH ramps — one value
+  this task's call to correct. Set to #71717A (Tailwind zinc-500) in BOTH ramps: one value
   clears 3:1 against both `background` and `card` in both themes (4.63 / 4.83 light, 4.12 /
   3.67 dark, all above). Candidates considered and rejected: #8A8A93 (passes all four but with
   a thinner margin, 3.28 lowest), #A1A1AA (fails light: 2.46 / 2.56), #52525B (fails dark:
   2.57 / 2.29), #3F3F46 (fails dark: 1.91 / 1.70).
 
   Accent note: light accent #2563EB on dark background #09090B measures 3.85:1 (previously
-  documented here and in MASTER.md as "~3.6:1" — corrected in fix round 1). Below the 4.5:1
-  floor either way, so the documented conclusion — dark mode uses the lightened #60A5FA
-  instead — is unaffected by the correction.
+  documented here and in MASTER.md as "~3.6:1", corrected in fix round 1). Below the 4.5:1
+  floor either way, so the documented conclusion (dark mode uses the lightened #60A5FA
+  instead) is unaffected by the correction.
 */
 
 @import "tw-animate-css";
-/* `shadcn` is listed in devDependencies (RULING AT — it isn't shipped at
+/* `shadcn` is listed in devDependencies (it isn't shipped at
    runtime, so it doesn't belong in dependencies), but this import makes it
    a genuine BUILD-time dependency: `vite build` resolves this path from
    node_modules while compiling CSS. CI must run a plain `npm ci` (all
@@ -107,7 +107,7 @@
   --color-input: #71717A;
   --color-ring: #2563EB;
 
-  /* Shadow Depths (MASTER.md) — same values in both themes; the table has
+  /* Shadow Depths (MASTER.md): same values in both themes; the table has
      no separate dark ramp, so these live in the flat block, not `.dark`. */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -140,12 +140,12 @@
 
   html {
     scroll-behavior: smooth;
-    /* Task 13 a11y fix — the per-section `scroll-margin-top: 5rem` below
+    /* A11y fix: the per-section `scroll-margin-top: 5rem` below
        only compensates the sticky navbar (h-16 = 4rem) when the browser
        scrolls to one of the six section ids directly. It does nothing for
        the browser's own focus-driven scrollIntoView, which runs whenever
        Tab moves focus to *any* off-screen element (a project link, a form
-       field, a footer link, etc.) — with no scroll-padding-top set, that
+       field, a footer link, etc.). With no scroll-padding-top set, that
        native scroll can park a focused element's top edge at viewport 0,
        i.e. directly under the sticky navbar (WCAG 2.4.11). Setting
        scroll-padding-top on the scrolling root reserves that space for
@@ -173,14 +173,14 @@
     cursor: pointer;
     }
 
-  /* Section landmarks (rendered by Tasks 7-9) sit under the sticky navbar
+  /* Section landmarks sit under the sticky navbar
      (h-16 = 4rem). scroll-margin-top keeps a keyboard-focused heading from
-     landing underneath it — WCAG 2.2 focus-not-obscured. */
+     landing underneath it: WCAG 2.2 focus-not-obscured. */
   #home, #work, #experience, #about, #certifications, #contact {
     scroll-margin-top: 5rem;
   }
 
-  /* Scroll reveal (Task 13, RULING AL — see useScrollReveal.ts). Base state
+  /* Scroll reveal (see useScrollReveal.ts). Base state
      is fully visible with nothing more than the transition declared, so
      content with no `.reveal-hidden` class (no JS, no observer support, or
      an observer that failed to construct) renders exactly as if this rule
@@ -196,9 +196,9 @@
 
   /* Belt-and-suspenders: the global prefers-reduced-motion block above
      already forces transition-duration to ~0 for every element, which
-     neutralises this one too (verified in-browser, Task 13 Part 3) — this
-     rule is purely documentation of that fact for this specific class, not
-     an independent mechanism. */
+     neutralises this one too (verified in-browser). This rule is purely
+     documentation of that fact for this specific class, not an
+     independent mechanism. */
   @media (prefers-reduced-motion: reduce) {
     .reveal {
       transition-duration: 0.01ms;

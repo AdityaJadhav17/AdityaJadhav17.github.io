@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 
 // Featured projects (the first two, `featured: true`) render full width,
 // one per row; the rest render in a responsive grid. Same ProjectCard
-// shape throughout — only the container width differs.
+// shape throughout: only the container width differs.
 export function Work() {
   const featured = projects.filter((project) => project.featured)
   const rest = projects.filter((project) => !project.featured)

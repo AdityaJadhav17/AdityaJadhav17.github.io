@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 
 // Vertical timeline, newest first (order comes from src/content/experience.ts,
 // which also carries a code comment noting the UC San Diego entry's
-// highlights are scope-derived pending real accomplishments — not repeated
+// highlights are scope-derived pending real accomplishments; not repeated
 // or altered here). Dates render in font-mono per MASTER.md's typography rule.
 export function Experience() {
   const { ref, revealed } = useScrollReveal<HTMLElement>()

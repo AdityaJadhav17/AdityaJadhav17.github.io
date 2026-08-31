@@ -11,12 +11,11 @@ import { site } from '@/content/site'
 
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xblawgak'
 
-// Same brand-mark map and fallback as Hero.tsx (RULING AJ) — the IA calls
-// for "form and direct links" here, and these mirror Hero's icon+label
-// treatment exactly rather than inventing a third style (see final-review
-// finding 2). Lucide's Mail glyph for the non-brand email link, react-icons
-// for GitHub/LinkedIn brand marks, ExternalLink as the fallback for any
-// future site.social entry this map doesn't recognize.
+// Same brand-mark map and fallback as Hero.tsx. The IA calls for "form and
+// direct links" here, and these mirror Hero's icon+label treatment exactly
+// rather than inventing a third style. Lucide's Mail glyph for the non-brand
+// email link, react-icons for GitHub/LinkedIn brand marks, ExternalLink as
+// the fallback for any future site.social entry this map doesn't recognize.
 const SOCIAL_ICONS: Record<string, typeof FaGithub> = {
   GitHub: FaGithub,
   LinkedIn: FaLinkedin,
@@ -45,15 +44,15 @@ function validate(values: FormValues): FormErrors {
   return errors
 }
 
-// Contact — the site's closing CTA. Two kinds of failure, handled
+// Contact is the site's closing CTA. Two kinds of failure, handled
 // differently: an empty-field submit is caught client-side (errors render
 // next to their field via aria-describedby, and focus jumps to the first
 // invalid field so a keyboard/screen-reader user isn't left guessing);
 // a submit that passes validation but fails at the network (Formspree
-// returns non-ok, or fetch throws outright) is announced in a role="alert"
-// and — unlike the old Contact.jsx, which only preserved the message by
-// accident — the typed values are always kept so a network blip never
-// costs a visitor's message.
+// returns non-ok, or fetch throws outright) is announced in a role="alert".
+// Unlike the old Contact.jsx, which only preserved the message by accident,
+// the typed values are always kept so a network blip never costs a
+// visitor's message.
 export function Contact() {
   const [values, setValues] = useState<FormValues>(EMPTY_VALUES)
   const [errors, setErrors] = useState<FormErrors>({})

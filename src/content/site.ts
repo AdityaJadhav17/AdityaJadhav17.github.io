@@ -1,5 +1,5 @@
 // Site-wide identity content: name, current roles, contact, and education.
-// Sourced from task-7-content.md — do not add claims not present there.
+// Do not add claims beyond what the owner has verified.
 
 export type SocialLink = {
   label: string

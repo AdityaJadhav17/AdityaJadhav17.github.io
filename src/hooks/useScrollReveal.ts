@@ -1,13 +1,12 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 
-// Scroll-reveal (Task 13 / RULING AL) — MASTER.md's Motion section specifies
-// a subtle fade+rise on scroll entry (300-400ms, 8-16px) via GSAP +
-// ScrollTrigger, but a GSAP dependency is overkill for a static portfolio.
-// This reproduces the same effect with IntersectionObserver + a CSS
-// transition, following the observer setup/cleanup shape of
-// useActiveSection.ts.
+// Scroll-reveal: MASTER.md's Motion section specifies a subtle fade+rise on
+// scroll entry (300-400ms, 8-16px) via GSAP + ScrollTrigger, but a GSAP
+// dependency is overkill for a static portfolio. This reproduces the same
+// effect with IntersectionObserver + a CSS transition, following the
+// observer setup/cleanup shape of useActiveSection.ts.
 //
-// "Start visible, then enhance" — `revealed` defaults to `true`, so the
+// "Start visible, then enhance": `revealed` defaults to `true`, so the
 // element renders fully visible (no hidden class) until an effect proves an
 // IntersectionObserver is actually available and working. That means:
 //   - No JS at all (bundle never runs): section stays visible (never had
@@ -17,7 +16,7 @@ import { useLayoutEffect, useRef, useState } from 'react'
 //   - `new IntersectionObserver(...)` / `.observe()` throws: caught, and
 //     the section is immediately revealed rather than left hidden.
 // The only way content goes to the hidden state at all is once an observer
-// has been constructed and started successfully — at which point the
+// has been constructed and started successfully, at which point the
 // observer itself (fired async, always, per spec) is what brings it back,
 // so it can never be left stranded invisible.
 export function useScrollReveal<T extends HTMLElement>() {
@@ -30,8 +29,8 @@ export function useScrollReveal<T extends HTMLElement>() {
   // is synchronous only on the hide side; the IntersectionObserver callback
   // that reveals it again is async (typically the next frame per spec), so
   // a section already in the viewport at mount does have a real one-frame
-  // hidden gap between paints. No wired section hits that gap today — every
-  // one sits below the min-h-dvh hero — but a future section placed above
+  // hidden gap between paints. No wired section hits that gap today: every
+  // one sits below the min-h-dvh hero, but a future section placed above
   // the fold would.
   useLayoutEffect(() => {
     const el = ref.current
@@ -58,7 +57,7 @@ export function useScrollReveal<T extends HTMLElement>() {
       observer.observe(el)
       return () => observer.disconnect()
     } catch {
-      // Observer construction/observe failed — never leave content
+      // Observer construction/observe failed. Never leave content
       // trapped invisible.
       reveal()
       return

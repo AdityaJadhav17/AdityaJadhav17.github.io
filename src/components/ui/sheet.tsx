@@ -69,7 +69,7 @@ function SheetContent({
         {showCloseButton && (
           <SheetPrimitive.Close data-slot="sheet-close" asChild>
             {/* Project-specific accessibility requirement, not shadcn's
-                default — do not drop this on a future `shadcn add sheet`
+                default: do not drop this on a future `shadcn add sheet`
                 regeneration. size="icon-sm" renders 28px (size-7), and this
                 button is mobile-only (the Sheet only opens on mobile), so
                 MASTER.md's 44x44 CSS px icon-only touch-target minimum
@@ -80,7 +80,7 @@ function SheetContent({
                 46x46 at before:-inset-2.5 (Navbar/Footer's -inset-2 on a
                 32px button also measures 46x46, but the same -inset-2 on
                 this 28px button measures only 42x42 and fails the 44px
-                minimum — the extra 0.5 (2px) makes up the 4px smaller
+                minimum; the extra 0.5 (2px) makes up the 4px smaller
                 button). */}
             <Button
               variant="ghost"

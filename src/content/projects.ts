@@ -1,6 +1,6 @@
-// Project card content. Sourced from task-7-content.md — do not add claims
-// not present there. `result` and `image` are optional: bird-classifier has
-// no measured result, and watchtower/talk-to-robot have no screenshot yet.
+// Project card content. Do not add claims beyond what the owner has
+// verified. `result` and `image` are optional: bird-classifier has no
+// measured result, and watchtower/talk-to-robot have no screenshot yet.
 
 export type Project = {
   id: string
@@ -100,8 +100,8 @@ export const projects: Project[] = [
     contribution:
       'A CNN image classifier built in PyTorch, with data preprocessing, augmentation, training, and evaluation.',
     stack: ['Python', 'PyTorch', 'OpenCV'],
-    // No numeric result was supplied for this project — left absent
-    // rather than invented. Do not add one without owner confirmation.
+    // No numeric result was supplied for this project. Left absent rather
+    // than invented. Do not add one without owner confirmation.
     links: {
       github: 'https://github.com/AdityaJadhav17/bird-classifier-forest',
     },

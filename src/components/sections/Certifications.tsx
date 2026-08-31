@@ -4,7 +4,7 @@ import { useScrollReveal } from '@/hooks/useScrollReveal'
 import { cn } from '@/lib/utils'
 
 // Compact row, not full-height cards. Badge PNGs are light artwork on
-// transparent backgrounds — each gets an explicit bg-card surface with
+// transparent backgrounds, so each gets an explicit bg-card surface with
 // padding (not just an ambient page background) so it stays legible in
 // dark mode instead of reading as a floating white artifact.
 export function Certifications() {

@@ -21,7 +21,7 @@ export function setTheme(theme: Theme): void {
   try {
     localStorage.setItem(KEY, theme)
   } catch {
-    // storage unavailable (private mode) — apply without persisting
+    // storage unavailable (private mode): apply without persisting
   }
   document.documentElement.classList.toggle('dark', resolveTheme(theme) === 'dark')
 }
