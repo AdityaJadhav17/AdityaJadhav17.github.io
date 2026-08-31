@@ -1,9 +1,14 @@
-// Work/leadership experience, newest first.
+// Work/leadership experience, newest first by start date.
 //
 // The Lumulus Technologies entry is governed by a signed NDA: the company
 // name and job title are cleared, the technical substance is not. Only the
 // highlights explicitly permitted by the owner are used, in approximately
 // their given wording. Do not add detail beyond that list.
+//
+// Every other entry is transcribed from the owner's resume. The security
+// wording in the UC San Diego entry ("authorized", "under defined scope",
+// "responsible disclosure") is his own and is deliberately careful. Keep it
+// verbatim: paraphrasing it looser would change what the sentence claims.
 
 export type Experience = {
   organization: string
@@ -30,15 +35,12 @@ export const experience: Experience[] = [
     organization: 'UC San Diego (ITS)',
     role: 'IT Security Programmer',
     start: 'Dec 2025',
-    end: 'Jun 2027 (expected)',
-    location: 'Hybrid, Torrey Pines Center South',
-    // Scope-derived from the role description, since concrete accomplishment
-    // detail is not yet available. Replace with real accomplishments once
-    // the owner updates his résumé.
+    end: 'Present',
     highlights: [
-      'Build web services and application components for enterprise information security projects',
-      'Analyze legacy and modern enterprise data; write queries and matching algorithms',
-      'Create test cases and documentation',
+      'AI infrastructure penetration testing: conducted authorized security validation on an academic AI compute environment, identifying configuration weaknesses and access control gaps under defined scope',
+      'Documented findings and remediation recommendations, supporting secure deployment practices while adhering to confidentiality and responsible disclosure guidelines',
+      'Risk and compliance assessment: assessed System Security Plans against NIST SP 800-171 controls, identifying access control and configuration management gaps to support remediation planning',
+      'Organized audit evidence and mapped security controls to NIST SP 800-171 requirements, supporting risk assessment and audit readiness',
     ],
   },
   {
@@ -46,13 +48,30 @@ export const experience: Experience[] = [
     role: 'Web Development Intern',
     start: 'Jun 2025',
     end: 'Oct 2025',
-    highlights: ['Contributed to web development work for the NutrifitWorld platform.'],
+    highlights: [
+      'Delivered and deployed a responsive business platform integrating CRM automation, scheduling, and customer management workflows, increasing client engagement by 25% and reducing manual operations by 40%',
+      'Created analytics dashboards and automated marketing pipelines to track user behavior and campaign performance, improving lead conversion rates by 20%',
+    ],
   },
   {
     organization: 'Irvine Valley College',
     role: 'Founder & President, AI Club',
     start: 'Aug 2024',
-    end: 'May 2025',
-    highlights: ['Founded and led the Irvine Valley College AI Club as President.'],
+    end: 'Jun 2025',
+    highlights: [
+      "Founded and expanded IVC's first AI-focused club, growing membership to over 150",
+      'Organized 5+ workshops and projects averaging 30 attendees, covering machine learning, computer vision, and NLP',
+      'Secured $2,000 in sponsorships to support practical AI projects and interdisciplinary collaborations',
+    ],
+  },
+  {
+    organization: 'Irvine Valley College',
+    role: 'Board Member, Cybersecurity Club',
+    start: 'Aug 2023',
+    end: 'Jun 2025',
+    highlights: [
+      'Served as Outreach Officer, onboarding new members and connecting them to cybersecurity resources and events',
+      'Organized cybersecurity workshops and supported new members with technical guidance',
+    ],
   },
 ]

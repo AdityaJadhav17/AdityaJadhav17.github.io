@@ -18,7 +18,7 @@ export type Project = {
 export const projects: Project[] = [
   {
     id: 'travel-agntcy',
-    title: 'AI-Powered Travel Planning Platform',
+    title: 'TravelAGNTCY',
     problem:
       'Travel planning spans flights, hotels, and activities, but stitching those sources into a coherent plan is slow and fragmented.',
     contribution:
