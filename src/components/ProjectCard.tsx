@@ -50,20 +50,15 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
       ) : (
         <div
           aria-hidden="true"
-          className="flex aspect-video w-full flex-col justify-between border-b border-border bg-muted p-6"
+          className="flex aspect-video w-full flex-col justify-center gap-2 border-b border-border bg-muted p-6"
         >
-          <span className="font-mono text-xs tracking-widest text-muted-foreground">
-            NO PREVIEW YET
-          </span>
-          <div className="space-y-2">
-            <p className="font-heading text-2xl leading-tight font-semibold tracking-tight text-foreground uppercase md:text-3xl">
-              {project.title}
-            </p>
-            <div className="h-px w-12 bg-border" />
-            <p className="font-mono text-xs tracking-wide text-muted-foreground uppercase">
-              {project.stack.slice(0, 4).join(' / ')}
-            </p>
-          </div>
+          <p className="font-heading text-2xl leading-tight font-semibold tracking-tight text-foreground uppercase md:text-3xl">
+            {project.title}
+          </p>
+          <div className="h-px w-12 bg-border" />
+          <p className="font-mono text-xs tracking-wide text-muted-foreground uppercase">
+            {project.stack.slice(0, 4).join(' / ')}
+          </p>
         </div>
       )}
 
