@@ -284,6 +284,9 @@ gsap.from(el, { opacity: 0, y: 12, duration: 0.35, ease: 'power1.out', scrollTri
 - ❌ **Low contrast text** — Maintain 4.5:1 minimum contrast ratio
 - ❌ **Instant state changes** — Always use transitions (150-300ms)
 - ❌ **Invisible focus states** — Focus states must be visible for a11y
+- ❌ **Touch targets under 44×44 CSS px on mobile** — if the visual control must stay
+  smaller (e.g. a compact icon button), expand the hit area with padding or a pseudo-element
+  overlay rather than enlarging the visible icon
 
 ---
 
@@ -297,6 +300,8 @@ Before delivering any UI code, verify:
 - [ ] Hover states with smooth transitions (150-300ms)
 - [ ] Light mode: text contrast 4.5:1 minimum
 - [ ] Focus states visible for keyboard navigation
+- [ ] Touch targets ≥44×44 CSS px on mobile (expand hit area via padding/pseudo-element if the
+      visual control must stay smaller)
 - [ ] `prefers-reduced-motion` respected
 - [ ] Responsive: 375px, 768px, 1024px, 1440px
 - [ ] No content hidden behind fixed navbars
