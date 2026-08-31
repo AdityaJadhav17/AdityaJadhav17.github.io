@@ -1,5 +1,7 @@
 import { projects } from '@/content/projects'
 import { ProjectCard } from '@/components/ProjectCard'
+import { useScrollReveal } from '@/hooks/useScrollReveal'
+import { cn } from '@/lib/utils'
 
 // Featured projects (the first two, `featured: true`) render full width,
 // one per row; the rest render in a responsive grid. Same ProjectCard
@@ -7,9 +9,14 @@ import { ProjectCard } from '@/components/ProjectCard'
 export function Work() {
   const featured = projects.filter((project) => project.featured)
   const rest = projects.filter((project) => !project.featured)
+  const { ref, revealed } = useScrollReveal<HTMLElement>()
 
   return (
-    <section id="work" className="border-t border-border py-16 md:py-24">
+    <section
+      id="work"
+      ref={ref}
+      className={cn('reveal border-t border-border py-16 md:py-24', !revealed && 'reveal-hidden')}
+    >
       <div className="mx-auto max-w-5xl px-4 md:px-6">
         <h2 className="font-heading text-3xl font-semibold text-foreground">Selected Work</h2>
 

@@ -1,13 +1,21 @@
 import { ExternalLink, FileText } from 'lucide-react'
 import { certifications } from '@/content/certifications'
+import { useScrollReveal } from '@/hooks/useScrollReveal'
+import { cn } from '@/lib/utils'
 
 // Compact row, not full-height cards. Badge PNGs are light artwork on
 // transparent backgrounds — each gets an explicit bg-card surface with
 // padding (not just an ambient page background) so it stays legible in
 // dark mode instead of reading as a floating white artifact.
 export function Certifications() {
+  const { ref, revealed } = useScrollReveal<HTMLElement>()
+
   return (
-    <section id="certifications" className="border-t border-border py-16 md:py-24">
+    <section
+      id="certifications"
+      ref={ref}
+      className={cn('reveal border-t border-border py-16 md:py-24', !revealed && 'reveal-hidden')}
+    >
       <div className="mx-auto max-w-5xl px-4 md:px-6">
         <h2 className="font-heading text-3xl font-semibold text-foreground">Certifications</h2>
 

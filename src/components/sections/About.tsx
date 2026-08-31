@@ -1,4 +1,6 @@
 import { site } from '@/content/site'
+import { useScrollReveal } from '@/hooks/useScrollReveal'
+import { cn } from '@/lib/utils'
 
 // Skills list per task-7-content.md's "About section prose" note — carried
 // over unchanged from the previous site's technical skills.
@@ -41,8 +43,14 @@ const ABOUT_PARAGRAPH =
 // matching ProjectCard's stack-tag treatment, and education pulled from
 // site.ts rather than hardcoded.
 export function About() {
+  const { ref, revealed } = useScrollReveal<HTMLElement>()
+
   return (
-    <section id="about" className="border-t border-border py-16 md:py-24">
+    <section
+      id="about"
+      ref={ref}
+      className={cn('reveal border-t border-border py-16 md:py-24', !revealed && 'reveal-hidden')}
+    >
       <div className="mx-auto max-w-5xl px-4 md:px-6">
         <h2 className="font-heading text-3xl font-semibold text-foreground">About</h2>
 

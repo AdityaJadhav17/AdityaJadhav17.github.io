@@ -12,15 +12,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      # Installs devDependencies too (no --omit=dev): `shadcn` lives in
+      # devDependencies but src/styles/theme.css imports
+      # "shadcn/tailwind.css" at build time, so `vite build` needs it in
+      # node_modules. `npm ci` (not `npm install`) so the build always uses
+      # exactly what's locked in package-lock.json.
       - name: Install dependencies
-        run: npm install   # ✅ safer here
+        run: npm ci
+
+      - name: Verify
+        run: npm run typecheck && npm run lint && npm test
 
       - name: Build
         run: npm run build

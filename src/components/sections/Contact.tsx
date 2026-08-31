@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { useScrollReveal } from '@/hooks/useScrollReveal'
+import { cn } from '@/lib/utils'
 
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xblawgak'
 
@@ -49,6 +51,7 @@ export function Contact() {
   const emailRef = useRef<HTMLInputElement>(null)
   const messageRef = useRef<HTMLTextAreaElement>(null)
   const fieldRefs = { name: nameRef, email: emailRef, message: messageRef }
+  const { ref: sectionRef, revealed } = useScrollReveal<HTMLElement>()
 
   function handleChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = e.target
@@ -86,7 +89,11 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="border-t border-border py-16 md:py-24">
+    <section
+      id="contact"
+      ref={sectionRef}
+      className={cn('reveal border-t border-border py-16 md:py-24', !revealed && 'reveal-hidden')}
+    >
       <div className="mx-auto max-w-5xl px-4 md:px-6">
         <h2 className="font-heading text-3xl font-semibold text-foreground">Contact</h2>
         <p className="mt-3 max-w-2xl text-base text-muted-foreground">

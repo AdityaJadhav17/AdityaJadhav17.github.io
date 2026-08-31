@@ -1,12 +1,20 @@
 import { experience } from '@/content/experience'
+import { useScrollReveal } from '@/hooks/useScrollReveal'
+import { cn } from '@/lib/utils'
 
 // Vertical timeline, newest first (order comes from src/content/experience.ts,
 // which also carries a code comment noting the UC San Diego entry's
 // highlights are scope-derived pending real accomplishments — not repeated
 // or altered here). Dates render in font-mono per MASTER.md's typography rule.
 export function Experience() {
+  const { ref, revealed } = useScrollReveal<HTMLElement>()
+
   return (
-    <section id="experience" className="border-t border-border py-16 md:py-24">
+    <section
+      id="experience"
+      ref={ref}
+      className={cn('reveal border-t border-border py-16 md:py-24', !revealed && 'reveal-hidden')}
+    >
       <div className="mx-auto max-w-5xl px-4 md:px-6">
         <h2 className="font-heading text-3xl font-semibold text-foreground">Experience</h2>
 

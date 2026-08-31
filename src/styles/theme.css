@@ -59,6 +59,11 @@
 */
 
 @import "tw-animate-css";
+/* `shadcn` is listed in devDependencies (RULING AT — it isn't shipped at
+   runtime, so it doesn't belong in dependencies), but this import makes it
+   a genuine BUILD-time dependency: `vite build` resolves this path from
+   node_modules while compiling CSS. CI must run a plain `npm ci` (all
+   deps, not `--omit=dev`) or this import fails and the build breaks. */
 @import "shadcn/tailwind.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -135,6 +140,17 @@
 
   html {
     scroll-behavior: smooth;
+    /* Task 13 a11y fix — the per-section `scroll-margin-top: 5rem` below
+       only compensates the sticky navbar (h-16 = 4rem) when the browser
+       scrolls to one of the six section ids directly. It does nothing for
+       the browser's own focus-driven scrollIntoView, which runs whenever
+       Tab moves focus to *any* off-screen element (a project link, a form
+       field, a footer link, etc.) — with no scroll-padding-top set, that
+       native scroll can park a focused element's top edge at viewport 0,
+       i.e. directly under the sticky navbar (WCAG 2.4.11). Setting
+       scroll-padding-top on the scrolling root reserves that space for
+       every scroll, focus-driven or not. */
+    scroll-padding-top: 5rem;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -162,5 +178,30 @@
      landing underneath it — WCAG 2.2 focus-not-obscured. */
   #home, #work, #experience, #about, #certifications, #contact {
     scroll-margin-top: 5rem;
+  }
+
+  /* Scroll reveal (Task 13, RULING AL — see useScrollReveal.ts). Base state
+     is fully visible with nothing more than the transition declared, so
+     content with no `.reveal-hidden` class (no JS, no observer support, or
+     an observer that failed to construct) renders exactly as if this rule
+     didn't exist. `.reveal-hidden` is the only thing IntersectionObserver
+     ever toggles, and only after confirming it can observe the element. */
+  .reveal {
+    transition: opacity 350ms ease-out, transform 350ms ease-out;
+  }
+  .reveal-hidden {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  /* Belt-and-suspenders: the global prefers-reduced-motion block above
+     already forces transition-duration to ~0 for every element, which
+     neutralises this one too (verified in-browser, Task 13 Part 3) — this
+     rule is purely documentation of that fact for this specific class, not
+     an independent mechanism. */
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      transition-duration: 0.01ms;
+    }
   }
 }
