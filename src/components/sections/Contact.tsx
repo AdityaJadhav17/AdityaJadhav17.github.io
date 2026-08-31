@@ -1,13 +1,26 @@
 import { useRef, useState, type ChangeEvent, type FormEvent } from 'react'
-import { Loader2 } from 'lucide-react'
+import { ExternalLink, Loader2, Mail } from 'lucide-react'
+import { FaGithub, FaLinkedin } from 'react-icons/fa'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
 import { cn } from '@/lib/utils'
+import { site } from '@/content/site'
 
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xblawgak'
+
+// Same brand-mark map and fallback as Hero.tsx (RULING AJ) — the IA calls
+// for "form and direct links" here, and these mirror Hero's icon+label
+// treatment exactly rather than inventing a third style (see final-review
+// finding 2). Lucide's Mail glyph for the non-brand email link, react-icons
+// for GitHub/LinkedIn brand marks, ExternalLink as the fallback for any
+// future site.social entry this map doesn't recognize.
+const SOCIAL_ICONS: Record<string, typeof FaGithub> = {
+  GitHub: FaGithub,
+  LinkedIn: FaLinkedin,
+}
 
 type FormValues = {
   name: string
@@ -101,81 +114,108 @@ export function Contact() {
           about technology and development. Feel free to reach out.
         </p>
 
-        <form noValidate onSubmit={handleSubmit} className="mt-8 max-w-xl space-y-5 md:mt-12">
-          <div className="space-y-1.5">
-            <Label htmlFor="contact-name">Name</Label>
-            <Input
-              id="contact-name"
-              name="name"
-              ref={nameRef}
-              value={values.name}
-              onChange={handleChange}
-              autoComplete="name"
-              aria-invalid={Boolean(errors.name)}
-              aria-describedby={errors.name ? 'contact-name-error' : undefined}
-            />
-            {errors.name && (
-              <p id="contact-name-error" className="text-sm text-destructive">
-                {errors.name}
+        <div className="mt-8 grid gap-10 md:mt-12 md:grid-cols-[3fr_2fr]">
+          <form noValidate onSubmit={handleSubmit} className="max-w-xl space-y-5">
+            <div className="space-y-1.5">
+              <Label htmlFor="contact-name">Name</Label>
+              <Input
+                id="contact-name"
+                name="name"
+                ref={nameRef}
+                value={values.name}
+                onChange={handleChange}
+                autoComplete="name"
+                aria-invalid={Boolean(errors.name)}
+                aria-describedby={errors.name ? 'contact-name-error' : undefined}
+              />
+              {errors.name && (
+                <p id="contact-name-error" className="text-sm text-destructive">
+                  {errors.name}
+                </p>
+              )}
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="contact-email">Email</Label>
+              <Input
+                id="contact-email"
+                name="email"
+                type="email"
+                ref={emailRef}
+                value={values.email}
+                onChange={handleChange}
+                autoComplete="email"
+                aria-invalid={Boolean(errors.email)}
+                aria-describedby={errors.email ? 'contact-email-error' : undefined}
+              />
+              {errors.email && (
+                <p id="contact-email-error" className="text-sm text-destructive">
+                  {errors.email}
+                </p>
+              )}
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="contact-message">Message</Label>
+              <Textarea
+                id="contact-message"
+                name="message"
+                ref={messageRef}
+                value={values.message}
+                onChange={handleChange}
+                rows={5}
+                aria-invalid={Boolean(errors.message)}
+                aria-describedby={errors.message ? 'contact-message-error' : undefined}
+              />
+              {errors.message && (
+                <p id="contact-message-error" className="text-sm text-destructive">
+                  {errors.message}
+                </p>
+              )}
+            </div>
+
+            <Button type="submit" disabled={submitting}>
+              {submitting && <Loader2 aria-hidden="true" className="size-4 animate-spin" />}
+              {submitting ? 'Sending…' : 'Send message'}
+            </Button>
+
+            {result === 'success' && (
+              <p role="status" aria-live="polite" className="text-sm text-foreground">
+                Thank you for your message! I&apos;ll get back to you soon.
               </p>
             )}
-          </div>
-
-          <div className="space-y-1.5">
-            <Label htmlFor="contact-email">Email</Label>
-            <Input
-              id="contact-email"
-              name="email"
-              type="email"
-              ref={emailRef}
-              value={values.email}
-              onChange={handleChange}
-              autoComplete="email"
-              aria-invalid={Boolean(errors.email)}
-              aria-describedby={errors.email ? 'contact-email-error' : undefined}
-            />
-            {errors.email && (
-              <p id="contact-email-error" className="text-sm text-destructive">
-                {errors.email}
+            {result === 'error' && (
+              <p role="alert" className="text-sm text-destructive">
+                Something went wrong sending your message. Please try again, or{' '}
+                <a href={`mailto:${site.email}`} className="underline underline-offset-2">
+                  email me directly at {site.email}
+                </a>
+                .
               </p>
             )}
+          </form>
+
+          <div className="flex flex-row flex-wrap gap-3 md:flex-col md:items-start">
+            <Button asChild variant="outline" size="lg">
+              <a href={`mailto:${site.email}`}>
+                <Mail aria-hidden="true" className="size-4" />
+                Email
+              </a>
+            </Button>
+
+            {site.social.map((link) => {
+              const Icon = SOCIAL_ICONS[link.label] ?? ExternalLink
+              return (
+                <Button key={link.label} asChild variant="outline" size="lg">
+                  <a href={link.url} target="_blank" rel="noopener noreferrer">
+                    <Icon aria-hidden="true" className="size-4" />
+                    {link.label}
+                  </a>
+                </Button>
+              )
+            })}
           </div>
-
-          <div className="space-y-1.5">
-            <Label htmlFor="contact-message">Message</Label>
-            <Textarea
-              id="contact-message"
-              name="message"
-              ref={messageRef}
-              value={values.message}
-              onChange={handleChange}
-              rows={5}
-              aria-invalid={Boolean(errors.message)}
-              aria-describedby={errors.message ? 'contact-message-error' : undefined}
-            />
-            {errors.message && (
-              <p id="contact-message-error" className="text-sm text-destructive">
-                {errors.message}
-              </p>
-            )}
-          </div>
-
-          <Button type="submit" disabled={submitting}>
-            {submitting && <Loader2 aria-hidden="true" className="size-4 animate-spin" />}
-            {submitting ? 'Sending…' : 'Send message'}
-          </Button>
-
-          {result === 'success' && (
-            <p role="status" aria-live="polite" className="text-sm text-foreground">
-              Thank you for your message! I&apos;ll get back to you soon.
-            </p>
-          )}
-          {result === 'error' && (
-            <p role="alert" className="text-sm text-destructive">
-              Something went wrong sending your message. Please try again, or email me directly.
-            </p>
-          )}
-        </form>
+        </div>
       </div>
     </section>
   )

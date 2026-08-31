@@ -25,8 +25,14 @@ export function useScrollReveal<T extends HTMLElement>() {
   const [revealed, setRevealed] = useState(true)
 
   // useLayoutEffect (not useEffect): flips to hidden before the browser
-  // paints, so an already-in-viewport section never flashes
-  // visible -> hidden -> visible on mount.
+  // paints, so a section NOT YET in the viewport at mount never flashes
+  // visible -> hidden -> visible before scrolling into view. This guarantee
+  // is synchronous only on the hide side; the IntersectionObserver callback
+  // that reveals it again is async (typically the next frame per spec), so
+  // a section already in the viewport at mount does have a real one-frame
+  // hidden gap between paints. No wired section hits that gap today — every
+  // one sits below the min-h-dvh hero — but a future section placed above
+  // the fold would.
   useLayoutEffect(() => {
     const el = ref.current
     if (!el || typeof IntersectionObserver === 'undefined') return
