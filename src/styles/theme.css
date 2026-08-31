@@ -149,4 +149,11 @@
   button:not(:disabled), [role="button"]:not(:disabled) {
     cursor: pointer;
     }
+
+  /* Section landmarks (rendered by Tasks 7-9) sit under the sticky navbar
+     (h-16 = 4rem). scroll-margin-top keeps a keyboard-focused heading from
+     landing underneath it — WCAG 2.2 focus-not-obscured. */
+  #home, #work, #experience, #about, #certifications, #contact {
+    scroll-margin-top: 5rem;
+  }
 }

@@ -28,4 +28,16 @@ export default tseslint.config([
       '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
     },
   },
+  {
+    // shadcn/ui codegen (src/components/ui/**) routinely exports a cva()
+    // variants function alongside the component, e.g. buttonVariants next
+    // to Button in button.tsx. That trips react-refresh/only-export-
+    // components, which assumes one file = one component. This is
+    // generated, vendored code we don't hand-edit, so the rule is exempted
+    // here rather than restructuring shadcn's own output.
+    files: ['src/components/ui/**/*.{ts,tsx}'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+    },
+  },
 ])
