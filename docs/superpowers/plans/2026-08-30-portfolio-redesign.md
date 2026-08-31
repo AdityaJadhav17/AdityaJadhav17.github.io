@@ -18,7 +18,9 @@
 - Semantic color tokens only. No raw hex in components — that is the defect being fixed.
 - Contrast: 4.5:1 body text, 3:1 non-text UI, verified independently in **both** themes.
 - Every foreground/background pair, every claim on the page, and every tech-stack entry must be verifiable. Remove unverifiable claims rather than softening them.
-- No emoji as icons. Lucide only.
+- No emoji as icons. Lucide for all UI icons. Brand marks (GitHub, LinkedIn, YouTube)
+  come from `react-icons` — Lucide 1.x removed brand icons and exports them as `undefined`.
+  Never mix icon families *within* UI icons.
 - Node 20 (matches CI).
 
 ## Deviation from default TDD — read before Task 1
@@ -1129,7 +1131,19 @@ git commit -m "feat: add real metadata, favicon, and 404 page"
 
 Change `actions/checkout@v3` → `@v4`, `actions/setup-node@v3` → `@v4`, and `npm install` → `npm ci` so the lockfile is respected. Add a `npm run typecheck && npm run lint && npm test` step before `npm run build` so a broken build cannot deploy.
 
-- [ ] **Step 2: Full accessibility pass in the browser**
+- [ ] **Step 2: Add subtle scroll reveals**
+
+The spec and `design-system/MASTER.md` both specify a subtle motion tier, and no earlier
+task implements it. Use `IntersectionObserver` plus a CSS opacity/translate transition —
+**not GSAP**, which is a heavy dependency for a static site. `theme.css` already carries a
+global `prefers-reduced-motion` guard that neutralises transitions, so the reveal needs no
+motion check of its own; verify that it is genuinely suppressed under reduced motion rather
+than assuming the guard covers it.
+
+Keep it to 300-400ms with an 8-16px offset, per MASTER.md's Motion section. Reveal section
+blocks, not individual list items — no staggered cascades.
+
+- [ ] **Step 3: Full accessibility pass in the browser**
 
 With the preview running:
 - Tab through the entire page. Focus is always visible and never obscured by the sticky navbar.
