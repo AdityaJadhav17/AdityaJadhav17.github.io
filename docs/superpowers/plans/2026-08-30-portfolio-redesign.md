@@ -101,27 +101,23 @@ npm install -D typescript @types/node vite-tsconfig-paths
     "baseUrl": ".",
     "paths": { "@/*": ["./src/*"] }
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src", "vite.config.ts"]
 }
 ```
 
-- [ ] **Step 4: Create `tsconfig.node.json`**
+`vite.config.ts` is included directly rather than split into a referenced
+`tsconfig.node.json`. The split is the Vite template default, but it does not
+typecheck under any single-invocation script: plain `tsc --noEmit` skips referenced
+projects entirely, and `tsc -b --noEmit` is rejected with TS6310 because a composite
+project cannot disable emit. One config that includes everything is what actually
+works. The cost is that `src` and `vite.config.ts` share one `lib`, so browser and
+Node globals are both visible to both — acceptable for a static site with a
+four-line config, and the alternative provides no real type safety at all.
 
-```json
-{
-  "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2023"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "noEmit": true
-  },
-  "include": ["vite.config.ts"]
-}
+- [ ] **Step 4: Add the build artifact to `.gitignore`**
+
+```bash
+printf '\n# TypeScript incremental build info\n*.tsbuildinfo\n' >> .gitignore
 ```
 
 - [ ] **Step 5: Rename source files**
@@ -153,14 +149,15 @@ export default defineConfig({
 Add to the `scripts` object:
 
 ```json
-"typecheck": "tsc -b --noEmit"
+"typecheck": "tsc --noEmit"
 ```
 
-Build mode (`-b`) is required, not optional. Plain `tsc --noEmit` does not compile
-files reachable only through `references` — it merely validates that the referenced
-config exists and is composite. Without `-b`, `vite.config.ts` is never typechecked
-at all and the `tsconfig.node.json` apparatus provides no type safety whatsoever.
-Add `*.tsbuildinfo` to `.gitignore`, since build mode emits it.
+This works because Step 3 puts `vite.config.ts` directly in `include` rather than
+behind a project reference. Do NOT reintroduce a referenced `tsconfig.node.json`:
+plain `tsc --noEmit` never compiles files reachable only through `references`, and
+`tsc -b --noEmit` fails unconditionally with TS6310 on a composite project, because
+composite requires declaration emit. Both were tried and measured; one config that
+includes every file it must check is the arrangement that actually typechecks.
 
 - [ ] **Step 8: Fix type errors until clean**
 
