@@ -5,6 +5,24 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React</title>
+    <!--
+      Flash-prevention: applies the .dark class before first paint, so the
+      page never flashes the wrong theme. This intentionally duplicates the
+      resolution rules in src/lib/theme.ts (getStoredTheme + resolveTheme) —
+      that module can't load early enough to run before paint, so the logic
+      is inlined here instead of shared. Keep the two in sync by hand; do
+      not "clean up" this duplication.
+    -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('theme') || 'system';
+          var dark = t === 'dark' || (t === 'system' &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
