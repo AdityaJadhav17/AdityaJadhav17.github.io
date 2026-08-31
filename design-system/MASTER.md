@@ -47,8 +47,8 @@ a token because it looks unused in page content — check component usage first.
 | Accent Foreground | `--color-accent-foreground` | `#FFFFFF` | Text/icons on accent |
 | Destructive | `--color-destructive` | `#DC2626` | Errors, destructive actions |
 | Destructive Foreground | `--color-destructive-foreground` | `#FFFFFF` | Text/icons on destructive |
-| Border | `--color-border` | `#E4E4E7` | Default borders/dividers |
-| Input | `--color-input` | `#E4E4E7` | Form control borders |
+| Border | `--color-border` | `#E4E4E7` | Default borders/dividers — decorative separation, outside WCAG 1.4.11's scope (not required to identify a component or understand content), so its sub-3:1 contrast against `background` is an accepted trade, not a defect |
+| Input | `--color-input` | `#71717A` | Form control borders — draws the boundary that identifies form controls and the outline `Button` variant, which WCAG 1.4.11 does cover; set to zinc-500 so it clears 3:1 against both `background` and `card` |
 | Ring | `--color-ring` | `#2563EB` | Focus ring |
 
 #### Dark theme
@@ -71,15 +71,17 @@ a token because it looks unused in page content — check component usage first.
 | Accent Foreground | `--color-accent-foreground` | `#09090B` | Text/icons on accent |
 | Destructive | `--color-destructive` | `#F87171` | Errors, destructive actions |
 | Destructive Foreground | `--color-destructive-foreground` | `#09090B` | Text/icons on destructive |
-| Border | `--color-border` | `#27272A` | Default borders/dividers |
-| Input | `--color-input` | `#3F3F46` | Form control borders |
+| Border | `--color-border` | `#27272A` | Default borders/dividers — decorative separation, outside WCAG 1.4.11's scope (not required to identify a component or understand content), so its sub-3:1 contrast against `background` is an accepted trade, not a defect |
+| Input | `--color-input` | `#71717A` | Form control borders — draws the boundary that identifies form controls and the outline `Button` variant, which WCAG 1.4.11 does cover; set to zinc-500 so it clears 3:1 against both `background` and `card` |
 | Ring | `--color-ring` | `#60A5FA` | Focus ring |
 
 **Color Notes:** Monochrome + blue accent. The dark ramp is authored, not a mechanical
 inversion of light — `accent` and `ring` lighten from `#2563EB` to `#60A5FA` in dark because
-`#2563EB` on `#09090B` measures 3.6:1, below the 4.5:1 floor required for text-sized UI.
-`destructive` lightens for the same reason. Task 4 Step 3 records the full per-pair contrast
-audit as a comment at the top of `theme.css`.
+`#2563EB` on `#09090B` measures 3.85:1, below the 4.5:1 floor required for text-sized UI.
+`destructive` lightens for the same reason. `--color-input` is `#71717A` (zinc-500) in both
+ramps rather than following `--color-border`, because 1.4.11 requires 3:1 for the boundary of
+an interactive control, unlike the purely decorative `--color-border`. Task 4 Step 3 records
+the full per-pair contrast audit as a comment at the top of `theme.css`.
 
 ### Typography
 

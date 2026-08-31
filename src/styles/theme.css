@@ -1,6 +1,6 @@
 /*
-  Contrast audit (Task 4, Step 3) — WCAG relative-luminance formula, computed with a
-  standalone script (not estimated). Ratios rounded to 2 decimals.
+  Contrast audit (Task 4, Step 3, revised in fix round 1) — WCAG relative-luminance formula,
+  computed with a standalone script (not estimated). Ratios rounded to 2 decimals.
 
   LIGHT theme
   -------------------------------------------------------------------------------------------
@@ -15,8 +15,9 @@
   accent-foreground #FFFFFF on accent     #2563EB                  5.17:1   need 4.5:1   PASS
   destructive-fg    #FFFFFF on destructive#DC2626                  4.83:1   need 4.5:1   PASS
   ring              #2563EB on background #FAFAFA                  4.95:1   need 3.0:1   PASS
-  border            #E4E4E7 on background #FAFAFA                  1.22:1   need 3.0:1   FAIL *
-  input             #E4E4E7 on background #FAFAFA                  1.22:1   need 3.0:1   FAIL *
+  border            #E4E4E7 on background #FAFAFA                  1.22:1   need 3.0:1   N/A **
+  input             #71717A on background #FAFAFA                  4.63:1   need 3.0:1   PASS
+  input             #71717A on card       #FFFFFF                  4.83:1   need 3.0:1   PASS
 
   DARK theme (.dark)
   -------------------------------------------------------------------------------------------
@@ -31,19 +32,30 @@
   accent-foreground #09090B on accent     #60A5FA                  7.83:1   need 4.5:1   PASS
   destructive-fg     #09090B on destructive#F87171                 7.19:1   need 4.5:1   PASS
   ring              #60A5FA on background #09090B                  7.83:1   need 3.0:1   PASS
-  border            #27272A on background #09090B                  1.34:1   need 3.0:1   FAIL *
-  input             #3F3F46 on background #09090B                  1.91:1   need 3.0:1   FAIL *
+  border            #27272A on background #09090B                  1.34:1   need 3.0:1   N/A **
+  input             #71717A on background #09090B                  4.12:1   need 3.0:1   PASS
+  input             #71717A on card       #18181B                  3.67:1   need 3.0:1   PASS
 
-  * ESCALATED, NOT ADJUSTED — see task-4-report.md. `--color-border` / `--color-input` are
-    thin dividers/outlines, not fills; they were not lightened/darkened here because the
-    palette is the project owner's decision, not this task's. Interactive components that
-    truly require a 3:1 boundary rely on `--color-ring` on focus (4.95:1 / 7.83:1, both PASS),
-    not the static border/input color, in both themes.
+  ** `--color-border` is decorative separation (card/section dividers) — content and
+     components remain identifiable without it, so it falls outside WCAG 1.4.11's scope and
+     its sub-3:1 contrast against `background` is an accepted, owner-approved trade, not a
+     defect. This differs from `--color-input`, which draws the boundary that identifies a
+     form control / the outline `Button` variant and IS covered by 1.4.11 — that token was
+     changed (see below) rather than left as-is.
 
-  Note check (brief's Step 2 comment): accent light value #2563EB on dark background #09090B
-  measures 3.85:1 here (brief text says "~3.6:1"); both are below the 4.5:1 floor, so the
-  documented conclusion — that dark mode must use the lightened #60A5FA instead — holds either
-  way. The discrepancy is in the approximate figure only, not the pass/fail outcome.
+  `--color-input` fix (fix round 1): was #E4E4E7 (light) / #3F3F46 (dark), both FAILing 1.4.11
+  at 1.22:1 / 1.91:1 against background. Introduced under Ruling M by assumption (mapped to
+  `--color-border`'s value) rather than by owner approval, so unlike `--color-border` this was
+  this task's call to correct. Set to #71717A (Tailwind zinc-500) in BOTH ramps — one value
+  clears 3:1 against both `background` and `card` in both themes (4.63 / 4.83 light, 4.12 /
+  3.67 dark, all above). Candidates considered and rejected: #8A8A93 (passes all four but with
+  a thinner margin, 3.28 lowest), #A1A1AA (fails light: 2.46 / 2.56), #52525B (fails dark:
+  2.57 / 2.29), #3F3F46 (fails dark: 1.91 / 1.70).
+
+  Accent note: light accent #2563EB on dark background #09090B measures 3.85:1 (previously
+  documented here and in MASTER.md as "~3.6:1" — corrected in fix round 1). Below the 4.5:1
+  floor either way, so the documented conclusion — dark mode uses the lightened #60A5FA
+  instead — is unaffected by the correction.
 */
 
 @import "tw-animate-css";
@@ -87,7 +99,7 @@
   --color-destructive: #DC2626;
   --color-destructive-foreground: #FFFFFF;
   --color-border: #E4E4E7;
-  --color-input: #E4E4E7;
+  --color-input: #71717A;
   --color-ring: #2563EB;
 }
 
@@ -110,7 +122,7 @@
     --color-destructive: #F87171;
     --color-destructive-foreground: #09090B;
     --color-border: #27272A;
-    --color-input: #3F3F46;
+    --color-input: #71717A;
     --color-ring: #60A5FA;
   }
 
