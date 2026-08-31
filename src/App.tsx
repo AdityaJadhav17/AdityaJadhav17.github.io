@@ -1,10 +1,12 @@
 import { SkipLink } from '@/components/layout/SkipLink'
 import { Navbar } from '@/components/layout/Navbar'
+import { Footer } from '@/components/layout/Footer'
 import { Hero } from '@/components/sections/Hero'
 import { Work } from '@/components/sections/Work'
 import { Experience } from '@/components/sections/Experience'
 import { About } from '@/components/sections/About'
 import { Certifications } from '@/components/sections/Certifications'
+import { Contact } from '@/components/sections/Contact'
 
 const SECTION_IDS = ['home', 'work', 'experience', 'about', 'certifications', 'contact']
 
@@ -19,8 +21,9 @@ export default function App() {
         <Experience />
         <About />
         <Certifications />
-        {/* contact lands in Task 10 */}
+        <Contact />
       </main>
+      <Footer />
     </>
   )
 }
