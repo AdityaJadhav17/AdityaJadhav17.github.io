@@ -31,9 +31,9 @@ export const projects: Project[] = [
     },
     image: {
       src: '/travel-agntcy.webp',
-      width: 1400,
-      height: 781,
-      alt: 'Screenshot of the Travel-Agntcy multi-agent travel planning platform',
+      width: 1136,
+      height: 592,
+      alt: 'TravelAGNTCY running: an agent chat panel beside ranked flight options with airline, price, and layover detail',
     },
     featured: true,
     context: 'SANDHacks 2026',
@@ -47,6 +47,12 @@ export const projects: Project[] = [
       'As Team Leader, Scrum Master, and backend tech lead for UCSD CSE 110 Team 09, directed delivery and system design for a browser SDK, Node.js ingest API, Supabase/Postgres persistence, and a Clerk-authenticated real-time dashboard. Shipped CI with Jest and Playwright, plus a deployed Render backend.',
     stack: ['JavaScript', 'Node.js', 'Supabase', 'Clerk', 'Jest', 'Playwright', 'Render'],
     result: 'Deployable observability platform with live backend and SDK test app.',
+    image: {
+      src: '/watchtower.webp',
+      width: 800,
+      height: 410,
+      alt: "WatchTower's triage queue showing live captured JavaScript errors with severity, version, and assignment",
+    },
     links: {
       github: 'https://github.com/cse110-sp26-group09/Watchtower-Course-Project',
       live: 'https://cse110-sp26-group09.github.io/Watchtower-Course-Project/',
@@ -64,6 +70,12 @@ export const projects: Project[] = [
     stack: ['Python', 'Gemini', 'MuJoCo', 'Gymnasium', 'Stable-Baselines3 (SAC + HER)'],
     result:
       'End-to-end success near-solved on literal/region tiers (T0 ~98%, T1 ~93%), with a clear cliff on relative and intent-heavy instructions (T2 ~77% LLM, T4 ~45–55%).',
+    image: {
+      src: '/talk-to-robot.webp',
+      width: 1280,
+      height: 800,
+      alt: 'Grouped bar chart of grounder, policy, and end-to-end success rates across instruction tiers T0 to T3',
+    },
     links: {
       github: 'https://github.com/YangLin14/Talk-to-Robot',
     },
