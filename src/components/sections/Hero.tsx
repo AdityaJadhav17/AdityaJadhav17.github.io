@@ -26,7 +26,7 @@ export function Hero() {
     >
       {/* LCP element: eager-loaded, intrinsic size fixed to prevent layout shift. */}
       <img
-        src="/aditya-profile.jpg"
+        src="/aditya-profile.webp"
         alt={`${site.name} headshot`}
         width={200}
         height={200}

@@ -30,9 +30,9 @@ export const projects: Project[] = [
       demo: 'https://youtu.be/T0EkJ9J_IQU',
     },
     image: {
-      src: '/travel-agntcy.png',
-      width: 2752,
-      height: 1536,
+      src: '/travel-agntcy.webp',
+      width: 1400,
+      height: 781,
       alt: 'Screenshot of the Travel-Agntcy multi-agent travel planning platform',
     },
     featured: true,
@@ -84,7 +84,7 @@ export const projects: Project[] = [
       demo: 'https://www.kaggle.com/competitions/synthetic-2-real-object-detection-challenge',
     },
     image: {
-      src: '/sim2real.png',
+      src: '/sim2real.webp',
       width: 560,
       height: 280,
       alt: 'Synthetic-to-Real Object Detection project visualization',
@@ -104,12 +104,6 @@ export const projects: Project[] = [
     // rather than invented. Do not add one without owner confirmation.
     links: {
       github: 'https://github.com/AdityaJadhav17/bird-classifier-forest',
-    },
-    image: {
-      src: '/bird-classifier.png',
-      width: 256,
-      height: 171,
-      alt: 'Bird Classifier in a Forest project screenshot',
     },
     featured: false,
   },
