@@ -772,7 +772,7 @@ export type Project = {
   problem: string
   contribution: string
   stack: string[]
-  result: string
+  result?: string   // absent where no metric exists — never invent one
   links: { github?: string; demo?: string; live?: string }
   image?: { src: string; width: number; height: number; alt: string }
   featured: boolean
