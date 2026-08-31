@@ -1,6 +1,18 @@
 import { Download, ExternalLink, MapPin } from 'lucide-react'
+import { FaGithub, FaLinkedin } from 'react-icons/fa'
 import { Button } from '@/components/ui/button'
 import { site } from '@/content/site'
+
+// RULING AJ: lucide-react ships no brand/logo marks (Github/Linkedin/Youtube
+// all resolve undefined) — official brand glyphs come from react-icons,
+// already a dependency (Footer.tsx, Contact.tsx). Lucide stays the icon set
+// for every non-brand UI icon (Download, MapPin, above). ExternalLink is
+// kept as the fallback glyph for a social label this map doesn't recognize,
+// so an unexpected future entry in site.social still renders sensibly.
+const SOCIAL_ICONS: Record<string, typeof FaGithub> = {
+  GitHub: FaGithub,
+  LinkedIn: FaLinkedin,
+}
 
 // Hero — name, both current roles (folded into `site.tagline`, the
 // one-line positioning statement), résumé download, and social links.
@@ -41,14 +53,17 @@ export function Hero() {
           </a>
         </Button>
 
-        {site.social.map((link) => (
-          <Button key={link.label} asChild variant="outline" size="lg">
-            <a href={link.url} target="_blank" rel="noopener noreferrer">
-              {link.label}
-              <ExternalLink aria-hidden="true" className="size-3.5" />
-            </a>
-          </Button>
-        ))}
+        {site.social.map((link) => {
+          const Icon = SOCIAL_ICONS[link.label] ?? ExternalLink
+          return (
+            <Button key={link.label} asChild variant="outline" size="lg">
+              <a href={link.url} target="_blank" rel="noopener noreferrer">
+                <Icon aria-hidden="true" className="size-4" />
+                {link.label}
+              </a>
+            </Button>
+          )
+        })}
       </div>
     </section>
   )

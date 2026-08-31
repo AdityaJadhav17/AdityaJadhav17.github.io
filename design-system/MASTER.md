@@ -278,15 +278,25 @@ gsap.from(el, { opacity: 0, y: 12, duration: 0.35, ease: 'power1.out', scrollTri
 
 ### Additional Forbidden Patterns
 
-- ❌ **Emojis as icons** — Use SVG icons (Heroicons, Lucide, Simple Icons)
+- ❌ **Emojis as icons** — Use SVG icons, split by role, never mixed within the UI-icon set
+  itself (RULING AJ): **Lucide** is the icon set for all UI icons — nav, buttons, status,
+  section labels, anything that isn't a brand mark. **Official brand marks** (GitHub,
+  LinkedIn, YouTube, etc.) come from **react-icons** instead, because Lucide does not ship
+  brand/logo icons (`Github`, `Linkedin`, `Youtube` all resolve `undefined` in the installed
+  version) — do not substitute a generic glyph or invent a brand mark where the real one is
+  unavailable; react-icons is the one exception to "Lucide only" and applies exclusively to
+  social/brand links.
 - ❌ **Missing cursor:pointer** — All clickable elements must have cursor:pointer
 - ❌ **Layout-shifting hovers** — Avoid scale transforms that shift layout
 - ❌ **Low contrast text** — Maintain 4.5:1 minimum contrast ratio
 - ❌ **Instant state changes** — Always use transitions (150-300ms)
 - ❌ **Invisible focus states** — Focus states must be visible for a11y
-- ❌ **Touch targets under 44×44 CSS px on mobile** — if the visual control must stay
-  smaller (e.g. a compact icon button), expand the hit area with padding or a pseudo-element
-  overlay rather than enlarging the visible icon
+- ❌ **Icon-only touch targets under 44×44 CSS px on mobile** — applies to icon-only controls
+  (no visible text label), where the hit area is small in both axes with nothing else to
+  widen it; expand the hit area with padding or a pseudo-element overlay rather than
+  enlarging the visible icon. Text/label buttons are exempt from this rule — a button with a
+  readable label is wide enough to clear WCAG 2.2 AA well below 44px tall (e.g. shadcn's
+  `Button` scale, `h-8`/`h-9`, used throughout this project).
 
 ---
 
@@ -295,13 +305,14 @@ gsap.from(el, { opacity: 0, y: 12, duration: 0.35, ease: 'power1.out', scrollTri
 Before delivering any UI code, verify:
 
 - [ ] No emojis used as icons (use SVG instead)
-- [ ] All icons from consistent icon set (Heroicons/Lucide)
+- [ ] Lucide for all UI icons; react-icons brand marks (GitHub/LinkedIn/YouTube/etc.) only for
+      social/brand links — never mixed within the UI-icon set itself
 - [ ] `cursor-pointer` on all clickable elements
 - [ ] Hover states with smooth transitions (150-300ms)
 - [ ] Light mode: text contrast 4.5:1 minimum
 - [ ] Focus states visible for keyboard navigation
-- [ ] Touch targets ≥44×44 CSS px on mobile (expand hit area via padding/pseudo-element if the
-      visual control must stay smaller)
+- [ ] Icon-only touch targets ≥44×44 CSS px on mobile (expand hit area via padding/pseudo-element
+      if the visual control must stay smaller); text/label buttons are exempt
 - [ ] `prefers-reduced-motion` respected
 - [ ] Responsive: 375px, 768px, 1024px, 1440px
 - [ ] No content hidden behind fixed navbars
