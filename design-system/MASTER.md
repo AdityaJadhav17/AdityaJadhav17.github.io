@@ -1,8 +1,7 @@
 # Design System Master File
 
-> **LOGIC:** When building a specific page, first check `design-system/pages/[page-name].md`.
-> If that file exists, its rules **override** this Master file.
-> If not, strictly follow the rules below.
+> **LOGIC:** No page-level override files exist in `design-system/`. This Master file governs
+> every page and component in the project directly — nothing supersedes it.
 
 ---
 
@@ -133,8 +132,8 @@ exact set Task 4 loads via `<link>` in `index.html` and exposes as `--font-headi
 ```css
 /* Primary Button */
 .btn-primary {
-  background: #2563EB;
-  color: white;
+  background: var(--color-accent);
+  color: var(--color-accent-foreground);
   padding: 12px 24px;
   border-radius: 8px;
   font-weight: 600;
@@ -150,8 +149,8 @@ exact set Task 4 loads via `<link>` in `index.html` and exposes as `--font-headi
 /* Secondary Button */
 .btn-secondary {
   background: transparent;
-  color: #18181B;
-  border: 2px solid #18181B;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
   padding: 12px 24px;
   border-radius: 8px;
   font-weight: 600;
@@ -164,7 +163,8 @@ exact set Task 4 loads via `<link>` in `index.html` and exposes as `--font-headi
 
 ```css
 .card {
-  background: #FAFAFA;
+  background: var(--color-card);
+  color: var(--color-card-foreground);
   border-radius: 12px;
   padding: 24px;
   box-shadow: var(--shadow-md);
@@ -178,34 +178,41 @@ exact set Task 4 loads via `<link>` in `index.html` and exposes as `--font-headi
 }
 ```
 
+`--color-card` is deliberately distinct from `--color-background` (`#FFFFFF` vs `#FAFAFA` in
+light) so a card reads as a raised surface against the page, not as invisible camouflage.
+
 ### Inputs
 
 ```css
 .input {
   padding: 12px 16px;
-  border: 1px solid #E2E8F0;
+  border: 1px solid var(--color-input);
   border-radius: 8px;
   font-size: 16px;
   transition: border-color 200ms ease;
 }
 
 .input:focus {
-  border-color: #18181B;
+  border-color: var(--color-ring);
   outline: none;
-  box-shadow: 0 0 0 3px #18181B20;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-ring) 20%, transparent);
 }
 ```
 
 ### Modals
 
 ```css
+/* .modal-overlay's scrim is intentionally a fixed black rgba(), not a theme token — a
+   backdrop dim should stay dark behind the modal in both light and dark mode; it doesn't
+   represent any of the 19 semantic roles. */
 .modal-overlay {
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
 }
 
 .modal {
-  background: white;
+  background: var(--color-popover);
+  color: var(--color-popover-foreground);
   border-radius: 16px;
   padding: 32px;
   box-shadow: var(--shadow-xl);
@@ -222,7 +229,9 @@ exact set Task 4 loads via `<link>` in `index.html` and exposes as `--font-headi
 
 **Keywords:** Clean, simple, spacious, functional, white space, high contrast, geometric, sans-serif, grid-based, essential
 
-**Best For:** Enterprise apps, dashboards, documentation sites, SaaS platforms, professional tools
+**Best For:** This project specifically — a single-owner developer/engineer portfolio and
+personal site. The Swiss-minimal treatment favors scannable work samples, credibility signals
+(experience, certifications), and a direct contact path over broad marketing conversion flows.
 
 **Key Effects:** Subtle hover (200-250ms), smooth transitions, sharp shadows if any, clear type hierarchy, fast loading
 
