@@ -365,7 +365,7 @@ Inside `<head>`:
   --color-destructive: #DC2626;
   --color-destructive-foreground: #FFFFFF;
   --color-border: #E4E4E7;
-  --color-input: #E4E4E7;
+  --color-input: #71717A;
   --color-ring: #2563EB;
 }
 
@@ -388,7 +388,7 @@ Inside `<head>`:
     --color-destructive: #F87171;
     --color-destructive-foreground: #09090B;
     --color-border: #27272A;
-    --color-input: #3F3F46;
+    --color-input: #71717A;
     --color-ring: #60A5FA;
   }
 
@@ -414,7 +414,7 @@ Inside `<head>`:
 }
 ```
 
-Note the dark ramp is authored, not inverted. `--color-accent` lightens to `#60A5FA` in dark because `#2563EB` on `#09090B` is 3.6:1 — below the 4.5:1 body-text floor.
+Note the dark ramp is authored, not inverted. `--color-accent` lightens to `#60A5FA` in dark because `#2563EB` on `#09090B` measures 3.85:1 — below the 4.5:1 body-text floor.
 
 - [ ] **Step 3: Verify every pair meets contrast**
 
