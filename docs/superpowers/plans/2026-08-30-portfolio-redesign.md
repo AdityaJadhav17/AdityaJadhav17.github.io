@@ -562,9 +562,12 @@ Add to `index.html` `<head>`, before the stylesheet link:
 
 ```html
 <script>
+  // Intentionally mirrors src/lib/theme.ts. The module cannot load before first
+  // paint, so this duplication cannot be removed — keep the two in lockstep.
   (function () {
     try {
-      var t = localStorage.getItem('theme') || 'system';
+      var t = localStorage.getItem('theme');
+      if (t !== 'light' && t !== 'dark' && t !== 'system') t = 'system';
       var dark = t === 'dark' || (t === 'system' &&
         window.matchMedia('(prefers-color-scheme: dark)').matches);
       if (dark) document.documentElement.classList.add('dark');
@@ -572,6 +575,13 @@ Add to `index.html` `<head>`, before the stylesheet link:
   })();
 </script>
 ```
+
+The explicit validity check is required, not defensive padding. `getStoredTheme()`
+rejects any value outside `light | dark | system` and falls back to `system`, which
+may resolve to dark. A bare `|| 'system'` accepts a corrupt value like `'banana'`,
+falls through to light, and then disagrees with the module — producing exactly the
+flash this script exists to prevent. The two copies must apply the same validation
+because they can never be merged.
 
 - [ ] **Step 7: Verify and commit**
 
