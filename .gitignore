@@ -31,3 +31,6 @@ yarn-error.log*
 
 # OS generated files
 Thumbs.db
+
+# Claude Code agent tooling (local only)
+.claude/
