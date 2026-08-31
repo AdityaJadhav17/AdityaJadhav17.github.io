@@ -54,8 +54,8 @@ If you disagree with this trade, raise it before Task 1 rather than during.
 ### Task 1: Branch and TypeScript migration
 
 **Files:**
-- Create: `tsconfig.json`, `tsconfig.node.json`
-- Modify: `package.json`, `vite.config.js` → `vite.config.ts`
+- Create: `tsconfig.json`
+- Modify: `package.json`, `.gitignore`, `vite.config.js` → `vite.config.ts`
 - Rename: all `src/**/*.jsx` → `.tsx`, `src/main.jsx` → `src/main.tsx`
 
 **Interfaces:**
