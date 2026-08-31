@@ -24,18 +24,18 @@ const SKILLS = [
 ]
 
 // The previous About.tsx carried three paragraphs; every claim below traces
-// to one of them. Dropped, not reworded: the AI Club mention (now its own
-// Experience entry) and "leading workshops for other students" (the same
-// AI Club leadership, described differently — repeating it here would just
-// smuggle the same fact back in under different wording).
+// to one of them. Dropped, not reworded: the AI Club mention only (now its
+// own Experience entry). RULING AO: "leading workshops for other students"
+// is a distinct claim from a different sentence in the original prose (an
+// organizational role vs. a teaching activity) and is kept.
 const ABOUT_PARAGRAPH =
   "I've always been curious about how technology powers the world, and that curiosity pulled " +
-  "me into tech — from small coding projects to building full AI pipelines and interactive web " +
-  'apps. I learn by doing, whether it was training a bird classifier on thousands of rainforest ' +
-  'images or building a responsive portfolio site, and each project has pushed me to take on ' +
-  'bigger challenges. What excites me most now is using AI/ML and software development to solve ' +
-  'real problems — collaborating with others, sharing ideas, and staying open to learning ' +
-  'something new.'
+  "me into tech — from small coding projects to building full AI pipelines, interactive web " +
+  'apps, and leading workshops for other students. I learn by doing, whether it was training a ' +
+  'bird classifier on thousands of rainforest images or building a responsive portfolio site, ' +
+  'and each project has pushed me to take on bigger challenges. What excites me most now is ' +
+  'using AI/ML and software development to solve real problems — collaborating with others, ' +
+  'sharing ideas, and staying open to learning something new.'
 
 // About — one condensed paragraph (was three), skills as font-mono tags
 // matching ProjectCard's stack-tag treatment, and education pulled from
