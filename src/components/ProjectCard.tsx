@@ -1,4 +1,5 @@
-import { Code2, ExternalLink } from 'lucide-react'
+import { ExternalLink } from 'lucide-react'
+import { FaGithub, FaYoutube } from 'react-icons/fa'
 import type { Project } from '@/content/projects'
 import { cn } from '@/lib/utils'
 
@@ -15,9 +16,20 @@ type ProjectCardProps = {
 // falls back to a typographic treatment built entirely from design tokens
 // — no AI-generated art.
 export function ProjectCard({ project, className }: ProjectCardProps) {
+  // RULING AM: apply RULING AJ's split consistently — every links.github
+  // points at GitHub, so the code link always gets the real GitHub mark.
+  // A demo link only gets the YouTube mark when it actually is one
+  // (travel-agntcy's is youtu.be; sim2real's is a Kaggle URL and stays
+  // generic); a live-site link is never a brand link, so it always stays
+  // the generic Lucide ExternalLink. Restores the previous site's
+  // FaGithub / FaYoutube / FiExternalLink split.
   const codeLink = project.links.github
-  const secondaryLink = project.links.live ?? project.links.demo
-  const secondaryLabel = project.links.live ? 'Live' : 'Demo'
+  const liveLink = project.links.live
+  const demoLink = project.links.demo
+  const secondaryLink = liveLink ?? demoLink
+  const secondaryLabel = liveLink ? 'Live' : 'Demo'
+  const isYouTubeDemo = !liveLink && Boolean(demoLink) && demoLink!.includes('youtu')
+  const SecondaryIcon = isYouTubeDemo ? FaYoutube : ExternalLink
 
   return (
     <article
@@ -116,7 +128,7 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 font-sans text-sm font-medium text-accent transition-colors duration-200 hover:text-foreground"
               >
-                <Code2 aria-hidden="true" className="size-4" />
+                <FaGithub aria-hidden="true" className="size-4" />
                 Code
               </a>
             )}
@@ -127,7 +139,7 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 font-sans text-sm font-medium text-accent transition-colors duration-200 hover:text-foreground"
               >
-                <ExternalLink aria-hidden="true" className="size-4" />
+                <SecondaryIcon aria-hidden="true" className="size-4" />
                 {secondaryLabel}
               </a>
             )}
