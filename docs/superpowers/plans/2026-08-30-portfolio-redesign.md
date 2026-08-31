@@ -153,8 +153,14 @@ export default defineConfig({
 Add to the `scripts` object:
 
 ```json
-"typecheck": "tsc --noEmit"
+"typecheck": "tsc -b --noEmit"
 ```
+
+Build mode (`-b`) is required, not optional. Plain `tsc --noEmit` does not compile
+files reachable only through `references` — it merely validates that the referenced
+config exists and is composite. Without `-b`, `vite.config.ts` is never typechecked
+at all and the `tsconfig.node.json` apparatus provides no type safety whatsoever.
+Add `*.tsbuildinfo` to `.gitignore`, since build mode emits it.
 
 - [ ] **Step 8: Fix type errors until clean**
 
