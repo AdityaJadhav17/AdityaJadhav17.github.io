@@ -23,7 +23,7 @@ export function Work() {
         <div className="mt-8 flex flex-col gap-6 md:mt-12">
           {featured.map((project) => (
             <Reveal.Item key={project.id}>
-              <ProjectCard project={project} />
+              <ProjectCard project={project} layout="wide" />
             </Reveal.Item>
           ))}
         </div>
