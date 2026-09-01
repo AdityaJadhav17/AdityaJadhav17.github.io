@@ -465,3 +465,20 @@ is a no-op: absent and `"false"` are equivalent, and the `img` inside carries it
 **Ruling:** omit it. The `alt` on the image is what makes the portrait accessible.
 
 **Cost if wrong:** none. Removing a no-op attribute cannot change behaviour.
+
+### Ruling C: the portrait is absolute only at `lg` and up
+
+**Raised at:** Task 3.
+
+Task 3's code positions the portrait `absolute inset-x-0 bottom-0` at every width. Task 4
+requires the opposite at mobile: "Do not attempt the overlap at mobile widths; let the
+portrait sit in flow." Absolute positioning at every width makes that impossible, because
+an absolutely positioned element is out of flow by definition and would sit underneath
+the stacked single-column content.
+
+**Ruling:** the wrapper is `flex justify-center` by default and gains
+`lg:absolute lg:inset-x-0 lg:bottom-0` at the breakpoint where the overlap is wanted.
+Task 4's mobile requirement is the binding one; Task 3's class list was the error.
+
+**Cost if wrong:** low. The failure would be visible immediately at 375px as a portrait
+overlapping the text stack, and it is a one-class fix.
