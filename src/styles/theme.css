@@ -185,10 +185,18 @@
      is the only place colour is allowed to be resolved. Masked radially so it
      fades out instead of tiling to a hard edge against the section border. */
   .dot-grid {
-    background-image: radial-gradient(var(--color-border) 1px, transparent 1px);
-    background-size: 22px 22px;
-    -webkit-mask-image: radial-gradient(ellipse 65% 55% at 50% 45%, #000 0%, transparent 78%);
-    mask-image: radial-gradient(ellipse 65% 55% at 50% 45%, #000 0%, transparent 78%);
+    /* Mixed up from --color-muted-foreground rather than --color-border:
+       border sits only a few steps off the background in both themes, which
+       made the grid read as almost nothing. The mix keeps it tied to the
+       token ramp instead of hardcoding a value, and stays proportional when
+       the palette changes. */
+    background-image: radial-gradient(
+      color-mix(in oklch, var(--color-muted-foreground) 32%, transparent) 1.25px,
+      transparent 1.25px
+    );
+    background-size: 20px 20px;
+    -webkit-mask-image: radial-gradient(ellipse 72% 62% at 50% 45%, #000 0%, transparent 85%);
+    mask-image: radial-gradient(ellipse 72% 62% at 50% 45%, #000 0%, transparent 85%);
   }
 
   body {
