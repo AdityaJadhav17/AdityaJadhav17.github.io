@@ -20,6 +20,8 @@ export type ProofPoint = {
 export type Site = {
   name: string
   positioning: string
+  discipline: string
+  capabilities: string[]
   roles: string[]
   tagline: string
   availability: string
@@ -40,6 +42,25 @@ export const site: Site = {
   // real data, WatchTower catches production errors, and the UC San Diego
   // role is authorized penetration testing and control-gap assessment.
   positioning: 'I build AI systems and find where they break.',
+
+  // The framing that sits under the name, the way a studio states its
+  // discipline. Narrower than the roles list, broader than any single project.
+  discipline: 'AI Systems & Security',
+
+  // What he actually works on, each traceable to a project or a role in this
+  // file's siblings. Not aspirational, and not a skills dump: the skills list
+  // in About already serves that purpose. Multi-agent traces to TravelAGNTCY,
+  // computer vision to Synthetic-to-Real and the bird classifier, evaluation
+  // to Talk-to-Robot, observability to WatchTower, and the last two to the
+  // UC San Diego role. Do not add a seventh.
+  capabilities: [
+    'Multi-agent LLM systems',
+    'Computer vision pipelines',
+    'Model evaluation and failure analysis',
+    'Production observability tooling',
+    'Penetration testing',
+    'Security compliance (NIST SP 800-171)',
+  ],
 
   roles: [
     'Software Engineering Intern @ Lumulus Technologies',
