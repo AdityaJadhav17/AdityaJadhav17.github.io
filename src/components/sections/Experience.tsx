@@ -39,7 +39,13 @@ export function Experience() {
           <h2 className="font-heading text-3xl font-semibold text-foreground">Experience</h2>
         </Reveal.Item>
 
-        <ol ref={listRef} className="relative mt-8 space-y-10 md:mt-12">
+        {/* Wrapper supplies the positioning context for the track and drawn
+            line instead of the <ol>: HTML's content model only allows <li>
+            (and script-supporting elements) as direct children of an <ol>,
+            so the two decorative spans live here. The <ol> keeps the ref
+            useScroll targets and drops its own `relative` now that the
+            wrapper provides it. */}
+        <div className="relative mt-8 md:mt-12">
           {/* Static track and drawn line. left-[7px] centres a 1px rule under
               a 2.5-unit (10px) dot inside a 4-unit (16px) column: (16-1)/2
               rounds to 7. Verify by measurement, not by trusting this sum. */}
@@ -53,17 +59,19 @@ export function Experience() {
             style={{ scaleY: reduced ? 1 : progress }}
           />
 
-          {experience.map((entry, index) => (
-            <TimelineEntry
-              key={`${entry.organization}-${entry.role}`}
-              entry={entry}
-              index={index}
-              total={experience.length}
-              progress={progress}
-              reduced={reduced}
-            />
-          ))}
-        </ol>
+          <ol ref={listRef} className="space-y-10">
+            {experience.map((entry, index) => (
+              <TimelineEntry
+                key={`${entry.organization}-${entry.role}`}
+                entry={entry}
+                index={index}
+                total={experience.length}
+                progress={progress}
+                reduced={reduced}
+              />
+            ))}
+          </ol>
+        </div>
       </div>
     </Reveal>
   )

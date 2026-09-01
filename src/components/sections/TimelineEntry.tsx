@@ -17,9 +17,17 @@ type TimelineEntryProps = {
 export function TimelineEntry({ entry, index, total, progress, reduced }: TimelineEntryProps) {
   // Where this dot sits along the line: the first at 0, the last at 1.
   // The 0.08 lead-in makes the dot fill just as the line reaches it rather
-  // than snapping after it has already passed.
+  // than snapping after it has already passed. Called unconditionally so
+  // hook order stays stable across rows, even though its result is
+  // overridden below for the first entry.
   const at = total > 1 ? index / (total - 1) : 0
   const fill = useTransform(progress, [Math.max(at - 0.08, 0), at], [0, 1])
+
+  // The first entry sits at progress 0, so its lead-in range above collapses
+  // to [0, 0]. It has no meaningful "unfilled" state to transition from, so
+  // state that intent plainly instead of relying on how useTransform happens
+  // to resolve a zero-width range.
+  const dotFill = index === 0 ? 1 : fill
 
   return (
     <Reveal.Item as="li" className="relative flex gap-4 sm:gap-6">
@@ -27,7 +35,7 @@ export function TimelineEntry({ entry, index, total, progress, reduced }: Timeli
         <span className="relative mt-1.5 size-2.5 flex-none rounded-full bg-border ring-4 ring-background">
           <motion.span
             className="absolute inset-0 rounded-full bg-accent"
-            style={{ scale: reduced ? 1 : fill }}
+            style={{ scale: reduced ? 1 : dotFill }}
           />
         </span>
       </div>
