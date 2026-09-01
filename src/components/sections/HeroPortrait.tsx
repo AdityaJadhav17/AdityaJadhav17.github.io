@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
 import { site } from '@/content/site'
-import { useHeroMotion } from '@/lib/motion'
+import { EASE, heroItem } from '@/lib/motion'
 
 // The portrait is the visual centre of the composition, so it gets its own
 // file: its sizing is viewport-relative rather than token-driven, and it has
@@ -12,11 +12,9 @@ import { useHeroMotion } from '@/lib/motion'
 // caption beneath it. If a rectangular photo is ever substituted here, the
 // overlap will look like a mistake rather than a design.
 export function HeroPortrait() {
-  const { item, reduced, ease } = useHeroMotion()
-
   return (
     <motion.div
-      variants={item}
+      variants={heroItem}
       // Right-anchored at lg rather than centred. A centred portrait puts the
     // subject's arm directly under the display claim's lower-right, which is
     // dark clothing behind dark type in the light theme. Offsetting right
@@ -33,9 +31,11 @@ export function HeroPortrait() {
         // A slow settle from very slightly oversized. Set as initial/animate
         // rather than a variant so it runs independently of the band stagger:
         // the portrait should still be moving while the text has landed.
-        initial={reduced ? false : { scale: 1.04 }}
+        // scale is a transform, so the MotionConfig in App.tsx suppresses
+        // this animation under prefers-reduced-motion; no local check needed.
+        initial={{ scale: 1.04 }}
         animate={{ scale: 1 }}
-        transition={reduced ? { duration: 0 } : { duration: 1.4, ease }}
+        transition={{ duration: 1.4, ease: EASE }}
         className="h-[38vh] w-auto max-w-none object-contain object-bottom sm:h-[46vh] lg:h-[66vh]"
       />
     </motion.div>

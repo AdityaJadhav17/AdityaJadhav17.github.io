@@ -4,7 +4,7 @@ import { FaGithub, FaLinkedin } from 'react-icons/fa'
 import { HeroPortrait } from '@/components/sections/HeroPortrait'
 import { Button } from '@/components/ui/button'
 import { site } from '@/content/site'
-import { useHeroMotion } from '@/lib/motion'
+import { heroContainer, heroItem } from '@/lib/motion'
 
 // lucide-react ships no brand/logo marks (Github/Linkedin/Youtube all
 // resolve undefined), so official brand glyphs come from react-icons,
@@ -44,18 +44,16 @@ const LABEL = 'font-mono text-[0.6875rem] tracking-[0.2em] text-muted-foreground
 // offset from the header's content box reads as intentional rather than as a
 // near-miss alignment.
 export function Hero() {
-  const { container, item } = useHeroMotion()
-
   return (
     <motion.section
       id="home"
-      variants={container}
+      variants={heroContainer}
       initial="hidden"
       animate="visible"
       className="relative grid min-h-[calc(100dvh-4rem-1px)] grid-cols-1 content-start gap-y-8 overflow-hidden px-6 py-20 lg:grid-cols-4 lg:content-stretch lg:gap-x-8 lg:grid-rows-[auto_1fr_auto_auto_auto] lg:px-12 lg:py-12"
     >
       {/* Identity */}
-      <motion.div variants={item} className="relative z-10 lg:col-start-1 lg:row-start-1">
+      <motion.div variants={heroItem} className="relative z-10 lg:col-start-1 lg:row-start-1">
         <h1 className="font-heading text-2xl font-bold tracking-tight text-foreground">
           {site.name}
         </h1>
@@ -67,7 +65,7 @@ export function Hero() {
           puts it in front of the portrait, which is what makes the two read
           as one composition rather than a photo with a caption. */}
       <motion.p
-        variants={item}
+        variants={heroItem}
         className="relative z-10 max-w-[14ch] font-heading text-[clamp(2rem,5vw,4rem)] leading-[0.95] font-bold tracking-tight text-balance text-foreground uppercase lg:col-span-2 lg:col-start-1 lg:row-start-3 lg:max-w-[14ch]"
       >
         {site.positioning}
@@ -78,7 +76,7 @@ export function Hero() {
       <HeroPortrait />
 
       {/* Current roles */}
-      <motion.div variants={item} className="relative z-10 lg:col-start-3 lg:row-start-1">
+      <motion.div variants={heroItem} className="relative z-10 lg:col-start-3 lg:row-start-1">
         <p className={LABEL}>Currently</p>
         <ul className="mt-3 space-y-1.5">
           {site.roles.map((role) => (
@@ -91,7 +89,7 @@ export function Hero() {
       </motion.div>
 
       {/* Capabilities */}
-      <motion.div variants={item} className="relative z-10 lg:col-start-4 lg:row-start-1">
+      <motion.div variants={heroItem} className="relative z-10 lg:col-start-4 lg:row-start-1">
         <p className={LABEL}>Capabilities</p>
         <ul className="mt-3 space-y-1.5">
           {site.capabilities.map((capability) => (
@@ -109,7 +107,7 @@ export function Hero() {
           positioned over the right half at that breakpoint, and these numbers
           set over the subject's arms are unreadable in both themes. */}
       <motion.div
-        variants={item}
+        variants={heroItem}
         className="relative z-10 flex flex-col gap-5 lg:col-span-2 lg:col-start-1 lg:row-start-4"
       >
         <p className="max-w-xs font-mono text-xs leading-relaxed tracking-wide text-muted-foreground">
@@ -130,7 +128,7 @@ export function Hero() {
 
       {/* Actions */}
       <motion.div
-        variants={item}
+        variants={heroItem}
         className="relative z-10 flex flex-wrap items-center gap-3 lg:col-span-2 lg:col-start-1 lg:row-start-5"
       >
         <Button asChild size="lg">
