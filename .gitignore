@@ -41,5 +41,13 @@ Thumbs.db
 # SDD scratch workspace (local only)
 .superpowers/
 
+# Specs and implementation plans (local only). Kept on disk because they are
+# still useful while working, but deliberately not versioned in this public
+# repo.
+docs/superpowers/
+
+# Generated design system source of truth (local only)
+design-system/
+
 # TypeScript incremental build info (tsc -b)
 *.tsbuildinfo
