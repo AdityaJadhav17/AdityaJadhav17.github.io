@@ -43,7 +43,17 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
   return (
     <article
       className={cn(
-        'flex flex-col overflow-hidden rounded-xl border border-border bg-card text-card-foreground shadow-md transition-shadow duration-200 hover:shadow-lg',
+        // The shadow lift alone is invisible in dark theme: the shadow colour
+        // is black at 10%, so on a rgb(9,9,11) ground it darkens an already
+        // near-black area by about one value. Measured identical rest and
+        // hover appearance in dark, while light reads correctly. The border
+        // lift is what carries the hover on dark, and it reads on both.
+        //
+        // Deliberately neutral and quiet rather than an accent border: this
+        // article is not clickable, only the Code and Live links inside it
+        // are, so a strong affordance here would promise something the card
+        // does not do.
+        'flex flex-col overflow-hidden rounded-xl border border-border bg-card text-card-foreground shadow-md transition-[box-shadow,border-color] duration-200 hover:border-muted-foreground/40 hover:shadow-lg',
         // Side by side only from md up. Below that the column is too narrow
         // to carry both, so every card stacks.
         isWide && 'md:flex-row',
