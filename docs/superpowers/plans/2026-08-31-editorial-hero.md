@@ -18,7 +18,7 @@ The reference is the multi-column editorial hero pattern: name and supporting co
 |---|---|
 | Name, top-left | `site.name` |
 | Discipline label | `site.discipline` (new) |
-| "What I do" paragraph | `site.positioning` |
+| "What I do" paragraph | `site.tagline` (the two current roles), labelled `Currently` |
 | Services list | `site.capabilities` (new) |
 | Oversized headline, bottom-left | `site.positioning`, in display type |
 | "Open to work" line | `site.availability` |
@@ -297,7 +297,7 @@ Layout, desktop (`lg` and up), inside a `relative min-h-dvh overflow-hidden` sec
 - **Top band**, a 4-column grid with `items-start`:
   1. `site.name` in `font-heading`, plus `site.discipline` beneath it in `font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground`
   2. empty spacer column
-  3. label `What I do` in the same mono-uppercase treatment, then `site.positioning` as body copy
+  3. label `Currently` in the same mono-uppercase treatment, then `site.tagline` as body copy, with `site.location` beneath it in `font-mono text-xs text-muted-foreground`
   4. label `Capabilities`, then `site.capabilities` as a plain `<ul>`, one per line, `text-sm`
 - **Portrait**: `<HeroPortrait />`, absolutely positioned by its own component
 - **Claim**: `site.positioning` again, but as the display element — `font-heading font-bold uppercase leading-[0.95] tracking-tight text-balance`, sized `text-[clamp(2.25rem,7vw,5.5rem)]`, anchored bottom-left, `relative z-10` so it overlaps the portrait
@@ -309,11 +309,11 @@ Layout, desktop (`lg` and up), inside a `relative min-h-dvh overflow-hidden` sec
 Wrap the whole thing in `<motion.section variants={container} initial="hidden" animate="visible">` and give each band `variants={item}`.
 
 **Accessibility requirements, non-negotiable:**
-- `site.positioning` appears twice visually (top band and display claim). Screen readers must not hear it twice: put `aria-hidden="true"` on the **display** copy and leave the top-band paragraph as the accessible one. The display text is decorative repetition, not content.
+- `site.positioning` appears exactly once, as the display claim (see Ruling A). It is real content, so it stays in the accessibility tree. Nothing in the hero carries `aria-hidden="true"` except decorative icons.
 - `<h1>` stays `site.name`. The e2e suite asserts `getByRole('heading', { level: 1, name: 'Aditya Jadhav' })` and the JSON-LD names him. Do not promote the claim to `h1`.
 - Every interactive element keeps a visible focus ring.
 
-**Mobile (`< lg`)**: the four-column band collapses to a single column in source order — name and discipline, claim, portrait, positioning, capabilities, proof, availability, actions. Do not attempt the overlap at mobile widths; let the portrait sit in flow.
+**Mobile (`< lg`)**: the four-column band collapses to a single column in source order — name and discipline, claim, portrait, roles, capabilities, proof, availability, actions. Do not attempt the overlap at mobile widths; let the portrait sit in flow.
 
 - [ ] **Step 2: Verify the gate**
 
@@ -423,9 +423,45 @@ Say so explicitly rather than manufacturing a change.
 
 **Placeholder scan.** No TBD, no "handle edge cases", no "similar to Task N". Task 6 has a genuine external dependency (the owner's photo) and states explicitly what to do when it is absent: stop and report.
 
-**Type consistency.** `useHeroMotion` is defined in Task 1 and consumed by name in Tasks 3 and 4. `site.discipline` and `site.capabilities` are defined in Task 2 and consumed in Task 4; `HeroPortrait` also reads `site.discipline` for its alt text. `<HeroPortrait />` takes no props in Task 3 and is used with none in Task 4. The asset path `/portrait.webp` is written in Task 3, placeheld in Task 3 Step 2, and replaced in Task 6.
+**Type consistency.** `useHeroMotion` is defined in Task 1 and consumed by name in Tasks 3 and 4. `site.discipline` and `site.capabilities` are defined in Task 2 and consumed in Task 4; `HeroPortrait` also reads `site.discipline` for its alt text. `<HeroPortrait />` takes no props in Task 3 and is used with none in Task 4. The asset path `/portrait.webp` is written in Task 3 and verified in Task 3 Step 2; it is already on disk, so nothing replaces it later.
 
 **Known risks carried deliberately.**
-- Tasks 1 through 5 render against a square headshot that will look wrong in a composition designed for a cut-out. Called out in the Asset dependency section so a reviewer does not file it as a defect.
-- The positioning claim appears twice visually. Task 4 specifies which copy is `aria-hidden` and why, because getting this backwards makes a screen reader announce the sentence twice.
+- The claim appears once, not twice. See Ruling A for why the brief's original mapping was rejected.
 - The hero uses tokens rather than committing to a permanently dark ground. That is a deliberate departure from the reference, which is dark-only: this site has a working theme toggle and the rest of the page respects it.
+
+---
+
+## Rulings recorded during execution
+
+### Ruling A: the top band carries the roles, not a second copy of the claim
+
+**Raised at:** plan review, before Task 1.
+
+The design brief mapped `site.positioning` to both the reference's "What I do"
+paragraph and its oversized headline. In the reference those slots hold two different
+strings. Rendering one sentence in both places puts the same twelve words on screen
+twice within one viewport, which reads as a duplication bug rather than as emphasis.
+
+The plan's mitigation was `aria-hidden="true"` on the display copy. That fixes only the
+screen reader, and it does so by declaring the largest element on the page decorative,
+which is false: the claim is the single most important sentence on the site.
+
+**Ruling:** the display claim keeps `site.positioning` and stays in the accessibility
+tree. The top band's third column carries `site.tagline` under the label `Currently`,
+with `site.location` beneath it. This is what the two slots hold in the reference: a
+statement and the supporting facts behind it.
+
+**Cost if wrong:** low and reversible. Both strings already exist in `site.ts`; swapping
+which slot holds which is a one-line change in a single component.
+
+### Ruling B: `aria-hidden="false"` dropped from the portrait wrapper
+
+**Raised at:** Task 3.
+
+Task 3's code sets `aria-hidden="false"` on the portrait's wrapper `div`. The attribute
+is a no-op: absent and `"false"` are equivalent, and the `img` inside carries its own
+`alt`. Explicitly writing it invites a future reader to assume it is load-bearing.
+
+**Ruling:** omit it. The `alt` on the image is what makes the portrait accessible.
+
+**Cost if wrong:** none. Removing a no-op attribute cannot change behaviour.
