@@ -482,3 +482,31 @@ Task 4's mobile requirement is the binding one; Task 3's class list was the erro
 
 **Cost if wrong:** low. The failure would be visible immediately at 375px as a portrait
 overlapping the text stack, and it is a one-class fix.
+
+### Ruling D: Task 5 is a no-op, and nothing is deleted to make it look otherwise
+
+**Raised at:** Task 5.
+
+Task 5 instructs the executor to retire the `anim-fade-in`, `anim-rise-in`, `anim-fade-up`
+and `anim-line` classes from `src/styles/theme.css` once Motion supersedes them. Those
+classes are not in that file, and never have been on this branch:
+
+```
+grep -rn "anim-fade-in\|anim-rise-in\|anim-fade-up\|anim-line" src/ index.html e2e/
+  -> no matches
+git log -S"anim-fade"  -- src/styles/theme.css  -> no commits
+git log -S"@keyframes" -- src/styles/theme.css  -> no commits
+```
+
+The only animation CSS in the file is the pair Task 5 explicitly forbids touching: the
+global `prefers-reduced-motion` block and the `.reveal` / `.reveal-hidden` pair that
+`useScrollReveal` drives for every section below the hero. The hero's previous entrance
+was not CSS keyframes at all, so replacing it with Motion left nothing behind.
+
+**Ruling:** Task 5 completes with no change. Deleting the reduced-motion block or the
+reveal pair to produce a diff would break every section below the hero and one passing
+e2e test. An empty task is the correct outcome, and is reported as such rather than
+quietly satisfied with an unrelated edit.
+
+**Cost if wrong:** none in the no-op direction. The cost of the alternative, deleting
+live CSS to manufacture a commit, is a broken page and a failing suite.
