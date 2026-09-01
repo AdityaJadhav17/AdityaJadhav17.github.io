@@ -21,6 +21,12 @@
       The <title> itself ("Software Engineer") is a deliberate editorial
       condensation, not a verbatim copy of site.roles. Leave it as-is even
       though it doesn't match those strings exactly.
+      The canonical, og:url, og:image, twitter:image and JSON-LD url above
+      all point at the custom domain (adityajadhav.dev), NOT at the
+      github.io origin. public/CNAME is what keeps that domain bound: Vite
+      copies it into dist/, and the deploy action replaces the whole
+      gh-pages branch on every run, so without it in the build output the
+      custom domain is dropped on the next deploy.
       When site.ts changes (e.g. the Lumulus internship ends), update every
       tag above by hand. Keep the three description copies identical to each
       other and at or under 160 characters. Keep the two theme-color values
@@ -32,7 +38,7 @@
       name="description"
       content="Aditya Jadhav builds AI systems and finds where they break. Software engineering and security work. Graduating June 2027 and open to new-grad roles."
     />
-    <link rel="canonical" href="https://adityajadhav17.github.io/" />
+    <link rel="canonical" href="https://adityajadhav.dev/" />
 
     <meta name="theme-color" content="#FAFAFA" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#09090B" media="(prefers-color-scheme: dark)" />
@@ -44,8 +50,8 @@
       property="og:description"
       content="Aditya Jadhav builds AI systems and finds where they break. Software engineering and security work. Graduating June 2027 and open to new-grad roles."
     />
-    <meta property="og:url" content="https://adityajadhav17.github.io/" />
-    <meta property="og:image" content="https://adityajadhav17.github.io/og-image.png" />
+    <meta property="og:url" content="https://adityajadhav.dev/" />
+    <meta property="og:image" content="https://adityajadhav.dev/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
 
@@ -55,14 +61,14 @@
       name="twitter:description"
       content="Aditya Jadhav builds AI systems and finds where they break. Software engineering and security work. Graduating June 2027 and open to new-grad roles."
     />
-    <meta name="twitter:image" content="https://adityajadhav17.github.io/og-image.png" />
+    <meta name="twitter:image" content="https://adityajadhav.dev/og-image.png" />
 
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Person",
         "name": "Aditya Jadhav",
-        "url": "https://adityajadhav17.github.io/",
+        "url": "https://adityajadhav.dev/",
         "jobTitle": ["Software Engineering Intern", "IT Security Programmer"],
         "sameAs": [
           "https://github.com/AdityaJadhav17",
