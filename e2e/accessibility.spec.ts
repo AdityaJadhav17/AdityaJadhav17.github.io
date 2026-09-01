@@ -80,6 +80,14 @@ async function sampleRevealEntrance(page: Page) {
     wrapper.scrollIntoView()
     // 45 frames is roughly 750ms at 60fps, comfortably past the 500ms
     // reveal, so the entrance is fully covered and settled by the end.
+    // scrollIntoView() itself inherits the page's CSS scroll-behavior,
+    // which is smooth without a motion preference and forced instant under
+    // reduced motion (see src/styles/theme.css). So the no-preference
+    // sampling window here absorbs an animated scroll on top of the reveal,
+    // while the reduced-motion window above only ever covers the reveal.
+    // That asymmetry has not produced flakiness (three full-suite runs,
+    // twelve single-worker runs), but it is worth knowing before changing
+    // frame counts or timings here.
     for (let i = 0; i < 45; i++) {
       await new Promise((resolve) => requestAnimationFrame(resolve))
       samples.push(getComputedStyle(wrapper).transform)

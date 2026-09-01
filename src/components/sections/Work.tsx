@@ -30,8 +30,8 @@ export function Work() {
 
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {rest.map((project) => (
-            <Reveal.Item key={project.id}>
-              <ProjectCard project={project} />
+            <Reveal.Item key={project.id} className="flex">
+              <ProjectCard project={project} className="flex-1" />
             </Reveal.Item>
           ))}
         </div>
