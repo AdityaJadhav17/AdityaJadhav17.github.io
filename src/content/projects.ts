@@ -66,21 +66,22 @@ export const projects: Project[] = [
     problem:
       'Natural-language robot commands fail when spatial grounding is mixed with control, making it hard to see where LLM understanding breaks.',
     contribution:
-      'Team project (CSE 190) with a decoupled LLM grounder and SAC+HER controller in MuJoCo FetchPush. Evaluated instruction tiers from literal coordinates to functional intent, isolating grounding failures from policy errors.',
+      'Team project (CSE 190) with a decoupled LLM grounder and SAC+HER controller in MuJoCo FetchPush-v4. Benchmarked a regex baseline against zero-shot, few-shot and chain-of-thought prompting across five instruction tiers, from literal coordinates to functional intent, then retrained the controller to test which grounding failures were recoverable.',
     stack: ['Python', 'Gemini', 'MuJoCo', 'Gymnasium', 'Stable-Baselines3 (SAC + HER)'],
-    // Tier codes (T0..T4) are dropped here on purpose: they mean nothing to
-    // a reader outside the project, and this is the single best piece of
-    // evidence on the site for the positioning claim about finding where
-    // systems break, so it has to be legible. The distinction the original
-    // wording drew is preserved: 98% and 93% are end-to-end success, while
-    // 77% is the grounder's own score, not the same measure.
+    // Numbers taken from the CSE 190 final presentation's results table, not
+    // from an earlier run. Tier codes are dropped because they mean nothing
+    // outside the project, but every figure below is end-to-end success for
+    // the best-performing prompt variant at that tier: 98.3 T0, 76.7 T2,
+    // 5.0 T3, 55.0 T4. Policy success ran 93.3 to 100 across every tier and
+    // reached 100 after retraining, which is what licenses the claim that the
+    // failures sit in grounding rather than control.
     result:
-      'End-to-end success runs about 98% on literal instructions and 93% on region-based ones, then falls sharply as the language gets harder: the grounder alone drops to about 77% on relative spatial references, and intent-heavy commands land between 45 and 55%. Separating the grounder from the controller is what makes that fall traceable to language understanding rather than to control.',
+      'End-to-end success falls from 98% on literal coordinates to 77% on relative offsets and 5% on reference objects, while the controller held between 93 and 100% throughout, which places the failures in grounding rather than control. The tiers break differently too: reference-object errors are a consistent offset and recoverable downstream, while relative offsets are not, and there the LLM scored below a plain regex baseline.',
     image: {
       src: '/talk-to-robot.webp',
       width: 1280,
       height: 800,
-      alt: 'Grouped bar chart of grounder, policy, and end-to-end success rates across instruction tiers T0 to T3',
+      alt: 'Grouped bar chart comparing grounder, policy, and end-to-end success rates for the few-shot grounder across instruction tiers T0 to T3',
     },
     links: {
       github: 'https://github.com/YangLin14/Talk-to-Robot',
