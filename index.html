@@ -2,13 +2,252 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" href="/favicon.svg" />
+    <link rel="mask-icon" href="/favicon.svg" color="#60A5FA" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
-    <script type="module" crossorigin src="/assets/index-Ce-8jPGl.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-CHfY9YtJ.css">
+    <title>Aditya Jadhav | Software Engineer</title>
+    <!--
+      Metadata block (through the JSON-LD script below): duplicates content that
+      lives in src/content/site.ts, because static HTML cannot import TypeScript
+      and this markup must be present before any script runs. Specifically:
+        - site.roles      -> the description/og:description/twitter:description
+                              copy ("Software Engineering Intern @ Lumulus
+                              Technologies, IT Security Programmer @ UC San
+                              Diego") and the JSON-LD "jobTitle" array.
+        - site.social      -> the JSON-LD "sameAs" array (GitHub, LinkedIn).
+        - site.education.institution -> the JSON-LD "affiliation.name"
+                              ("UC San Diego").
+      The <title> itself ("Software Engineer") is a deliberate editorial
+      condensation, not a verbatim copy of site.roles. Leave it as-is even
+      though it doesn't match those strings exactly.
+      When site.ts changes (e.g. the Lumulus internship ends), update every
+      tag above by hand. Keep the three description copies identical to each
+      other and at or under 160 characters. Keep the two theme-color values
+      in sync with --color-background in src/styles/theme.css, and the
+      favicon/mask-icon color in sync with --color-accent (dark theme, since
+      the favicon is built on the dark palette).
+    -->
+    <meta
+      name="description"
+      content="Aditya Jadhav builds AI systems and finds where they break. Software engineering and security work. Graduating June 2027 and open to new-grad roles."
+    />
+    <link rel="canonical" href="https://adityajadhav17.github.io/" />
+
+    <meta name="theme-color" content="#FAFAFA" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#09090B" media="(prefers-color-scheme: dark)" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Aditya Jadhav" />
+    <meta property="og:title" content="Aditya Jadhav | Software Engineer" />
+    <meta
+      property="og:description"
+      content="Aditya Jadhav builds AI systems and finds where they break. Software engineering and security work. Graduating June 2027 and open to new-grad roles."
+    />
+    <meta property="og:url" content="https://adityajadhav17.github.io/" />
+    <meta property="og:image" content="https://adityajadhav17.github.io/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Aditya Jadhav | Software Engineer" />
+    <meta
+      name="twitter:description"
+      content="Aditya Jadhav builds AI systems and finds where they break. Software engineering and security work. Graduating June 2027 and open to new-grad roles."
+    />
+    <meta name="twitter:image" content="https://adityajadhav17.github.io/og-image.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Aditya Jadhav",
+        "url": "https://adityajadhav17.github.io/",
+        "jobTitle": ["Software Engineering Intern", "IT Security Programmer"],
+        "sameAs": [
+          "https://github.com/AdityaJadhav17",
+          "https://www.linkedin.com/in/aditya-jadhav-06484123a/"
+        ],
+        "affiliation": {
+          "@type": "CollegeOrUniversity",
+          "name": "UC San Diego"
+        }
+      }
+    </script>
+    <!--
+      Flash-prevention: applies the .dark class before first paint, so the
+      page never flashes the wrong theme. This intentionally duplicates the
+      resolution rules in src/lib/theme.ts (getStoredTheme + resolveTheme):
+      that module can't load early enough to run before paint, so the logic
+      is inlined here instead of shared. Keep the two in sync by hand; do
+      not "clean up" this duplication.
+    -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('theme');
+          if (t !== 'light' && t !== 'dark' && t !== 'system') t = 'system';
+          var dark = t === 'dark' || (t === 'system' &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Space+Grotesk:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" crossorigin src="/assets/index-B1a3W0S0.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BtqGeIyo.css">
   </head>
   <body>
     <div id="root"></div>
+
+    <!--
+      Static fallback for visitors and crawlers without JavaScript. This is a
+      client-rendered React app, so #root above is empty until the bundle runs;
+      without this block the page would be blank rather than merely unstyled.
+
+      It duplicates content from src/content/site.ts, projects.ts and
+      experience.ts, for the same reason the metadata block above does: static
+      HTML cannot import TypeScript. Keep it in sync by hand when a role ends,
+      a project is added, or a link changes. It is deliberately a summary, not
+      a mirror of the full page.
+    -->
+    <noscript>
+      <style>
+        .nojs {
+          max-width: 46rem;
+          margin: 0 auto;
+          padding: 3rem 1.5rem 4rem;
+          font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+          line-height: 1.6;
+          color: #09090b;
+          background: #fafafa;
+        }
+        .nojs h1,
+        .nojs h2,
+        .nojs h3 {
+          font-family: 'Archivo', ui-sans-serif, system-ui, sans-serif;
+          line-height: 1.2;
+          margin: 0;
+        }
+        .nojs h1 { font-size: 2.25rem; letter-spacing: -0.02em; }
+        .nojs h2 { font-size: 1.25rem; margin-top: 2.5rem; }
+        .nojs h3 { font-size: 1rem; margin-top: 1.5rem; }
+        .nojs p { margin: 0.5rem 0 0; }
+        .nojs .claim { font-size: 1.15rem; margin-top: 0.75rem; }
+        .nojs .roles { font-size: 1rem; color: #475569; margin-top: 0.75rem; }
+        .nojs .meta {
+          font-family: 'JetBrains Mono', ui-monospace, monospace;
+          font-size: 0.8rem;
+          color: #475569;
+        }
+        .nojs a { color: #2563eb; }
+        .nojs ul { padding-left: 1.1rem; margin: 0.5rem 0 0; }
+        .nojs .note {
+          margin-top: 3rem;
+          padding-top: 1rem;
+          border-top: 1px solid #e4e4e7;
+          font-size: 0.85rem;
+          color: #475569;
+        }
+        @media (prefers-color-scheme: dark) {
+          .nojs { color: #fafafa; background: #09090b; }
+          .nojs .roles, .nojs .meta, .nojs .note { color: #a1a1aa; }
+          .nojs a { color: #60a5fa; }
+          .nojs .note { border-top-color: #27272a; }
+        }
+      </style>
+      <div class="nojs">
+        <h1>Aditya Jadhav</h1>
+        <p class="claim">I build AI systems and find where they break.</p>
+        <p class="roles">
+          Software Engineering Intern @ Lumulus Technologies, IT Security
+          Programmer @ UC San Diego
+        </p>
+        <p class="meta">Graduating June 2027. Open to new-grad software engineering roles.</p>
+        <p class="meta">San Diego, CA</p>
+        <p>
+          <a href="https://github.com/AdityaJadhav17">GitHub</a> &middot;
+          <a href="https://www.linkedin.com/in/aditya-jadhav-06484123a/">LinkedIn</a> &middot;
+          <a href="mailto:aditya.jadhav7910@gmail.com">aditya.jadhav7910@gmail.com</a> &middot;
+          <a href="/Aditya_Jadhav_Resume.pdf">Résumé (PDF)</a>
+        </p>
+
+        <section id="work">
+          <h2>Selected work</h2>
+
+          <h3>TravelAGNTCY</h3>
+          <p>
+            Distributed multi-agent travel planner with a LangGraph supervisor,
+            FastAPI services, and a React/TypeScript UI.
+            <a href="https://github.com/AdityaJadhav17/Travel-Agntcy">Code</a>
+          </p>
+
+          <h3>WatchTower</h3>
+          <p>
+            Lightweight production observability for JS errors, latency, and user
+            activity. Team lead, scrum master, and backend tech lead.
+            <a href="https://github.com/cse110-sp26-group09/Watchtower-Course-Project">Code</a>,
+            <a href="https://cse110-sp26-group09.github.io/Watchtower-Course-Project/">live</a>
+          </p>
+
+          <h3>Talk-to-Robot</h3>
+          <p>
+            Decoupled LLM grounder and SAC+HER controller in MuJoCo FetchPush,
+            isolating grounding failures from policy errors.
+            <a href="https://github.com/YangLin14/Talk-to-Robot">Code</a>
+          </p>
+
+          <h3>Synthetic-to-Real Object Detection</h3>
+          <p>
+            End-to-end YOLOv8 detection pipeline for a Kaggle sim-to-real
+            challenge. Final mAP 0.9175.
+            <a href="https://github.com/AdityaJadhav17/Synthetic-to-Real-Object-Detection">Code</a>
+          </p>
+
+          <h3>Bird Classifier in a Forest</h3>
+          <p>
+            CNN image classifier built in PyTorch, with preprocessing,
+            augmentation, training, and evaluation.
+            <a href="https://github.com/AdityaJadhav17/bird-classifier-forest">Code</a>
+          </p>
+        </section>
+
+        <section id="experience">
+          <h2>Experience</h2>
+          <ul>
+            <li>
+              <strong>Software Engineering Intern</strong>, Lumulus Technologies
+              <span class="meta">(Jun 2026 &ndash; Sep 2026)</span>
+            </li>
+            <li>
+              <strong>IT Security Programmer</strong>, UC San Diego (ITS)
+              <span class="meta">(Dec 2025 &ndash; Present)</span>
+            </li>
+            <li>
+              <strong>Web Development Intern</strong>, NutrifitWorld
+              <span class="meta">(Jun 2025 &ndash; Oct 2025)</span>
+            </li>
+            <li>
+              <strong>Founder &amp; President, AI Club</strong>, Irvine Valley College
+              <span class="meta">(Aug 2024 &ndash; Jun 2025)</span>
+            </li>
+            <li>
+              <strong>Board Member, Cybersecurity Club</strong>, Irvine Valley College
+              <span class="meta">(Aug 2023 &ndash; Jun 2025)</span>
+            </li>
+          </ul>
+        </section>
+
+        <p class="note">
+          This is a text-only version. The full site needs JavaScript enabled.
+        </p>
+      </div>
+    </noscript>
+
   </body>
 </html>
