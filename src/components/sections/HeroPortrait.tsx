@@ -17,7 +17,11 @@ export function HeroPortrait() {
   return (
     <motion.div
       variants={item}
-      className="pointer-events-none flex justify-center lg:absolute lg:inset-x-0 lg:bottom-0"
+      // Right-anchored at lg rather than centred. A centred portrait puts the
+    // subject's arm directly under the display claim's lower-right, which is
+    // dark clothing behind dark type in the light theme. Offsetting right
+    // keeps the two clear of each other while they still share the frame.
+    className="pointer-events-none flex justify-center lg:absolute lg:inset-x-0 lg:bottom-0 lg:justify-end lg:pr-[6%]"
     >
       <motion.img
         src="/portrait.webp"
@@ -32,7 +36,7 @@ export function HeroPortrait() {
         initial={reduced ? false : { scale: 1.04 }}
         animate={{ scale: 1 }}
         transition={reduced ? { duration: 0 } : { duration: 1.4, ease }}
-        className="h-[38vh] w-auto max-w-none object-contain object-bottom sm:h-[46vh] lg:h-[68vh]"
+        className="h-[38vh] w-auto max-w-none object-contain object-bottom sm:h-[46vh] lg:h-[66vh]"
       />
     </motion.div>
   )
