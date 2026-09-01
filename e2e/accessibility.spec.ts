@@ -1,20 +1,5 @@
 import { test, expect, type Page } from '@playwright/test'
 
-// Parses a CSS computed transition-duration string (e.g. "0.35s, 0.35s" or
-// "1e-05s, 1e-05s") into its first value, in milliseconds. Chromium reports
-// these in seconds, including scientific notation for very small values
-// (0.01ms round-trips through computed style as "1e-05s"), so this checks
-// the unit suffix first, then lets parseFloat handle whatever numeric
-// notation follows rather than assuming a plain decimal.
-function firstDurationMs(computed: string): number {
-  const first = computed.split(',')[0].trim()
-  const isMs = first.endsWith('ms')
-  const numeric = first.slice(0, first.length - (isMs ? 2 : 1))
-  const value = Number.parseFloat(numeric)
-  if (Number.isNaN(value)) throw new Error(`Unrecognized transition-duration value: "${computed}"`)
-  return isMs ? value : value * 1000
-}
-
 async function collectConsoleErrors(page: Page): Promise<string[]> {
   const errors: string[] = []
   page.on('console', (msg) => {
@@ -52,51 +37,91 @@ test.describe('content without JavaScript', () => {
   })
 })
 
-test.describe('prefers-reduced-motion suppresses the scroll-reveal animation', () => {
-  // NOTE: `reducedMotion` is not a flat PlaywrightTestOptions property in
-  // this Playwright version (unlike `colorScheme` or `javaScriptEnabled`) -
-  // it must go through `contextOptions`, or `test.use({ reducedMotion })`
-  // silently does nothing (no type error, since e2e/ is outside
-  // tsconfig.json's `include`, and no runtime error, since it's just an
-  // unrecognized extra key). Confirmed by checking
-  // `window.matchMedia('(prefers-reduced-motion: reduce)').matches` under
-  // both forms before settling on this one.
+// The reveal transform lives on the wrapper div that Reveal.Item renders,
+// not on the heading itself, so these assertions read the heading's
+// parentElement. Asserting on the h2 would read "none" in both states and
+// pass vacuously, which is the exact defect this rewrite removes.
+//
+// What separates the two motion modes is INTERPOLATION, not any single
+// sampled value. Asserting "never translated" under reduced motion is racy:
+// the wrapper still starts at its static `hidden` translate and settles a
+// few frames later, so an early sample can legitimately catch it. But under
+// reduced motion there is no transform animation, so the transform never
+// takes an intermediate value; without it, it passes through many.
+// Measured over four runs per mode: 0 intermediate samples under `reduce`,
+// 15 under `no-preference`.
+
+/** translateY in px from a computed transform, or null if unparseable. */
+function translateY(transform: string): number | null {
+  if (transform === 'none') return 0
+  const match = transform.match(/^matrix\(([^)]+)\)$/)
+  if (!match) return null
+  const parts = match[1].split(',').map((part) => Number(part.trim()))
+  return parts.length === 6 ? parts[5] : null
+}
+
+// The reveal rises 16px. A value strictly inside that range is evidence of
+// an in-flight transform animation: the bounds exclude both the resting
+// hidden value and the settled one.
+const RISE_PX = 16
+
+function midRiseCount(samples: string[]): number {
+  return samples.filter((sample) => {
+    const y = translateY(sample)
+    return y !== null && y > 0.5 && y < RISE_PX - 0.5
+  }).length
+}
+
+async function sampleRevealEntrance(page: Page) {
+  return page.locator('#work h2').evaluate(async (heading) => {
+    const wrapper = heading.parentElement as HTMLElement
+    const samples: string[] = []
+
+    wrapper.scrollIntoView()
+    // 45 frames is roughly 750ms at 60fps, comfortably past the 500ms
+    // reveal, so the entrance is fully covered and settled by the end.
+    for (let i = 0; i < 45; i++) {
+      await new Promise((resolve) => requestAnimationFrame(resolve))
+      samples.push(getComputedStyle(wrapper).transform)
+    }
+
+    const settled = getComputedStyle(wrapper)
+    return { samples, transform: settled.transform, opacity: settled.opacity }
+  })
+}
+
+test.describe('reduced motion suppresses the reveal translate', () => {
   test.use({ contextOptions: { reducedMotion: 'reduce' } })
 
-  test('revealed sections are fully opaque with an effectively-zero transition', async ({ page }) => {
+  test('the Work heading never interpolates its transform, and ends visible', async ({
+    page,
+  }) => {
     await page.goto('/')
 
-    const work = page.locator('#work')
-    await work.scrollIntoViewIfNeeded()
-    await expect(work).toHaveCSS('opacity', '1')
-    const workDuration = await work.evaluate((el) => getComputedStyle(el).transitionDuration)
-    expect(firstDurationMs(workDuration)).toBeLessThan(10)
+    const { samples, transform, opacity } = await sampleRevealEntrance(page)
 
-    const experience = page.locator('#experience')
-    await experience.scrollIntoViewIfNeeded()
-    await expect(experience).toHaveCSS('opacity', '1')
-    const experienceDuration = await experience.evaluate((el) => getComputedStyle(el).transitionDuration)
-    expect(firstDurationMs(experienceDuration)).toBeLessThan(10)
+    expect(midRiseCount(samples)).toBe(0)
+    expect(transform).toBe('none')
+    expect(opacity).toBe('1')
   })
 })
 
-test.describe('control: without reduced motion the reveal transition is real', () => {
+test.describe('control: without reduced motion the reveal does translate', () => {
   test.use({ contextOptions: { reducedMotion: 'no-preference' } })
 
-  // Same assertions as the reduced-motion test above, but proving the
-  // opposite value in the opposite state - this is what makes the
-  // reduced-motion test meaningful rather than something that would pass
-  // vacuously regardless of whether the media query does anything at all.
-  test('revealed sections use the real ~350ms transition', async ({ page }) => {
+  // The same sampling in the opposite state. This is what stops the test
+  // above from passing vacuously: it proves the motion preference changes
+  // the rendered result rather than merely being readable.
+  test('the Work heading interpolates its transform, then settles visible', async ({
+    page,
+  }) => {
     await page.goto('/')
 
-    const work = page.locator('#work')
-    await work.scrollIntoViewIfNeeded()
-    await expect(work).toHaveCSS('opacity', '1')
-    const workDuration = await work.evaluate((el) => getComputedStyle(el).transitionDuration)
-    const ms = firstDurationMs(workDuration)
-    expect(ms).toBeGreaterThan(300)
-    expect(ms).toBeLessThan(400)
+    const { samples, transform, opacity } = await sampleRevealEntrance(page)
+
+    expect(midRiseCount(samples)).toBeGreaterThan(0)
+    expect(transform).toBe('none')
+    expect(opacity).toBe('1')
   })
 })
 

@@ -180,28 +180,4 @@
     scroll-margin-top: 5rem;
   }
 
-  /* Scroll reveal (see useScrollReveal.ts). Base state
-     is fully visible with nothing more than the transition declared, so
-     content with no `.reveal-hidden` class (no JS, no observer support, or
-     an observer that failed to construct) renders exactly as if this rule
-     didn't exist. `.reveal-hidden` is the only thing IntersectionObserver
-     ever toggles, and only after confirming it can observe the element. */
-  .reveal {
-    transition: opacity 350ms ease-out, transform 350ms ease-out;
-  }
-  .reveal-hidden {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-
-  /* Belt-and-suspenders: the global prefers-reduced-motion block above
-     already forces transition-duration to ~0 for every element, which
-     neutralises this one too (verified in-browser). This rule is purely
-     documentation of that fact for this specific class, not an
-     independent mechanism. */
-  @media (prefers-reduced-motion: reduce) {
-    .reveal {
-      transition-duration: 0.01ms;
-    }
-  }
 }
