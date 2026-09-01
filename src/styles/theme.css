@@ -162,6 +162,35 @@
     }
   }
 
+  /* Icon nudge on button hover (see the Download and external-link icons in
+     Hero, Footer and ProjectCard). The transform itself is a Tailwind
+     group-hover utility at the call site; this class exists so the
+     reduced-motion guard below can switch it off. Without that override the
+     global rule above would only collapse the duration, leaving the icon to
+     jump instantly rather than not move at all. */
+  @media (prefers-reduced-motion: reduce) {
+    .icon-nudge {
+      /* Both properties, deliberately. Tailwind v4 compiles translate-*
+         utilities to the standalone `translate` property rather than to
+         `transform`, so a `transform: none` override alone silently fails to
+         disable the nudge. Verified: on hover the icon computes
+         `transform: none` but `translate: 0px 2px`. */
+      transform: none !important;
+      translate: none !important;
+    }
+  }
+
+  /* Decorative dot grid behind the Contact section. Declared here rather than
+     inline because the dot colour has to resolve from a token, and theme.css
+     is the only place colour is allowed to be resolved. Masked radially so it
+     fades out instead of tiling to a hard edge against the section border. */
+  .dot-grid {
+    background-image: radial-gradient(var(--color-border) 1px, transparent 1px);
+    background-size: 22px 22px;
+    -webkit-mask-image: radial-gradient(ellipse 65% 55% at 50% 45%, #000 0%, transparent 78%);
+    mask-image: radial-gradient(ellipse 65% 55% at 50% 45%, #000 0%, transparent 78%);
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);

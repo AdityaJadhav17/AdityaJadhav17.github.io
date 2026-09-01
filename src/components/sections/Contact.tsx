@@ -118,8 +118,19 @@ export function Contact() {
   }
 
   return (
-    <Reveal as="section" id="contact" className="border-t border-border py-16 md:py-24">
-      <div className="mx-auto max-w-5xl px-4 md:px-6">
+    <Reveal
+      as="section"
+      id="contact"
+      className="relative overflow-hidden border-t border-border py-16 md:py-24"
+    >
+      {/* Decorative dot grid. This section is mostly form and whitespace, and
+          without it the page ends on a flat void. Radially masked in
+          theme.css so it fades out rather than tiling to a hard edge, and
+          purely presentational, so it is hidden from assistive technology
+          and cannot receive pointer events. */}
+      <div aria-hidden="true" className="dot-grid pointer-events-none absolute inset-0" />
+
+      <div className="relative mx-auto max-w-5xl px-4 md:px-6">
         <Reveal.Item>
           <h2 className="font-heading text-3xl font-semibold text-foreground">Contact</h2>
         </Reveal.Item>

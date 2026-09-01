@@ -166,9 +166,20 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
                 href={secondaryLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 font-sans text-sm font-medium text-accent transition-colors duration-200 hover:text-foreground"
+                className="group/link inline-flex items-center gap-1.5 font-sans text-sm font-medium text-accent transition-colors duration-200 hover:text-foreground"
               >
-                <SecondaryIcon aria-hidden="true" className="size-4" />
+                {/* Leans up and to the right, the direction the link goes.
+                    Only for the generic external-link glyph: when the demo is
+                    a YouTube link this renders the brand mark instead, which
+                    stays still. */}
+                <SecondaryIcon
+                  aria-hidden="true"
+                  className={cn(
+                    'size-4',
+                    !isYouTubeDemo &&
+                      'icon-nudge transition-transform duration-200 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5',
+                  )}
+                />
                 {secondaryLabel}
               </a>
             )}

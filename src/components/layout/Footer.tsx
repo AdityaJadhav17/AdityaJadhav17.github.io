@@ -67,7 +67,7 @@ export function Footer() {
 
             <Button asChild variant="outline" size="sm">
               <a href={site.resumePath} download>
-                <Download aria-hidden="true" />
+                <Download aria-hidden="true" className="icon-nudge transition-transform duration-200 group-hover/button:translate-y-0.5" />
                 Résumé
               </a>
             </Button>

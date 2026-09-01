@@ -138,7 +138,10 @@ export function Hero() {
       >
         <Button asChild size="lg">
           <a href={site.resumePath} download>
-            <Download aria-hidden="true" />
+            {/* The arrow leans toward what the button does. Brand marks below
+                are deliberately left still: a company's logo should not
+                wiggle. */}
+            <Download aria-hidden="true" className="icon-nudge transition-transform duration-200 group-hover/button:translate-y-0.5" />
             Download résumé
           </a>
         </Button>
