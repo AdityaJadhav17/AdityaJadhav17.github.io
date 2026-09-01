@@ -1,0 +1,878 @@
+{
+  "skill": {
+    "name": "unknown",
+    "source": "C:\\Aditya\\tmp\\skillscans\\karpathy-guidelines",
+    "scanned_at": "2026-08-31T21:42:30.669940+00:00"
+  },
+  "risk_assessment": {
+    "score": 31,
+    "severity": "MEDIUM",
+    "recommendation": "CAUTION",
+    "max_issue_severity": "MEDIUM"
+  },
+  "components": [
+    {
+      "path": ".claude-plugin/marketplace.json",
+      "type": "json",
+      "lines": 29,
+      "executable": false,
+      "size_bytes": 787,
+      "source_url": null,
+      "source_identity": null,
+      "source_digest": null
+    },
+    {
+      "path": ".claude-plugin/plugin.json",
+      "type": "json",
+      "lines": 11,
+      "executable": false,
+      "size_bytes": 401,
+      "source_url": null,
+      "source_identity": null,
+      "source_digest": null
+    },
+    {
+      "path": ".cursor/rules/karpathy-guidelines.mdc",
+      "type": "other",
+      "lines": 70,
+      "executable": false,
+      "size_bytes": 2708,
+      "source_url": null,
+      "source_identity": null,
+      "source_digest": null
+    },
+    {
+      "path": ".git/config",
+      "type": "other",
+      "lines": 13,
+      "executable": false,
+      "size_bytes": 317,
+      "source_url": null,
+      "source_identity": null,
+      "source_digest": null
+    },
+    {
+      "path": "CLAUDE.md",
+      "type": "markdown",
+      "lines": 65,
+      "executable": false,
+      "size_bytes": 2422,
+      "source_url": null,
+      "source_identity": null,
+      "source_digest": null
+    },
+    {
+      "path": "CURSOR.md",
+      "type": "markdown",
+      "lines": 28,
+      "executable": false,
+      "size_bytes": 1983,
+      "source_url": null,
+      "source_identity": null,
+      "source_digest": null
+    },
+    {
+      "path": "EXAMPLES.md",
+      "type": "markdown",
+      "lines": 522,
+      "executable": false,
+      "size_bytes": 15360,
+      "source_url": null,
+      "source_identity": null,
+      "source_digest": null
+    },
+    {
+      "path": "README.md",
+      "type": "markdown",
+      "lines": 171,
+      "executable": false,
+      "size_bytes": 6369,
+      "source_url": null,
+      "source_identity": null,
+      "source_digest": null
+    },
+    {
+      "path": "README.zh.md",
+      "type": "markdown",
+      "lines": 171,
+      "executable": false,
+      "size_bytes": 6213,
+      "source_url": null,
+      "source_identity": null,
+      "source_digest": null
+    },
+    {
+      "path": "skills/karpathy-guidelines/SKILL.md",
+      "type": "markdown",
+      "lines": 67,
+      "executable": false,
+      "size_bytes": 2585,
+      "source_url": null,
+      "source_identity": null,
+      "source_digest": null
+    }
+  ],
+  "structured_summaries": [],
+  "issues": [
+    {
+      "id": "RA2",
+      "finding_id": "finding-0e58b099199549b4affd9591d8d3b781",
+      "category": "Rogue Agent",
+      "pattern": "Session Persistence",
+      "severity": "MEDIUM",
+      "confidence": 0.6,
+      "location": {
+        "file": "CURSOR.md",
+        "start_line": 13,
+        "end_line": null
+      },
+      "finding": "create the folders if needed). Adjust or merge with existing rules as you like.\r\n\r\n**Other tools:** If a stack only supports a root instruction file, copy [`CLAUDE.md`](CLAUDE.md) into that project in",
+      "explanation": "Skill establishes unauthorized persistence across sessions via cron jobs, startup scripts, or state files. Session persistence allows an attacker to maintain access beyond the current interaction.",
+      "remediation": "Remove any persistence mechanisms (cron jobs, startup scripts, state files). Skills should not maintain state across sessions without explicit user consent.",
+      "code_snippet": "\n## Use the same guidelines in another project\n\n**Cursor (recommended):** Copy `.cursor/rules/karpathy-guidelines.mdc` into that project\u2019s `.cursor/rules/` directory (create the folders if needed). Adjust or merge with existing rules as you like.\n\n**Other tools:** If a stack only supports a root instruction file, copy [`CLAUDE.md`](CLAUDE.md) into that project instead (or merge its contents into your existing instructions).\n",
+      "intent": null,
+      "tags": [
+        "Rogue Agent",
+        "llm-unconfirmed"
+      ],
+      "evidence": {},
+      "match_fingerprint": "bb4c1d55d515234f37b65595585b3b1f84bc3beccecaca1e10bb5d492f6d71b9",
+      "occurrences": [
+        {
+          "file": "CURSOR.md",
+          "start_line": 13,
+          "end_line": null
+        }
+      ]
+    },
+    {
+      "id": "AS3",
+      "finding_id": "finding-9daf83fa41b84816b056af5434a277d9",
+      "category": "Agent Snooping",
+      "pattern": "Skill Enumeration",
+      "severity": "MEDIUM",
+      "confidence": 0.8,
+      "location": {
+        "file": "CURSOR.md",
+        "start_line": 19,
+        "end_line": null
+      },
+      "finding": "skills/karpathy-guidelines/SKILL.md",
+      "explanation": "Skill enumerates or reads other installed skills. Access to other skills' SKILL.md files or the skills directory reveals prompt instructions, capabilities, and secrets that should be invisible to peer skills.",
+      "remediation": "Remove all code or instructions that list or read other skills' files or directories. Skills should operate independently; cross-skill access is a privilege escalation.",
+      "code_snippet": "\n## Optional: personal Agent Skills\n\nIf you want the same content as a reusable skill under `~/.cursor/skills`, use [`skills/karpathy-guidelines/SKILL.md`](skills/karpathy-guidelines/SKILL.md). You can copy or symlink it into your personal skills directory; use whatever layout you use for other skills.\n\n## Claude Code vs Cursor\n",
+      "intent": null,
+      "tags": [
+        "Agent Snooping",
+        "llm-unconfirmed"
+      ],
+      "evidence": {},
+      "match_fingerprint": "17898b0dd918efb34d4a1ce68e51c8b68c60e67cdbcdb4eeb881b1a3fa572ab1",
+      "occurrences": [
+        {
+          "file": "CURSOR.md",
+          "start_line": 19,
+          "end_line": null
+        }
+      ]
+    },
+    {
+      "id": "AS3",
+      "finding_id": "finding-9daf83fa41b84816b056af5434a277d9",
+      "category": "Agent Snooping",
+      "pattern": "Skill Enumeration",
+      "severity": "MEDIUM",
+      "confidence": 0.8,
+      "location": {
+        "file": "CURSOR.md",
+        "start_line": 28,
+        "end_line": null
+      },
+      "finding": "skills/karpathy-guidelines/SKILL.md",
+      "explanation": "Skill enumerates or reads other installed skills. Access to other skills' SKILL.md files or the skills directory reveals prompt instructions, capabilities, and secrets that should be invisible to peer skills.",
+      "remediation": "Remove all code or instructions that list or read other skills' files or directories. Skills should operate independently; cross-skill access is a privilege escalation.",
+      "code_snippet": "\n## Optional: personal Agent Skills\n\nIf you want the same content as a reusable skill under `~/.cursor/skills`, use [`skills/karpathy-guidelines/SKILL.md`](skills/karpathy-guidelines/SKILL.md). You can copy or symlink it into your personal skills directory; use whatever layout you use for other skills.\n\n## Claude Code vs Cursor\n",
+      "intent": null,
+      "tags": [
+        "Agent Snooping",
+        "llm-unconfirmed"
+      ],
+      "evidence": {},
+      "match_fingerprint": "17898b0dd918efb34d4a1ce68e51c8b68c60e67cdbcdb4eeb881b1a3fa572ab1",
+      "occurrences": [
+        {
+          "file": "CURSOR.md",
+          "start_line": 28,
+          "end_line": null
+        }
+      ]
+    },
+    {
+      "id": "EA2",
+      "finding_id": "finding-c5cb1990bbfc431e8763f8e75d043981",
+      "category": "Excessive Agency",
+      "pattern": "Autonomous Decision Making",
+      "severity": "MEDIUM",
+      "confidence": 0.75,
+      "location": {
+        "file": "EXAMPLES.md",
+        "start_line": 34,
+        "end_line": null
+      },
+      "finding": "without asking",
+      "explanation": "Skill enables autonomous high-impact decisions without human-in-the-loop verification. Critical operations (destructive commands, financial transactions, data deletion) should require explicit user confirmation.",
+      "remediation": "Add human-in-the-loop confirmation for destructive, irreversible, or high-impact operations. Never auto-execute commands that modify files, send data, or alter system state.",
+      "code_snippet": "\n**Problems:**\n- Assumed it should export ALL users (what about pagination? privacy?)\n- Assumed file location without asking\n- Assumed which fields to include\n- Assumed CSV fieldnames without checking actual data structure\n",
+      "intent": null,
+      "tags": [
+        "Excessive Agency",
+        "llm-unconfirmed"
+      ],
+      "evidence": {},
+      "match_fingerprint": "8dc77d3dce9ba1f2672e813265a1b1a0c8594866ef38a4e978bf4f4451795465",
+      "occurrences": [
+        {
+          "file": "EXAMPLES.md",
+          "start_line": 34,
+          "end_line": null
+        }
+      ]
+    },
+    {
+      "id": "EA2",
+      "finding_id": "finding-c5cb1990bbfc431e8763f8e75d043981",
+      "category": "Excessive Agency",
+      "pattern": "Autonomous Decision Making",
+      "severity": "MEDIUM",
+      "confidence": 0.75,
+      "location": {
+        "file": "EXAMPLES.md",
+        "start_line": 65,
+        "end_line": null
+      },
+      "finding": "without asking",
+      "explanation": "Skill enables autonomous high-impact decisions without human-in-the-loop verification. Critical operations (destructive commands, financial transactions, data deletion) should require explicit user confirmation.",
+      "remediation": "Add human-in-the-loop confirmation for destructive, irreversible, or high-impact operations. Never auto-execute commands that modify files, send data, or alter system state.",
+      "code_snippet": "\n**Problems:**\n- Assumed it should export ALL users (what about pagination? privacy?)\n- Assumed file location without asking\n- Assumed which fields to include\n- Assumed CSV fieldnames without checking actual data structure\n",
+      "intent": null,
+      "tags": [
+        "Excessive Agency",
+        "llm-unconfirmed"
+      ],
+      "evidence": {},
+      "match_fingerprint": "8dc77d3dce9ba1f2672e813265a1b1a0c8594866ef38a4e978bf4f4451795465",
+      "occurrences": [
+        {
+          "file": "EXAMPLES.md",
+          "start_line": 65,
+          "end_line": null
+        }
+      ]
+    },
+    {
+      "id": "EA2",
+      "finding_id": "finding-b296d4fbae474dae9d5ca82daa87439c",
+      "category": "Excessive Agency",
+      "pattern": "Autonomous Decision Making",
+      "severity": "MEDIUM",
+      "confidence": 0.75,
+      "location": {
+        "file": "EXAMPLES.md",
+        "start_line": 36,
+        "end_line": null
+      },
+      "finding": "without checking",
+      "explanation": "Skill enables autonomous high-impact decisions without human-in-the-loop verification. Critical operations (destructive commands, financial transactions, data deletion) should require explicit user confirmation.",
+      "remediation": "Add human-in-the-loop confirmation for destructive, irreversible, or high-impact operations. Never auto-execute commands that modify files, send data, or alter system state.",
+      "code_snippet": "\nFrom Andrej's post:\n\n> \"The models make wrong assumptions on your behalf and just run along with them without checking. They don't manage their confusion, don't seek clarifications, don't surface inconsistencies, don't present tradeoffs, don't push back when they should.\"\n\n> \"They really like to overcomplicate code and APIs, bloat abstractions, don't clean up dead code... implement a bloated construction over 1000 lines when 100 would do.\"\n",
+      "intent": null,
+      "tags": [
+        "Excessive Agency",
+        "llm-unconfirmed"
+      ],
+      "evidence": {},
+      "match_fingerprint": "9341b6f34d6af9081a0d6673f4217b7307d273da9f43357efd9029e15c5da76c",
+      "occurrences": [
+        {
+          "file": "EXAMPLES.md",
+          "start_line": 36,
+          "end_line": null
+        }
+      ]
+    },
+    {
+      "id": "EA2",
+      "finding_id": "finding-b296d4fbae474dae9d5ca82daa87439c",
+      "category": "Excessive Agency",
+      "pattern": "Autonomous Decision Making",
+      "severity": "MEDIUM",
+      "confidence": 0.75,
+      "location": {
+        "file": "README.md",
+        "start_line": 15,
+        "end_line": null
+      },
+      "finding": "without checking",
+      "explanation": "Skill enables autonomous high-impact decisions without human-in-the-loop verification. Critical operations (destructive commands, financial transactions, data deletion) should require explicit user confirmation.",
+      "remediation": "Add human-in-the-loop confirmation for destructive, irreversible, or high-impact operations. Never auto-execute commands that modify files, send data, or alter system state.",
+      "code_snippet": "\nFrom Andrej's post:\n\n> \"The models make wrong assumptions on your behalf and just run along with them without checking. They don't manage their confusion, don't seek clarifications, don't surface inconsistencies, don't present tradeoffs, don't push back when they should.\"\n\n> \"They really like to overcomplicate code and APIs, bloat abstractions, don't clean up dead code... implement a bloated construction over 1000 lines when 100 would do.\"\n",
+      "intent": null,
+      "tags": [
+        "Excessive Agency",
+        "llm-unconfirmed"
+      ],
+      "evidence": {},
+      "match_fingerprint": "9341b6f34d6af9081a0d6673f4217b7307d273da9f43357efd9029e15c5da76c",
+      "occurrences": [
+        {
+          "file": "README.md",
+          "start_line": 15,
+          "end_line": null
+        }
+      ]
+    }
+  ],
+  "suppressed_count": 0,
+  "suppressed": [],
+  "metadata": {
+    "has_executable_scripts": false,
+    "skillspector_version": "2.11.0",
+    "llm_requested": true,
+    "llm_available": true,
+    "meta_analysis_applied": true,
+    "inference_usage": [],
+    "llm_calls_attempted": 4,
+    "llm_calls_succeeded": 4
+  },
+  "execution_successful": true,
+  "analysis_completeness": {
+    "total_components": 10,
+    "scanned_components": 10,
+    "coverage_percent": 100.0,
+    "is_complete": true,
+    "status": "complete",
+    "execution_successful": true,
+    "fully_inspected_files": 10,
+    "partially_inspected_files": 0,
+    "entirely_uninspected_files": 0,
+    "ledger_exceptions": [],
+    "scope_exclusions": [
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/HEAD",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/description",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/hooks/applypatch-msg.sample",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/hooks/commit-msg.sample",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/hooks/fsmonitor-watchman.sample",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/hooks/post-update.sample",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/hooks/pre-applypatch.sample",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/hooks/pre-commit.sample",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/hooks/pre-merge-commit.sample",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/hooks/pre-push.sample",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/hooks/pre-rebase.sample",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/hooks/pre-receive.sample",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/hooks/prepare-commit-msg.sample",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/hooks/push-to-checkout.sample",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/hooks/sendemail-validate.sample",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/hooks/update.sample",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/index",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/info/",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/logs/",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/objects/",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/packed-refs",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/refs/",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      },
+      {
+        "outcome": "out_of_scope",
+        "phase": "discovery",
+        "reason_code": "vcs_metadata",
+        "message": "VCS object and history metadata is outside the bounded artifact inspection profile.",
+        "path": ".git/shallow",
+        "start_line": null,
+        "end_line": null,
+        "fatal": false
+      }
+    ],
+    "analyzer_statuses": [
+      {
+        "analyzer_id": "artifact_integrity",
+        "status": "completed",
+        "planned_work": 10,
+        "completed": 10,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "behavioral_ast",
+        "status": "not_applicable",
+        "planned_work": 0,
+        "completed": 0,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0,
+        "reason_code": "no_applicable_files",
+        "message": "No files matched this analyzer's applicability contract."
+      },
+      {
+        "analyzer_id": "behavioral_taint_tracking",
+        "status": "not_applicable",
+        "planned_work": 0,
+        "completed": 0,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0,
+        "reason_code": "no_applicable_files",
+        "message": "No files matched this analyzer's applicability contract."
+      },
+      {
+        "analyzer_id": "bundled_execution_surface",
+        "status": "not_applicable",
+        "planned_work": 0,
+        "completed": 0,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0,
+        "reason_code": "no_applicable_files",
+        "message": "No files matched this analyzer's applicability contract."
+      },
+      {
+        "analyzer_id": "mcp_least_privilege",
+        "status": "not_applicable",
+        "planned_work": 0,
+        "completed": 0,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0,
+        "reason_code": "manifest_absent",
+        "message": "No compatible manifest was present for this analyzer."
+      },
+      {
+        "analyzer_id": "mcp_rug_pull",
+        "status": "completed",
+        "planned_work": 10,
+        "completed": 10,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "mcp_tool_poisoning",
+        "status": "not_applicable",
+        "planned_work": 0,
+        "completed": 0,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0,
+        "reason_code": "manifest_absent",
+        "message": "No compatible manifest was present for this analyzer."
+      },
+      {
+        "analyzer_id": "meta_analyzer",
+        "status": "completed",
+        "planned_work": 3,
+        "completed": 3,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "semantic_developer_intent",
+        "status": "completed",
+        "planned_work": 6,
+        "completed": 6,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "semantic_quality_policy",
+        "status": "completed",
+        "planned_work": 6,
+        "completed": 6,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "semantic_security_discovery",
+        "status": "completed",
+        "planned_work": 6,
+        "completed": 6,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_agent_snooping",
+        "status": "completed",
+        "planned_work": 10,
+        "completed": 10,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_anti_refusal",
+        "status": "completed",
+        "planned_work": 10,
+        "completed": 10,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_data_exfiltration",
+        "status": "completed",
+        "planned_work": 10,
+        "completed": 10,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_deserialization",
+        "status": "completed",
+        "planned_work": 10,
+        "completed": 10,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_excessive_agency",
+        "status": "completed",
+        "planned_work": 10,
+        "completed": 10,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_harmful_content",
+        "status": "completed",
+        "planned_work": 10,
+        "completed": 10,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_memory_poisoning",
+        "status": "completed",
+        "planned_work": 10,
+        "completed": 10,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_output_handling",
+        "status": "completed",
+        "planned_work": 10,
+        "completed": 10,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_privilege_escalation",
+        "status": "completed",
+        "planned_work": 10,
+        "completed": 10,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_prompt_injection",
+        "status": "completed",
+        "planned_work": 10,
+        "completed": 10,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_rogue_agent",
+        "status": "completed",
+        "planned_work": 10,
+        "completed": 10,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_ssrf",
+        "status": "completed",
+        "planned_work": 10,
+        "completed": 10,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_supply_chain",
+        "status": "completed",
+        "planned_work": 10,
+        "completed": 10,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_system_prompt_leakage",
+        "status": "completed",
+        "planned_work": 10,
+        "completed": 10,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_patterns_tool_misuse",
+        "status": "completed",
+        "planned_work": 10,
+        "completed": 10,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      },
+      {
+        "analyzer_id": "static_yara",
+        "status": "completed",
+        "planned_work": 10,
+        "completed": 10,
+        "partial": 0,
+        "skipped": 0,
+        "failed": 0,
+        "unaccounted": 0
+      }
+    ],
+    "references": [],
+    "limitations": [],
+    "findings_before_filtering": 7,
+    "findings_after_filtering": 7
+  }
+}

@@ -18,7 +18,6 @@ const NAV = [
   { id: 'work', label: 'Work' },
   { id: 'experience', label: 'Experience' },
   { id: 'about', label: 'About' },
-  { id: 'certifications', label: 'Certifications' },
   { id: 'contact', label: 'Contact' },
 ] as const
 

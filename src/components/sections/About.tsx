@@ -1,3 +1,4 @@
+import { certifications } from '@/content/certifications'
 import { site } from '@/content/site'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
 import { cn } from '@/lib/utils'
@@ -86,6 +87,46 @@ export function About() {
                 {site.education.degree}, {site.education.institution}
               </p>
               <p className="font-mono text-xs text-muted-foreground">{site.education.status}</p>
+            </div>
+
+            {/* Certifications live here rather than in their own section.
+                They are supporting credentials, not headline proof, and a
+                full section for them sat between About and the contact CTA
+                where it competed with the call to action. */}
+            <div>
+              <h3 className="font-heading text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                Certifications
+              </h3>
+              <ul className="mt-3 space-y-3">
+                {certifications.map((cert) => (
+                  <li key={cert.id} className="flex items-start gap-3">
+                    <div className="flex-none rounded-md bg-card p-1 shadow-sm">
+                      <img
+                        src={cert.badge}
+                        alt=""
+                        width={28}
+                        height={28}
+                        loading="lazy"
+                        className="size-7 object-contain"
+                      />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm leading-snug text-foreground">{cert.title}</p>
+                      <p className="font-mono text-xs text-muted-foreground">
+                        {cert.issuer} · {cert.year} ·{' '}
+                        <a
+                          href={cert.verify}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-accent underline-offset-2 hover:underline"
+                        >
+                          Verify
+                        </a>
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>

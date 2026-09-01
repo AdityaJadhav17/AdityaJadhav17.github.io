@@ -12,10 +12,18 @@ export type Education = {
   status: string
 }
 
+export type ProofPoint = {
+  value: string
+  label: string
+}
+
 export type Site = {
   name: string
+  positioning: string
   roles: string[]
   tagline: string
+  availability: string
+  proof: ProofPoint[]
   location: string
   email: string
   social: SocialLink[]
@@ -25,11 +33,32 @@ export type Site = {
 
 export const site: Site = {
   name: 'Aditya Jadhav',
+
+  // The one claim the page is built around. Not a new assertion: it is the
+  // thread already running through the work. Talk-to-Robot isolates where
+  // LLM grounding breaks, Synthetic-to-Real measures where models fail on
+  // real data, WatchTower catches production errors, and the UC San Diego
+  // role is authorized penetration testing and control-gap assessment.
+  positioning: 'I build AI systems and find where they break.',
+
   roles: [
     'Software Engineering Intern @ Lumulus Technologies',
     'IT Security Programmer @ UC San Diego',
   ],
   tagline: 'Software Engineering Intern @ Lumulus Technologies · IT Security Programmer @ UC San Diego',
+
+  // Senior year, so this is new-grad recruiting rather than internships.
+  availability: 'Graduating June 2027. Open to new-grad software engineering roles.',
+
+  // Numbers that already appear inside project and experience bullets,
+  // surfaced where a recruiter actually reads them. Every one is verifiable
+  // from a linked repository or the experience entries below.
+  proof: [
+    { value: '11', label: 'engineers led on WatchTower' },
+    { value: '0.9175', label: 'mAP, sim-to-real detection' },
+    { value: '150+', label: 'members in the AI club I founded' },
+  ],
+
   location: 'San Diego, CA',
   email: 'aditya.jadhav7910@gmail.com',
   social: [

@@ -176,7 +176,7 @@
   /* Section landmarks sit under the sticky navbar
      (h-16 = 4rem). scroll-margin-top keeps a keyboard-focused heading from
      landing underneath it: WCAG 2.2 focus-not-obscured. */
-  #home, #work, #experience, #about, #certifications, #contact {
+  #home, #work, #experience, #about, #contact {
     scroll-margin-top: 5rem;
   }
 

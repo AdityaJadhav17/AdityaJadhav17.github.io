@@ -17,28 +17,6 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    id: 'travel-agntcy',
-    title: 'TravelAGNTCY',
-    problem:
-      'Travel planning spans flights, hotels, and activities, but stitching those sources into a coherent plan is slow and fragmented.',
-    contribution:
-      'A distributed multi-agent travel planner with a LangGraph supervisor, FastAPI services, and a React/TypeScript UI. Containerized the stack with Docker, used NATS for inter-service messaging, and added Grafana/ClickHouse observability.',
-    stack: ['Python', 'FastAPI', 'LangGraph', 'React', 'TypeScript', 'Docker', 'NATS', 'Grafana'],
-    result: 'Cut inter-service latency by ~40% with containerized microservices and NATS messaging.',
-    links: {
-      github: 'https://github.com/AdityaJadhav17/Travel-Agntcy',
-      demo: 'https://youtu.be/T0EkJ9J_IQU',
-    },
-    image: {
-      src: '/travel-agntcy.webp',
-      width: 1136,
-      height: 592,
-      alt: 'TravelAGNTCY running: an agent chat panel beside ranked flight options with airline, price, and layover detail',
-    },
-    featured: true,
-    context: 'SANDHacks 2026',
-  },
-  {
     id: 'watchtower',
     title: 'WatchTower',
     problem:
@@ -59,6 +37,28 @@ export const projects: Project[] = [
     },
     featured: true,
     context: 'UCSD CSE 110, 11-person team',
+  },
+  {
+    id: 'travel-agntcy',
+    title: 'TravelAGNTCY',
+    problem:
+      'Travel planning spans flights, hotels, and activities, but stitching those sources into a coherent plan is slow and fragmented.',
+    contribution:
+      'A distributed multi-agent travel planner with a LangGraph supervisor, FastAPI services, and a React/TypeScript UI. Containerized the stack with Docker, used NATS for inter-service messaging, and added Grafana/ClickHouse observability.',
+    stack: ['Python', 'FastAPI', 'LangGraph', 'React', 'TypeScript', 'Docker', 'NATS', 'Grafana'],
+    result: 'Cut inter-service latency by ~40% with containerized microservices and NATS messaging.',
+    links: {
+      github: 'https://github.com/AdityaJadhav17/Travel-Agntcy',
+      demo: 'https://youtu.be/T0EkJ9J_IQU',
+    },
+    image: {
+      src: '/travel-agntcy.webp',
+      width: 1136,
+      height: 592,
+      alt: 'TravelAGNTCY running: an agent chat panel beside ranked flight options with airline, price, and layover detail',
+    },
+    featured: true,
+    context: 'SANDHacks 2026',
   },
   {
     id: 'talk-to-robot',

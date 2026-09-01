@@ -5,10 +5,9 @@ import { Hero } from '@/components/sections/Hero'
 import { Work } from '@/components/sections/Work'
 import { Experience } from '@/components/sections/Experience'
 import { About } from '@/components/sections/About'
-import { Certifications } from '@/components/sections/Certifications'
 import { Contact } from '@/components/sections/Contact'
 
-const SECTION_IDS = ['home', 'work', 'experience', 'about', 'certifications', 'contact']
+const SECTION_IDS = ['home', 'work', 'experience', 'about', 'contact']
 
 export default function App() {
   return (
@@ -20,7 +19,6 @@ export default function App() {
         <Work />
         <Experience />
         <About />
-        <Certifications />
         <Contact />
       </main>
       <Footer />

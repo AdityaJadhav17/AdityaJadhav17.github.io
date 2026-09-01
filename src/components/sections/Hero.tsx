@@ -34,16 +34,42 @@ export function Hero() {
         className="size-[200px] rounded-full border border-border object-cover shadow-xl"
       />
 
-      <div className="max-w-2xl space-y-3">
-        <h1 className="font-heading text-4xl font-bold text-foreground md:text-5xl">
+      <div className="max-w-2xl space-y-4">
+        <h1 className="font-heading text-3xl font-bold text-foreground md:text-4xl">
           {site.name}
         </h1>
-        <p className="font-sans text-lg text-muted-foreground md:text-xl">{site.tagline}</p>
-        <p className="flex items-center justify-center gap-1.5 font-sans text-sm text-muted-foreground">
+
+        {/* The positioning claim carries the page. It sits above the job
+            titles deliberately: titles say where he has worked, this says
+            what he does. */}
+        <p className="font-heading text-xl leading-snug text-balance text-foreground md:text-2xl">
+          {site.positioning}
+        </p>
+
+        <p className="font-sans text-base text-muted-foreground">{site.tagline}</p>
+
+        <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 font-sans text-sm text-muted-foreground">
           <MapPin aria-hidden="true" className="size-4" />
           {site.location}
         </p>
       </div>
+
+      {/* Proof before the call to action: a recruiter who reads nothing else
+          should still leave with a number. */}
+      <ul className="flex flex-wrap items-start justify-center gap-x-10 gap-y-6">
+        {site.proof.map((point) => (
+          <li key={point.label} className="max-w-[13rem] space-y-1">
+            <p className="font-mono text-2xl font-medium text-accent tabular-nums">
+              {point.value}
+            </p>
+            <p className="font-sans text-sm leading-snug text-muted-foreground">{point.label}</p>
+          </li>
+        ))}
+      </ul>
+
+      <p className="rounded-full border border-border bg-card px-4 py-1.5 font-mono text-xs tracking-wide text-muted-foreground">
+        {site.availability}
+      </p>
 
       <div className="flex flex-wrap items-center justify-center gap-3">
         <Button asChild size="lg">
