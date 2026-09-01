@@ -1,6 +1,7 @@
 import { motion } from 'motion/react'
 import { Download, ExternalLink } from 'lucide-react'
 import { FaGithub, FaLinkedin } from 'react-icons/fa'
+import { CountUp } from '@/components/motion/CountUp'
 import { HeroPortrait } from '@/components/sections/HeroPortrait'
 import { Button } from '@/components/ui/button'
 import { site } from '@/content/site'
@@ -119,8 +120,10 @@ export function Hero() {
         <ul className="flex flex-wrap gap-x-8 gap-y-4">
           {site.proof.map((point) => (
             <li key={point.label} className="max-w-[12rem] flex-1">
+              {/* tabular-nums on the parent keeps the digits from jittering
+                  while the value counts up. */}
               <p className="font-mono text-xl font-medium text-accent tabular-nums">
-                {point.value}
+                <CountUp value={point.value} />
               </p>
               <p className="mt-1 text-[0.8125rem] leading-snug text-muted-foreground">{point.label}</p>
             </li>
