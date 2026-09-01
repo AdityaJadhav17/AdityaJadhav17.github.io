@@ -1,6 +1,8 @@
 // Project card content. Do not add claims beyond what the owner has
 // verified. `result` and `image` are optional: bird-classifier has no
-// measured result, and watchtower/talk-to-robot have no screenshot yet.
+// measured result. `links.paper` is a PDF served from public/, currently
+// only on talk-to-robot; it opens in a new tab rather than downloading,
+// so a reader can skim it without committing a file to their machine.
 
 export type Project = {
   id: string
@@ -9,7 +11,7 @@ export type Project = {
   contribution: string
   stack: string[]
   result?: string
-  links: { github?: string; demo?: string; live?: string }
+  links: { github?: string; demo?: string; live?: string; paper?: string }
   image?: { src: string; width: number; height: number; alt: string }
   featured: boolean
   context?: string
@@ -85,6 +87,7 @@ export const projects: Project[] = [
     },
     links: {
       github: 'https://github.com/YangLin14/Talk-to-Robot',
+      paper: '/llm-spatial-grounding-paper.pdf',
     },
     featured: false,
     context: 'UCSD CSE 190, team project',

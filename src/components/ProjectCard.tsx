@@ -1,4 +1,4 @@
-import { ExternalLink } from 'lucide-react'
+import { ExternalLink, FileText } from 'lucide-react'
 import { FaGithub, FaYoutube } from 'react-icons/fa'
 import type { Project } from '@/content/projects'
 import { cn } from '@/lib/utils'
@@ -36,6 +36,7 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
   const liveLink = project.links.live
   const demoLink = project.links.demo
   const secondaryLink = liveLink ?? demoLink
+  const paperLink = project.links.paper
   const secondaryLabel = liveLink ? 'Live' : 'Demo'
   const isYouTubeDemo = !liveLink && Boolean(demoLink) && demoLink!.includes('youtu')
   const SecondaryIcon = isYouTubeDemo ? FaYoutube : ExternalLink
@@ -163,7 +164,7 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
           </div>
         )}
 
-        {(codeLink || secondaryLink) && (
+        {(codeLink || secondaryLink || paperLink) && (
           <div className="mt-auto flex flex-wrap gap-4 pt-2">
             {codeLink && (
               <a
@@ -196,6 +197,21 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
                   )}
                 />
                 {secondaryLabel}
+              </a>
+            )}
+
+            {paperLink && (
+              <a
+                href={paperLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group/link inline-flex items-center gap-1.5 font-sans text-sm font-medium text-accent transition-colors duration-200 hover:text-foreground"
+              >
+                <FileText
+                  aria-hidden="true"
+                  className="icon-nudge size-4 transition-transform duration-200 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5"
+                />
+                Paper
               </a>
             )}
           </div>
