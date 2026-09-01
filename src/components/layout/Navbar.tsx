@@ -1,5 +1,6 @@
 import { forwardRef, useId, useState, type ComponentProps } from 'react'
 import { Menu } from 'lucide-react'
+import { motion } from 'motion/react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -45,7 +46,7 @@ const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(function NavLink(
       aria-current={active ? 'page' : undefined}
       className={cn(
         // Nav is Archivo per MASTER.md's "Heading Font: ... nav" entry.
-        'font-heading text-sm font-medium transition-colors',
+        'relative font-heading text-sm font-medium transition-colors',
         active ? 'text-accent hover:text-accent' : 'text-muted-foreground hover:text-foreground',
         variant === 'mobile' && 'rounded-md px-3 py-2 hover:bg-muted',
         className,
@@ -53,6 +54,19 @@ const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(function NavLink(
       {...props}
     >
       {label}
+      {active && (
+        // layoutId is what makes Motion animate this between nav items
+        // rather than cross-fading two separate elements. Scoped per
+        // variant: the desktop nav and the mobile Sheet render this same
+        // component, and both can be mounted at once, so a single shared id
+        // would have Motion trying to animate the indicator between a
+        // visible navbar and a drawer.
+        <motion.span
+          layoutId={variant === 'mobile' ? 'nav-active-mobile' : 'nav-active-desktop'}
+          aria-hidden="true"
+          className="absolute inset-x-0 -bottom-1.5 h-px bg-accent"
+        />
+      )}
     </a>
   )
 })
