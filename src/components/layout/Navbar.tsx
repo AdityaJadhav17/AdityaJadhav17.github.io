@@ -133,6 +133,16 @@ export function Navbar({ sectionIds }: NavbarProps) {
               <Button
                 variant="ghost"
                 size="icon"
+                // Expands the hit area without growing the glyph. The
+                // measured rendered size is 46x46, not the naively expected
+                // 48x48: the inset on an absolutely positioned pseudo-element
+                // resolves against the button's padding box, so its 1px
+                // border eats 1px per side before the -8px inset adds it
+                // back. 46px still clears WCAG 2.5.8's 44x44 minimum. If more
+                // icon-only controls are ever placed beside this one, their
+                // container gap must be at least 16px (8px of growth per
+                // side) or the hit areas overlap and 2.5.8's spacing
+                // exception stops applying.
                 className="relative md:hidden before:absolute before:-inset-2 before:content-['']"
                 aria-label="Open menu"
                 aria-controls={mobileMenuId}
