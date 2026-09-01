@@ -1,54 +1,70 @@
+import { useRef } from 'react'
+import { motion, useReducedMotion, useScroll, useSpring } from 'motion/react'
 import { experience } from '@/content/experience'
-import { useScrollReveal } from '@/hooks/useScrollReveal'
-import { cn } from '@/lib/utils'
+import { Reveal } from '@/components/motion/Reveal'
+import { TimelineEntry } from '@/components/sections/TimelineEntry'
 
 // Vertical timeline, newest first (order comes from src/content/experience.ts,
 // which also carries a code comment noting the UC San Diego entry's
 // highlights are scope-derived pending real accomplishments; not repeated
 // or altered here). Dates render in font-mono per MASTER.md's typography rule.
+//
+// The connector was previously a per-entry segment inside each row. It is now
+// one continuous track down the whole list, with an accent line drawn over it
+// whose height follows scroll position, because a scrubbed draw needs a single
+// element to scale rather than five independent ones.
 export function Experience() {
-  const { ref, revealed } = useScrollReveal<HTMLElement>()
+  const listRef = useRef<HTMLOListElement>(null)
+
+  // Explicit check, deliberately not delegated to the MotionConfig in
+  // App.tsx. That handles animations; the line below is a MotionValue bound
+  // to a style, which MotionConfig does not touch. Under reduced motion the
+  // timeline renders fully drawn and every dot filled, statically.
+  const reduced = useReducedMotion() ?? false
+
+  const { scrollYProgress } = useScroll({
+    target: listRef,
+    offset: ['start 0.8', 'end 0.6'],
+  })
+  const progress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 30,
+    restDelta: 0.001,
+  })
 
   return (
-    <section
-      id="experience"
-      ref={ref}
-      className={cn('reveal border-t border-border py-16 md:py-24', !revealed && 'reveal-hidden')}
-    >
+    <Reveal as="section" id="experience" className="border-t border-border py-16 md:py-24">
       <div className="mx-auto max-w-5xl px-4 md:px-6">
-        <h2 className="font-heading text-3xl font-semibold text-foreground">Experience</h2>
+        <Reveal.Item>
+          <h2 className="font-heading text-3xl font-semibold text-foreground">Experience</h2>
+        </Reveal.Item>
 
-        <ol className="mt-8 space-y-10 md:mt-12">
+        <ol ref={listRef} className="relative mt-8 space-y-10 md:mt-12">
+          {/* Static track and drawn line. left-[7px] centres a 1px rule under
+              a 2.5-unit (10px) dot inside a 4-unit (16px) column: (16-1)/2
+              rounds to 7. Verify by measurement, not by trusting this sum. */}
+          <span
+            aria-hidden="true"
+            className="absolute top-2 bottom-2 left-[7px] w-px bg-border"
+          />
+          <motion.span
+            aria-hidden="true"
+            className="absolute top-2 bottom-2 left-[7px] w-px origin-top bg-accent"
+            style={{ scaleY: reduced ? 1 : progress }}
+          />
+
           {experience.map((entry, index) => (
-            <li key={`${entry.organization}-${entry.role}`} className="relative flex gap-4 sm:gap-6">
-              <div aria-hidden="true" className="flex w-4 flex-none flex-col items-center">
-                <span className="mt-1.5 size-2.5 flex-none rounded-full bg-accent ring-4 ring-background" />
-                {index < experience.length - 1 && <span className="mt-1 w-px flex-1 bg-border" />}
-              </div>
-
-              <div className="flex-1 pb-2">
-                <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                  <h3 className="font-heading text-lg font-semibold text-foreground">
-                    {entry.role}
-                  </h3>
-                  <span className="font-mono text-xs whitespace-nowrap text-muted-foreground">
-                    {entry.start} – {entry.end}
-                  </span>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  {entry.organization}
-                  {entry.location ? ` · ${entry.location}` : ''}
-                </p>
-                <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm text-foreground">
-                  {entry.highlights.map((highlight) => (
-                    <li key={highlight}>{highlight}</li>
-                  ))}
-                </ul>
-              </div>
-            </li>
+            <TimelineEntry
+              key={`${entry.organization}-${entry.role}`}
+              entry={entry}
+              index={index}
+              total={experience.length}
+              progress={progress}
+              reduced={reduced}
+            />
           ))}
         </ol>
       </div>
-    </section>
+    </Reveal>
   )
 }
