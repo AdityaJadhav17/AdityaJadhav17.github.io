@@ -32,3 +32,18 @@ export function useHeroMotion() {
 
   return { container, item, reduced, ease: EASE }
 }
+
+// Reveal choreography for the four sections below the hero. Exported as
+// plain Variants rather than from a hook: reduced motion is handled once by
+// the MotionConfig in App.tsx, so there is no per-component state left to
+// compute. Tuned quicker than the hero's, because these carry body content
+// rather than a cover.
+export const revealContainer: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.06 } },
+}
+
+export const revealItem: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
+}
