@@ -63,6 +63,11 @@ export function Contact() {
   const messageRef = useRef<HTMLTextAreaElement>(null)
   const fieldRefs = { name: nameRef, email: emailRef, message: messageRef }
 
+  // Spam honeypot. Deliberately a ref rather than form state: keeping it out
+  // of FormValues means validate(), FIELD_ORDER and the focus management stay
+  // untouched, and a bot filling it cannot trigger a re-render.
+  const honeypotRef = useRef<HTMLInputElement>(null)
+
   function handleChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = e.target
     setValues((prev) => ({ ...prev, [name]: value }))
@@ -81,12 +86,26 @@ export function Contact() {
       return
     }
 
+    // A real person never sees this field, so anything in it means an
+    // automated submission. Drop it here rather than relying on the form
+    // service to filter it: this guard is ours and is verifiable. `_gotcha`
+    // is still sent below as defence in depth, since Formspree treats that
+    // name as a honeypot when it chooses to.
+    //
+    // Report success rather than an error. Telling a bot it was filtered
+    // just teaches whoever wrote it to stop filling the field.
+    if (honeypotRef.current?.value) {
+      setValues(EMPTY_VALUES)
+      setResult('success')
+      return
+    }
+
     setSubmitting(true)
     try {
       const res = await fetch(FORMSPREE_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values),
+        body: JSON.stringify({ ...values, _gotcha: '' }),
       })
       if (!res.ok) throw new Error('Form submission failed')
       setResult('success')
@@ -120,6 +139,19 @@ export function Contact() {
               single focusable element. */}
           <Reveal.Item>
             <form noValidate onSubmit={handleSubmit} className="max-w-xl space-y-5">
+              {/* Honeypot. `hidden` keeps it out of the layout and out of the
+                  accessibility tree; tabIndex -1 keeps it out of the keyboard
+                  order. No label, because nothing human should ever reach it. */}
+              <input
+                ref={honeypotRef}
+                type="text"
+                name="_gotcha"
+                className="hidden"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+              />
+
               <div className="space-y-1.5">
                 <Label htmlFor="contact-name">Name</Label>
                 <Input

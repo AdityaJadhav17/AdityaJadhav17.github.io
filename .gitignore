@@ -51,3 +51,6 @@ design-system/
 
 # TypeScript incremental build info (tsc -b)
 *.tsbuildinfo
+
+# Local tooling scan output (never belongs in this repo)
+karpathy-report.json
