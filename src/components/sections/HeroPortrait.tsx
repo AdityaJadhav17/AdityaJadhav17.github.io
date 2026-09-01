@@ -32,23 +32,31 @@ export function HeroPortrait() {
     // theme.
     className="pointer-events-none flex justify-center lg:absolute lg:inset-x-0 lg:bottom-0 lg:justify-end lg:pr-[7%]"
     >
-      <motion.img
-        src="/portrait.webp"
-        alt={`${site.name}, ${site.discipline}`}
-        width={1467}
-        height={1600}
-        loading="eager"
-        fetchPriority="high"
-        // A slow settle from very slightly oversized. Set as initial/animate
-        // rather than a variant so it runs independently of the band stagger:
-        // the portrait should still be moving while the text has landed.
-        // scale is a transform, so the MotionConfig in App.tsx suppresses
-        // this animation under prefers-reduced-motion; no local check needed.
-        initial={{ scale: 1.04 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 1.4, ease: EASE }}
-        className="h-[38vh] w-auto max-w-none object-contain object-bottom sm:h-[46vh] lg:h-[66vh]"
-      />
+      <div className="relative">
+        {/* Sits behind the portrait. Purely presentational, so it is hidden
+            from assistive technology and takes no pointer events. Inset
+            negatively so the falloff extends past the image rather than
+            stopping at its edge. */}
+        <div aria-hidden="true" className="hero-glow pointer-events-none absolute -inset-[18%]" />
+
+        <motion.img
+          src="/portrait.webp"
+          alt={`${site.name}, ${site.discipline}`}
+          width={1467}
+          height={1600}
+          loading="eager"
+          fetchPriority="high"
+          // A slow settle from very slightly oversized. Set as initial/animate
+          // rather than a variant so it runs independently of the band stagger:
+          // the portrait should still be moving while the text has landed.
+          // scale is a transform, so the MotionConfig in App.tsx suppresses
+          // this animation under prefers-reduced-motion; no local check needed.
+          initial={{ scale: 1.04 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 1.4, ease: EASE }}
+          className="relative h-[38vh] w-auto max-w-none object-contain object-bottom sm:h-[46vh] lg:h-[66vh]"
+        />
+      </div>
     </motion.div>
   )
 }

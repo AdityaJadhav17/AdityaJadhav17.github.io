@@ -180,6 +180,21 @@
     }
   }
 
+  /* Soft glow behind the hero portrait. The cut-out otherwise floats on a
+     flat ground with nothing under it, which reads as pasted on rather than
+     placed. Mixed from --color-muted-foreground rather than --color-accent
+     deliberately: an accent-tinted halo casts colour onto skin tones, while
+     a neutral one lifts the subject off a dark ground and grounds him
+     against a light one, which is the job. Anchored low and wide so the
+     brightest part sits behind the torso rather than ringing the head. */
+  .hero-glow {
+    background-image: radial-gradient(
+      ellipse 52% 42% at 50% 58%,
+      color-mix(in oklch, var(--color-muted-foreground) 20%, transparent) 0%,
+      transparent 72%
+    );
+  }
+
   /* Decorative dot grid behind the Contact section. Declared here rather than
      inline because the dot colour has to resolve from a token, and theme.css
      is the only place colour is allowed to be resolved. Masked radially so it
