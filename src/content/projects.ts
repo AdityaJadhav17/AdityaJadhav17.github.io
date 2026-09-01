@@ -78,10 +78,10 @@ export const projects: Project[] = [
     result:
       'End-to-end success falls from 98% on literal coordinates to 77% on relative offsets and 5% on reference objects, while the controller held between 93 and 100% throughout, which places the failures in grounding rather than control. The tiers break differently too: reference-object errors are a consistent offset and recoverable downstream, while relative offsets are not, and there the LLM scored below a plain regex baseline.',
     image: {
-      src: '/talk-to-robot.webp',
-      width: 1280,
-      height: 800,
-      alt: 'Grouped bar chart comparing grounder, policy, and end-to-end success rates for the few-shot grounder across instruction tiers T0 to T3',
+      src: '/talk-to-robot.svg',
+      width: 800,
+      height: 450,
+      alt: 'Bar chart of end-to-end success by instruction tier: 98.3% on literal coordinates, 93.3% on named regions, 76.7% on relative offsets, 5% on reference objects, and 50% on functional intent',
     },
     links: {
       github: 'https://github.com/YangLin14/Talk-to-Robot',
