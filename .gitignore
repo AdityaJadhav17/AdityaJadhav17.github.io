@@ -5,6 +5,9 @@ node_modules/
 
 # Testing
 /coverage
+/test-results
+/playwright-report
+/playwright/.cache
 
 # Production
 /dist
@@ -34,3 +37,20 @@ Thumbs.db
 
 # Claude Code agent tooling (local only)
 .claude/
+
+# SDD scratch workspace (local only)
+.superpowers/
+
+# Specs and implementation plans (local only). Kept on disk because they are
+# still useful while working, but deliberately not versioned in this public
+# repo.
+docs/superpowers/
+
+# Generated design system source of truth (local only)
+design-system/
+
+# TypeScript incremental build info (tsc -b)
+*.tsbuildinfo
+
+# Local tooling scan output (never belongs in this repo)
+karpathy-report.json

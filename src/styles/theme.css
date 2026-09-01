@@ -1,0 +1,235 @@
+/*
+  Contrast audit (revised in fix round 1): WCAG relative-luminance formula,
+  computed with a standalone script (not estimated). Ratios rounded to 2 decimals.
+
+  LIGHT theme
+  -------------------------------------------------------------------------------------------
+  foreground        #09090B on background #FAFAFA                 19.06:1   need 4.5:1   PASS
+  foreground        #09090B on card       #FFFFFF                 19.90:1   need 4.5:1   PASS
+  card-foreground   #09090B on card       #FFFFFF                 19.90:1   need 4.5:1   PASS
+  popover-foreground#09090B on popover    #FFFFFF                 19.90:1   need 4.5:1   PASS
+  muted-foreground  #475569 on background #FAFAFA                  7.26:1   need 4.5:1   PASS
+  muted-foreground  #475569 on card       #FFFFFF                  7.58:1   need 4.5:1   PASS
+  primary-foreground#FAFAFA on primary    #18181B                 16.97:1   need 4.5:1   PASS
+  secondary-fg      #18181B on secondary  #E8ECF0                 14.92:1   need 4.5:1   PASS
+  accent-foreground #FFFFFF on accent     #2563EB                  5.17:1   need 4.5:1   PASS
+  destructive-fg    #FFFFFF on destructive#DC2626                  4.83:1   need 4.5:1   PASS
+  ring              #2563EB on background #FAFAFA                  4.95:1   need 3.0:1   PASS
+  border            #E4E4E7 on background #FAFAFA                  1.22:1   need 3.0:1   N/A **
+  input             #71717A on background #FAFAFA                  4.63:1   need 3.0:1   PASS
+  input             #71717A on card       #FFFFFF                  4.83:1   need 3.0:1   PASS
+
+  DARK theme (.dark)
+  -------------------------------------------------------------------------------------------
+  foreground        #FAFAFA on background #09090B                 19.06:1   need 4.5:1   PASS
+  foreground        #FAFAFA on card       #18181B                 16.97:1   need 4.5:1   PASS
+  card-foreground   #FAFAFA on card       #18181B                 16.97:1   need 4.5:1   PASS
+  popover-foreground#FAFAFA on popover    #18181B                 16.97:1   need 4.5:1   PASS
+  muted-foreground  #A1A1AA on background #09090B                  7.76:1   need 4.5:1   PASS
+  muted-foreground  #A1A1AA on card       #18181B                  6.91:1   need 4.5:1   PASS
+  primary-foreground#18181B on primary    #FAFAFA                 16.97:1   need 4.5:1   PASS
+  secondary-fg       #FAFAFA on secondary #27272A                 14.27:1   need 4.5:1   PASS
+  accent-foreground #09090B on accent     #60A5FA                  7.83:1   need 4.5:1   PASS
+  destructive-fg     #09090B on destructive#F87171                 7.19:1   need 4.5:1   PASS
+  ring              #60A5FA on background #09090B                  7.83:1   need 3.0:1   PASS
+  border            #27272A on background #09090B                  1.34:1   need 3.0:1   N/A **
+  input             #71717A on background #09090B                  4.12:1   need 3.0:1   PASS
+  input             #71717A on card       #18181B                  3.67:1   need 3.0:1   PASS
+
+  ** `--color-border` is decorative separation (card/section dividers): content and
+     components remain identifiable without it, so it falls outside WCAG 1.4.11's scope and
+     its sub-3:1 contrast against `background` is an accepted, owner-approved trade, not a
+     defect. This differs from `--color-input`, which draws the boundary that identifies a
+     form control / the outline `Button` variant and IS covered by 1.4.11; that token was
+     changed (see below) rather than left as-is.
+
+  `--color-input` fix (fix round 1): was #E4E4E7 (light) / #3F3F46 (dark), both FAILing 1.4.11
+  at 1.22:1 / 1.91:1 against background. Introduced by assumption (mapped to
+  `--color-border`'s value) rather than by owner approval, so unlike `--color-border` this was
+  this task's call to correct. Set to #71717A (Tailwind zinc-500) in BOTH ramps: one value
+  clears 3:1 against both `background` and `card` in both themes (4.63 / 4.83 light, 4.12 /
+  3.67 dark, all above). Candidates considered and rejected: #8A8A93 (passes all four but with
+  a thinner margin, 3.28 lowest), #A1A1AA (fails light: 2.46 / 2.56), #52525B (fails dark:
+  2.57 / 2.29), #3F3F46 (fails dark: 1.91 / 1.70).
+
+  Accent note: light accent #2563EB on dark background #09090B measures 3.85:1 (previously
+  documented here and in MASTER.md as "~3.6:1", corrected in fix round 1). Below the 4.5:1
+  floor either way, so the documented conclusion (dark mode uses the lightened #60A5FA
+  instead) is unaffected by the correction.
+*/
+
+@import "tw-animate-css";
+/* `shadcn` is listed in devDependencies (it isn't shipped at
+   runtime, so it doesn't belong in dependencies), but this import makes it
+   a genuine BUILD-time dependency: `vite build` resolves this path from
+   node_modules while compiling CSS. CI must run a plain `npm ci` (all
+   deps, not `--omit=dev`) or this import fails and the build breaks. */
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+    --radius: 0.625rem;
+}
+
+@theme {
+  --font-heading: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-background: #FAFAFA;
+  --color-foreground: #09090B;
+  --color-card: #FFFFFF;
+  --color-card-foreground: #09090B;
+  --color-popover: #FFFFFF;
+  --color-popover-foreground: #09090B;
+  --color-primary: #18181B;
+  --color-primary-foreground: #FAFAFA;
+  --color-secondary: #E8ECF0;
+  --color-secondary-foreground: #18181B;
+  --color-muted: #E8ECF0;
+  --color-muted-foreground: #475569;
+  --color-accent: #2563EB;
+  --color-accent-foreground: #FFFFFF;
+  --color-destructive: #DC2626;
+  --color-destructive-foreground: #FFFFFF;
+  --color-border: #E4E4E7;
+  --color-input: #71717A;
+  --color-ring: #2563EB;
+
+  /* Shadow Depths (MASTER.md): same values in both themes; the table has
+     no separate dark ramp, so these live in the flat block, not `.dark`. */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+}
+
+@layer base {
+  .dark {
+    --color-background: #09090B;
+    --color-foreground: #FAFAFA;
+    --color-card: #18181B;
+    --color-card-foreground: #FAFAFA;
+    --color-popover: #18181B;
+    --color-popover-foreground: #FAFAFA;
+    --color-primary: #FAFAFA;
+    --color-primary-foreground: #18181B;
+    --color-secondary: #27272A;
+    --color-secondary-foreground: #FAFAFA;
+    --color-muted: #27272A;
+    --color-muted-foreground: #A1A1AA;
+    --color-accent: #60A5FA;
+    --color-accent-foreground: #09090B;
+    --color-destructive: #F87171;
+    --color-destructive-foreground: #09090B;
+    --color-border: #27272A;
+    --color-input: #71717A;
+    --color-ring: #60A5FA;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* A11y fix: the per-section `scroll-margin-top: 5rem` below
+       only compensates the sticky navbar (h-16 = 4rem) when the browser
+       scrolls to one of the six section ids directly. It does nothing for
+       the browser's own focus-driven scrollIntoView, which runs whenever
+       Tab moves focus to *any* off-screen element (a project link, a form
+       field, a footer link, etc.). With no scroll-padding-top set, that
+       native scroll can park a focused element's top edge at viewport 0,
+       i.e. directly under the sticky navbar (WCAG 2.4.11). Setting
+       scroll-padding-top on the scrolling root reserves that space for
+       every scroll, focus-driven or not. */
+    scroll-padding-top: 5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Icon nudge on button hover (see the Download and external-link icons in
+     Hero, Footer and ProjectCard). The transform itself is a Tailwind
+     group-hover utility at the call site; this class exists so the
+     reduced-motion guard below can switch it off. Without that override the
+     global rule above would only collapse the duration, leaving the icon to
+     jump instantly rather than not move at all. */
+  @media (prefers-reduced-motion: reduce) {
+    .icon-nudge {
+      /* Both properties, deliberately. Tailwind v4 compiles translate-*
+         utilities to the standalone `translate` property rather than to
+         `transform`, so a `transform: none` override alone silently fails to
+         disable the nudge. Verified: on hover the icon computes
+         `transform: none` but `translate: 0px 2px`. */
+      transform: none !important;
+      translate: none !important;
+    }
+  }
+
+  /* Soft glow behind the hero portrait. The cut-out otherwise floats on a
+     flat ground with nothing under it, which reads as pasted on rather than
+     placed. Mixed from --color-muted-foreground rather than --color-accent
+     deliberately: an accent-tinted halo casts colour onto skin tones, while
+     a neutral one lifts the subject off a dark ground and grounds him
+     against a light one, which is the job. Anchored low and wide so the
+     brightest part sits behind the torso rather than ringing the head. */
+  .hero-glow {
+    background-image: radial-gradient(
+      ellipse 52% 42% at 50% 58%,
+      color-mix(in oklch, var(--color-muted-foreground) 20%, transparent) 0%,
+      transparent 72%
+    );
+  }
+
+  /* Decorative dot grid behind the Contact section. Declared here rather than
+     inline because the dot colour has to resolve from a token, and theme.css
+     is the only place colour is allowed to be resolved. Masked radially so it
+     fades out instead of tiling to a hard edge against the section border. */
+  .dot-grid {
+    /* Mixed up from --color-muted-foreground rather than --color-border:
+       border sits only a few steps off the background in both themes, which
+       made the grid read as almost nothing. The mix keeps it tied to the
+       token ramp instead of hardcoding a value, and stays proportional when
+       the palette changes. */
+    background-image: radial-gradient(
+      color-mix(in oklch, var(--color-muted-foreground) 32%, transparent) 1.25px,
+      transparent 1.25px
+    );
+    background-size: 20px 20px;
+    -webkit-mask-image: radial-gradient(ellipse 72% 62% at 50% 45%, #000 0%, transparent 85%);
+    mask-image: radial-gradient(ellipse 72% 62% at 50% 45%, #000 0%, transparent 85%);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+  }
+
+  button:not(:disabled), [role="button"]:not(:disabled) {
+    cursor: pointer;
+    }
+
+  /* Section landmarks sit under the sticky navbar
+     (h-16 = 4rem). scroll-margin-top keeps a keyboard-focused heading from
+     landing underneath it: WCAG 2.2 focus-not-obscured. */
+  #home, #work, #experience, #about, #contact {
+    scroll-margin-top: 5rem;
+  }
+
+}
