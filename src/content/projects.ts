@@ -68,8 +68,14 @@ export const projects: Project[] = [
     contribution:
       'Team project (CSE 190) with a decoupled LLM grounder and SAC+HER controller in MuJoCo FetchPush. Evaluated instruction tiers from literal coordinates to functional intent, isolating grounding failures from policy errors.',
     stack: ['Python', 'Gemini', 'MuJoCo', 'Gymnasium', 'Stable-Baselines3 (SAC + HER)'],
+    // Tier codes (T0..T4) are dropped here on purpose: they mean nothing to
+    // a reader outside the project, and this is the single best piece of
+    // evidence on the site for the positioning claim about finding where
+    // systems break, so it has to be legible. The distinction the original
+    // wording drew is preserved: 98% and 93% are end-to-end success, while
+    // 77% is the grounder's own score, not the same measure.
     result:
-      'End-to-end success near-solved on literal/region tiers (T0 ~98%, T1 ~93%), with a clear cliff on relative and intent-heavy instructions (T2 ~77% LLM, T4 ~45–55%).',
+      'End-to-end success runs about 98% on literal instructions and 93% on region-based ones, then falls sharply as the language gets harder: the grounder alone drops to about 77% on relative spatial references, and intent-heavy commands land between 45 and 55%. Separating the grounder from the controller is what makes that fall traceable to language understanding rather than to control.',
     image: {
       src: '/talk-to-robot.webp',
       width: 1280,

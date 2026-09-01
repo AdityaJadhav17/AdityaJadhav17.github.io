@@ -154,7 +154,12 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
             <p className="font-heading text-xs font-semibold tracking-wide text-muted-foreground uppercase">
               Result
             </p>
-            <p className="mt-1 font-mono text-sm text-foreground">{project.result}</p>
+            {/* Space Grotesk, not JetBrains Mono. Three of the four result
+                lines are sentences rather than figures, and MASTER.md
+                reserves mono for tags, metrics and dates. The one that is a
+                bare figure still reads as one because the label above it
+                says Result. */}
+            <p className="mt-1 text-sm text-foreground">{project.result}</p>
           </div>
         )}
 
