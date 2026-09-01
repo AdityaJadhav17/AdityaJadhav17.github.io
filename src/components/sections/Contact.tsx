@@ -5,8 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { useScrollReveal } from '@/hooks/useScrollReveal'
-import { cn } from '@/lib/utils'
+import { Reveal } from '@/components/motion/Reveal'
 import { site } from '@/content/site'
 
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xblawgak'
@@ -63,7 +62,6 @@ export function Contact() {
   const emailRef = useRef<HTMLInputElement>(null)
   const messageRef = useRef<HTMLTextAreaElement>(null)
   const fieldRefs = { name: nameRef, email: emailRef, message: messageRef }
-  const { ref: sectionRef, revealed } = useScrollReveal<HTMLElement>()
 
   function handleChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = e.target
@@ -101,121 +99,131 @@ export function Contact() {
   }
 
   return (
-    <section
-      id="contact"
-      ref={sectionRef}
-      className={cn('reveal border-t border-border py-16 md:py-24', !revealed && 'reveal-hidden')}
-    >
+    <Reveal as="section" id="contact" className="border-t border-border py-16 md:py-24">
       <div className="mx-auto max-w-5xl px-4 md:px-6">
-        <h2 className="font-heading text-3xl font-semibold text-foreground">Contact</h2>
-        <p className="mt-3 max-w-2xl text-base text-muted-foreground">
-          I&apos;m always interested in new opportunities, collaborations, or just a conversation
-          about technology and development. Feel free to reach out.
-        </p>
+        <Reveal.Item>
+          <h2 className="font-heading text-3xl font-semibold text-foreground">Contact</h2>
+        </Reveal.Item>
+
+        <Reveal.Item>
+          <p className="mt-3 max-w-2xl text-base text-muted-foreground">
+            I&apos;m always interested in new opportunities, collaborations, or just a conversation
+            about technology and development. Feel free to reach out.
+          </p>
+        </Reveal.Item>
 
         <div className="mt-8 grid gap-10 md:mt-12 md:grid-cols-[3fr_2fr]">
-          <form noValidate onSubmit={handleSubmit} className="max-w-xl space-y-5">
-            <div className="space-y-1.5">
-              <Label htmlFor="contact-name">Name</Label>
-              <Input
-                id="contact-name"
-                name="name"
-                ref={nameRef}
-                value={values.name}
-                onChange={handleChange}
-                autoComplete="name"
-                aria-invalid={Boolean(errors.name)}
-                aria-describedby={errors.name ? 'contact-name-error' : undefined}
-              />
-              {errors.name && (
-                <p id="contact-name-error" className="text-sm text-destructive">
-                  {errors.name}
+          {/* The form is ONE Reveal.Item, never one per field. Staggering
+              individual inputs animates elements a keyboard user may be
+              tabbing toward, and moving a focus target is worse than not
+              animating it. Same rule everywhere: no Reveal.Item wraps a
+              single focusable element. */}
+          <Reveal.Item>
+            <form noValidate onSubmit={handleSubmit} className="max-w-xl space-y-5">
+              <div className="space-y-1.5">
+                <Label htmlFor="contact-name">Name</Label>
+                <Input
+                  id="contact-name"
+                  name="name"
+                  ref={nameRef}
+                  value={values.name}
+                  onChange={handleChange}
+                  autoComplete="name"
+                  aria-invalid={Boolean(errors.name)}
+                  aria-describedby={errors.name ? 'contact-name-error' : undefined}
+                />
+                {errors.name && (
+                  <p id="contact-name-error" className="text-sm text-destructive">
+                    {errors.name}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="contact-email">Email</Label>
+                <Input
+                  id="contact-email"
+                  name="email"
+                  type="email"
+                  ref={emailRef}
+                  value={values.email}
+                  onChange={handleChange}
+                  autoComplete="email"
+                  aria-invalid={Boolean(errors.email)}
+                  aria-describedby={errors.email ? 'contact-email-error' : undefined}
+                />
+                {errors.email && (
+                  <p id="contact-email-error" className="text-sm text-destructive">
+                    {errors.email}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="contact-message">Message</Label>
+                <Textarea
+                  id="contact-message"
+                  name="message"
+                  ref={messageRef}
+                  value={values.message}
+                  onChange={handleChange}
+                  rows={5}
+                  aria-invalid={Boolean(errors.message)}
+                  aria-describedby={errors.message ? 'contact-message-error' : undefined}
+                />
+                {errors.message && (
+                  <p id="contact-message-error" className="text-sm text-destructive">
+                    {errors.message}
+                  </p>
+                )}
+              </div>
+
+              <Button type="submit" disabled={submitting}>
+                {submitting && <Loader2 aria-hidden="true" className="size-4 animate-spin" />}
+                {submitting ? 'Sending…' : 'Send message'}
+              </Button>
+
+              {result === 'success' && (
+                <p role="status" aria-live="polite" className="text-sm text-foreground">
+                  Thank you for your message! I&apos;ll get back to you soon.
                 </p>
               )}
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="contact-email">Email</Label>
-              <Input
-                id="contact-email"
-                name="email"
-                type="email"
-                ref={emailRef}
-                value={values.email}
-                onChange={handleChange}
-                autoComplete="email"
-                aria-invalid={Boolean(errors.email)}
-                aria-describedby={errors.email ? 'contact-email-error' : undefined}
-              />
-              {errors.email && (
-                <p id="contact-email-error" className="text-sm text-destructive">
-                  {errors.email}
-                </p>
-              )}
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="contact-message">Message</Label>
-              <Textarea
-                id="contact-message"
-                name="message"
-                ref={messageRef}
-                value={values.message}
-                onChange={handleChange}
-                rows={5}
-                aria-invalid={Boolean(errors.message)}
-                aria-describedby={errors.message ? 'contact-message-error' : undefined}
-              />
-              {errors.message && (
-                <p id="contact-message-error" className="text-sm text-destructive">
-                  {errors.message}
-                </p>
-              )}
-            </div>
-
-            <Button type="submit" disabled={submitting}>
-              {submitting && <Loader2 aria-hidden="true" className="size-4 animate-spin" />}
-              {submitting ? 'Sending…' : 'Send message'}
-            </Button>
-
-            {result === 'success' && (
-              <p role="status" aria-live="polite" className="text-sm text-foreground">
-                Thank you for your message! I&apos;ll get back to you soon.
-              </p>
-            )}
-            {result === 'error' && (
-              <p role="alert" className="text-sm text-destructive">
-                Something went wrong sending your message. Please try again, or{' '}
-                <a href={`mailto:${site.email}`} className="underline underline-offset-2">
-                  email me directly at {site.email}
-                </a>
-                .
-              </p>
-            )}
-          </form>
-
-          <div className="flex flex-row flex-wrap gap-3 md:flex-col md:items-start">
-            <Button asChild variant="outline" size="lg">
-              <a href={`mailto:${site.email}`}>
-                <Mail aria-hidden="true" className="size-4" />
-                Email
-              </a>
-            </Button>
-
-            {site.social.map((link) => {
-              const Icon = SOCIAL_ICONS[link.label] ?? ExternalLink
-              return (
-                <Button key={link.label} asChild variant="outline" size="lg">
-                  <a href={link.url} target="_blank" rel="noopener noreferrer">
-                    <Icon aria-hidden="true" className="size-4" />
-                    {link.label}
+              {result === 'error' && (
+                <p role="alert" className="text-sm text-destructive">
+                  Something went wrong sending your message. Please try again, or{' '}
+                  <a href={`mailto:${site.email}`} className="underline underline-offset-2">
+                    email me directly at {site.email}
                   </a>
-                </Button>
-              )
-            })}
-          </div>
+                  .
+                </p>
+              )}
+            </form>
+          </Reveal.Item>
+
+          <Reveal.Item>
+            <div className="flex flex-row flex-wrap gap-3 md:flex-col md:items-start">
+              <Button asChild variant="outline" size="lg">
+                <a href={`mailto:${site.email}`}>
+                  <Mail aria-hidden="true" className="size-4" />
+                  Email
+                </a>
+              </Button>
+
+              {site.social.map((link) => {
+                const Icon = SOCIAL_ICONS[link.label] ?? ExternalLink
+                return (
+                  <Button key={link.label} asChild variant="outline" size="lg">
+                    <a href={link.url} target="_blank" rel="noopener noreferrer">
+                      <Icon aria-hidden="true" className="size-4" />
+                      {link.label}
+                    </a>
+                  </Button>
+                )
+              })}
+            </div>
+          </Reveal.Item>
         </div>
       </div>
-    </section>
+    </Reveal>
   )
 }
