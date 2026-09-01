@@ -51,7 +51,7 @@ export function TimelineEntry({ entry, index, total, progress, reduced }: Timeli
           {entry.organization}
           {entry.location ? ` · ${entry.location}` : ''}
         </p>
-        <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm text-foreground">
+        <ul className="mt-3 list-disc space-y-1.5 pl-5 text-[0.9375rem] text-foreground">
           {entry.highlights.map((highlight) => (
             <li key={highlight}>{highlight}</li>
           ))}

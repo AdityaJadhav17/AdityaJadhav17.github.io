@@ -1,4 +1,4 @@
-import { forwardRef, useId, useState, type ComponentProps } from 'react'
+import { forwardRef, useEffect, useId, useState, type ComponentProps } from 'react'
 import { Menu } from 'lucide-react'
 import { motion } from 'motion/react'
 import { cn } from '@/lib/utils'
@@ -71,15 +71,47 @@ const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(function NavLink(
   )
 })
 
+// The hero already shows the name as its h1, so repeating it in the header
+// puts the same words on screen twice. Rather than drop it (the header needs
+// a home link once the hero is out of view), fade it in past the hero.
+//
+// Driven by scroll position rather than useActiveSection: that hook seeds its
+// state to the first section id, so a failed observer would leave `active`
+// stuck on "home" and hide the brand permanently. window.scrollY has no such
+// failure mode.
+function useScrolledPastHero(threshold = 160) {
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const update = () => setScrolled(window.scrollY > threshold)
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    return () => window.removeEventListener('scroll', update)
+  }, [threshold])
+
+  return scrolled
+}
+
 export function Navbar({ sectionIds }: NavbarProps) {
   const active = useActiveSection(sectionIds)
+  const showBrand = useScrolledPastHero()
   const [open, setOpen] = useState(false)
   const mobileMenuId = useId()
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background">
       <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 md:px-6">
-        <a href="#home" className="font-heading text-base font-semibold text-foreground">
+        <a
+          href="#home"
+          aria-hidden={!showBrand}
+          tabIndex={showBrand ? 0 : -1}
+          className={cn(
+            // Kept mounted at all times: removing it would collapse the
+            // justify-between layout and shift the nav links sideways.
+            'font-heading text-base font-semibold text-foreground transition-opacity duration-300',
+            showBrand ? 'opacity-100' : 'pointer-events-none opacity-0',
+          )}
+        >
           Aditya Jadhav
         </a>
 

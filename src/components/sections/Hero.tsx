@@ -19,7 +19,7 @@ const SOCIAL_ICONS: Record<string, typeof FaGithub> = {
 
 // The small mono-uppercase label above each metadata column. Shared so the
 // four of them cannot drift apart.
-const LABEL = 'font-mono text-[0.6875rem] tracking-[0.2em] text-muted-foreground uppercase'
+const LABEL = 'font-mono text-xs tracking-[0.18em] text-muted-foreground uppercase'
 
 // Hero: a multi-column editorial composition rather than a centred stack.
 //
@@ -50,14 +50,16 @@ export function Hero() {
       variants={heroContainer}
       initial="hidden"
       animate="visible"
-      className="relative grid min-h-[calc(100dvh-4rem-1px)] grid-cols-1 content-start gap-y-8 overflow-hidden px-6 py-20 lg:grid-cols-4 lg:content-stretch lg:gap-x-8 lg:grid-rows-[auto_1fr_auto_auto_auto] lg:px-12 lg:py-12"
+      className="relative mx-auto grid min-h-[calc(100dvh-4rem-1px)] w-full max-w-[1600px] grid-cols-1 content-start gap-y-8 overflow-hidden px-6 py-20 lg:grid-cols-4 lg:content-stretch lg:gap-x-8 lg:grid-rows-[auto_1fr_auto_auto_auto] lg:px-12 lg:py-12"
     >
       {/* Identity */}
       <motion.div variants={heroItem} className="relative z-10 lg:col-start-1 lg:row-start-1">
-        <h1 className="font-heading text-2xl font-bold tracking-tight text-foreground">
+        <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground lg:text-4xl">
           {site.name}
         </h1>
-        <p className={`mt-1.5 ${LABEL}`}>{site.discipline}</p>
+        <p className="mt-2 font-mono text-[0.8125rem] tracking-[0.16em] text-muted-foreground uppercase">
+          {site.discipline}
+        </p>
       </motion.div>
 
       {/* The claim. The single most important sentence on the site, so it is
@@ -110,7 +112,7 @@ export function Hero() {
         variants={heroItem}
         className="relative z-10 flex flex-col gap-5 lg:col-span-2 lg:col-start-1 lg:row-start-4"
       >
-        <p className="max-w-xs font-mono text-xs leading-relaxed tracking-wide text-muted-foreground">
+        <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
           {site.availability}
         </p>
 
@@ -120,7 +122,7 @@ export function Hero() {
               <p className="font-mono text-xl font-medium text-accent tabular-nums">
                 {point.value}
               </p>
-              <p className="mt-0.5 text-xs leading-snug text-muted-foreground">{point.label}</p>
+              <p className="mt-1 text-[0.8125rem] leading-snug text-muted-foreground">{point.label}</p>
             </li>
           ))}
         </ul>

@@ -19,7 +19,18 @@ export function HeroPortrait() {
     // subject's arm directly under the display claim's lower-right, which is
     // dark clothing behind dark type in the light theme. Offsetting right
     // keeps the two clear of each other while they still share the frame.
-    className="pointer-events-none flex justify-center lg:absolute lg:inset-x-0 lg:bottom-0 lg:justify-end lg:pr-[6%]"
+    //
+    // 7% was measured, not guessed. The binding constraint is the proof row
+    // and the action buttons, not the claim: they reach further right, and
+    // they overlap the portrait vertically. Clearance between them and the
+    // portrait's left edge, by padding value:
+    //   6%  98px at 1440, 66px at 1920
+    //   7%  84px at 1440, 50px at 1920
+    //   8%  70px at 1440, 34px at 1920
+    // Below roughly 50px the proof numbers start reading as though they sit
+    // on the subject's arm, which is dark text on dark clothing in the light
+    // theme.
+    className="pointer-events-none flex justify-center lg:absolute lg:inset-x-0 lg:bottom-0 lg:justify-end lg:pr-[7%]"
     >
       <motion.img
         src="/portrait.webp"
