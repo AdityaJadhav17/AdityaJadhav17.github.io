@@ -1,11 +1,18 @@
-import { forwardRef, useEffect, useId, useState, type ComponentProps } from 'react'
+import {
+  forwardRef,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type ComponentProps,
+  type MouseEvent,
+} from 'react'
 import { Menu } from 'lucide-react'
 import { motion } from 'motion/react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -97,6 +104,80 @@ export function Navbar({ sectionIds }: NavbarProps) {
   const showBrand = useScrolledPastHero()
   const [open, setOpen] = useState(false)
   const mobileMenuId = useId()
+  const pendingTarget = useRef<string | null>(null)
+  // Separate from pendingTarget on purpose. The scroll effect clears
+  // pendingTarget as soon as it reads it, but onCloseAutoFocus fires later,
+  // so sharing one ref meant the guard below always saw null and never
+  // prevented anything. Each flag has exactly one owner: the effect clears
+  // pendingTarget, onCloseAutoFocus clears this.
+  const suppressFocusRestore = useRef(false)
+
+  // Two things fight a hash jump made from inside the drawer, and both were
+  // measured rather than guessed.
+  //
+  // First, Radix locks body scroll while the sheet is open (body gets
+  // overflow: hidden and a data-scroll-locked attribute) and only releases it
+  // after the exit animation. A native hash jump inside that window is
+  // swallowed: the hash updates, the body cannot scroll, and the navigation
+  // is consumed.
+  //
+  // Second, and the one that actually kept breaking this: on close Radix
+  // restores focus to the trigger, which sits in the sticky header. Focusing
+  // it scrolls the page back to the top and cancels any scroll already in
+  // flight. Traced at 390px, clicking "About": scrollY reached 21 then 72 as
+  // the scroll started, then focus moved to the menu button at t=315ms and
+  // scrollY fell back to 2 and then 0.
+  //
+  // So: suppress that focus restore when a navigation is pending (see
+  // onCloseAutoFocus on SheetContent below), then move focus to the target
+  // section ourselves and scroll. Focusing the destination is also the right
+  // behaviour for a keyboard user, who should land in the section they chose
+  // rather than back on the menu button.
+  function handleMobileNavigate(event: MouseEvent<HTMLAnchorElement>, id: string) {
+    // Let the browser handle anything that is not a plain left click.
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+      return
+    }
+    event.preventDefault()
+    pendingTarget.current = id
+    suppressFocusRestore.current = true
+    setOpen(false)
+  }
+
+  useEffect(() => {
+    if (open || !pendingTarget.current) return
+
+    const id = pendingTarget.current
+    pendingTarget.current = null
+
+    // Wait for the lock to lift rather than guessing a timeout, so this does
+    // not silently break if the animation duration changes. The frame cap
+    // stops a change in Radix's internals from hanging this forever.
+    let frames = 0
+    const go = () => {
+      if (document.body.hasAttribute('data-scroll-locked') && frames++ < 60) {
+        requestAnimationFrame(go)
+        return
+      }
+
+      const target = document.getElementById(id)
+      if (!target) return
+
+      // Sections are not focusable by default. Make this one programmatically
+      // focusable, focus it without scrolling, then scroll deliberately.
+      // Cleared on blur so the page is not left littered with tabindex.
+      target.setAttribute('tabindex', '-1')
+      target.addEventListener('blur', () => target.removeAttribute('tabindex'), { once: true })
+      target.focus({ preventScroll: true })
+
+      // No behavior argument on purpose: that lets the `scroll-behavior` in
+      // theme.css decide, which is already switched to `auto` under
+      // prefers-reduced-motion.
+      target.scrollIntoView()
+      history.replaceState(null, '', `#${id}`)
+    }
+    requestAnimationFrame(go)
+  }, [open])
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background">
@@ -150,16 +231,33 @@ export function Navbar({ sectionIds }: NavbarProps) {
                 <Menu aria-hidden="true" />
               </Button>
             </SheetTrigger>
-            <SheetContent id={mobileMenuId} side="right">
+            <SheetContent
+              id={mobileMenuId}
+              side="right"
+              // Radix returns focus to the trigger on close. The trigger is in
+              // the sticky header, so that scrolls the page to the top and
+              // cancels the scroll we just started. Suppress it only when a
+              // navigation is pending; the effect above then owns focus.
+              onCloseAutoFocus={(event) => {
+                if (!suppressFocusRestore.current) return
+                suppressFocusRestore.current = false
+                event.preventDefault()
+              }}
+            >
               <SheetHeader>
                 <SheetTitle>Menu</SheetTitle>
                 <SheetDescription className="sr-only">Site navigation</SheetDescription>
               </SheetHeader>
               <nav aria-label="Mobile" className="flex flex-col gap-1 px-4">
                 {NAV.map((item) => (
-                  <SheetClose asChild key={item.id}>
-                    <NavLink id={item.id} label={item.label} active={active === item.id} variant="mobile" />
-                  </SheetClose>
+                  <NavLink
+                    key={item.id}
+                    id={item.id}
+                    label={item.label}
+                    active={active === item.id}
+                    variant="mobile"
+                    onClick={(event) => handleMobileNavigate(event, item.id)}
+                  />
                 ))}
               </nav>
             </SheetContent>
