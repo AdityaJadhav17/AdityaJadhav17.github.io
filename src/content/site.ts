@@ -84,7 +84,7 @@ export const site: Site = {
   email: 'aditya.jadhav7910@gmail.com',
   social: [
     { label: 'GitHub', url: 'https://github.com/AdityaJadhav17' },
-    { label: 'LinkedIn', url: 'https://www.linkedin.com/in/aditya-jadhav-06484123a/' },
+    { label: 'LinkedIn', url: 'https://www.linkedin.com/in/adityajadhav17/' },
   ],
   resumePath: '/Aditya_Jadhav_Resume.pdf',
   education: {

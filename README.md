@@ -4,7 +4,7 @@ Personal portfolio site, built as a single-page React app: hero, selected work, 
 timeline, about/skills, certifications, and a contact form, with light/dark theming and a
 subtle scroll-reveal on each section.
 
-Live at [adityajadhav17.github.io](https://adityajadhav17.github.io).
+Live at [adityajadhav.dev](https://adityajadhav.dev).
 
 ## Stack
 
