@@ -54,3 +54,7 @@ design-system/
 
 # Local tooling scan output (never belongs in this repo)
 karpathy-report.json
+
+# Resume working files (local only). These carry personal contact details
+# and unpublished drafts; only the rendered PDF in public/ is versioned.
+resume/
