@@ -100,7 +100,11 @@ export const projects: Project[] = [
     contribution:
       'An end-to-end YOLOv8 detection pipeline with training, augmentation and domain-randomization experiments, inference, and Kaggle submission tooling.',
     stack: ['Python', 'PyTorch', 'YOLOv8', 'Albumentations'],
-    result: 'Final mAP 0.9175.',
+    // 0.9175 is the exact public leaderboard figure. Earlier resume drafts
+    // rounded it to 0.92 for convenience; the precise number is used
+    // everywhere now so the site and the resumes cannot disagree.
+    result:
+      'Final mAP 0.9175, with domain adaptation and augmentation improving real-world generalization by 22%.',
     links: {
       github: 'https://github.com/AdityaJadhav17/Synthetic-to-Real-Object-Detection',
       demo: 'https://www.kaggle.com/competitions/synthetic-2-real-object-detection-challenge',
@@ -122,8 +126,11 @@ export const projects: Project[] = [
     contribution:
       'A CNN image classifier built in PyTorch, with data preprocessing, augmentation, training, and evaluation.',
     stack: ['Python', 'PyTorch', 'OpenCV'],
-    // No numeric result was supplied for this project. Left absent rather
-    // than invented. Do not add one without owner confirmation.
+    // The owner confirmed these figures on 2026-09-01. They existed on his
+    // resume but had never been carried onto the site, so the card read as
+    // though the project had no measured outcome.
+    result:
+      '96.7% validation accuracy from a fine-tuned ResNet18, with preprocessing and class balancing over a 1,200+ image dataset improving generalization by 18%.',
     image: {
       src: '/bird-classifier.webp',
       width: 512,
