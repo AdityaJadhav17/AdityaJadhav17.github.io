@@ -49,7 +49,7 @@ export const projects: Project[] = [
       'A distributed multi-agent travel planner with a LangGraph supervisor, FastAPI services, and a React/TypeScript UI. Containerized the stack with Docker, used NATS for inter-service messaging, and added Grafana/ClickHouse observability.',
     stack: ['Python', 'FastAPI', 'LangGraph', 'React', 'TypeScript', 'Docker', 'NATS', 'Grafana'],
     result:
-      'Won SANDHacks 2026. Cut inter-service latency by ~40% with containerized microservices and NATS messaging.',
+      "Won Cisco's AGNTCY track at SANDHacks 2026. Cut inter-service latency by ~40% with containerized microservices and NATS messaging.",
     links: {
       github: 'https://github.com/AdityaJadhav17/Travel-Agntcy',
       demo: 'https://youtu.be/T0EkJ9J_IQU',
