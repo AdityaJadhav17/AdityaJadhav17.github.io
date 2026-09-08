@@ -46,7 +46,7 @@ export const projects: Project[] = [
     problem:
       'Travel planning spans flights, hotels, and activities, but stitching those sources into a coherent plan is slow and fragmented.',
     contribution:
-      'A distributed multi-agent travel planner with a LangGraph supervisor, FastAPI services, and a React/TypeScript UI. Containerized the stack with Docker, used NATS for inter-service messaging, and added Grafana/ClickHouse observability.',
+      "A distributed multi-agent travel planner built on Cisco's open-source AGNTCY framework, with a LangGraph supervisor, FastAPI services, and a React/TypeScript UI. Containerized the stack with Docker, used NATS for inter-service messaging, and added Grafana/ClickHouse observability.",
     stack: ['Python', 'FastAPI', 'LangGraph', 'React', 'TypeScript', 'Docker', 'NATS', 'Grafana'],
     result:
       "Won Cisco's AGNTCY track at SANDHacks 2026. Cut inter-service latency by ~40% with containerized microservices and NATS messaging.",
