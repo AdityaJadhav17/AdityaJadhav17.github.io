@@ -8,10 +8,11 @@
 // highlights explicitly permitted by the owner are used, in approximately
 // their given wording. Do not add detail beyond that list.
 //
-// Every other entry is transcribed from the owner's resume. The security
-// wording in the UC San Diego entry ("authorized", "under defined scope",
-// "responsible disclosure") is his own and is deliberately careful. Keep it
-// verbatim: paraphrasing it looser would change what the sentence claims.
+// The UC San Diego highlights are the owner's own wording, supplied verbatim
+// in September 2026, and describe the scope of an ongoing role in present
+// tense rather than claiming finished work. Keep them verbatim. Note that the
+// SQL and REST lines track the job posting; he flagged some of that as work
+// still ahead of him, so do not restate them in the past tense anywhere.
 
 export type Experience = {
   organization: string
@@ -29,10 +30,10 @@ export const experience: Experience[] = [
     start: 'Dec 2025',
     end: 'Present',
     highlights: [
-      'AI infrastructure penetration testing: conducted authorized security validation on an academic AI compute environment, identifying configuration weaknesses and access control gaps under defined scope',
-      'Documented findings and remediation recommendations, supporting secure deployment practices while adhering to confidentiality and responsible disclosure guidelines',
-      'Risk and compliance assessment: assessed System Security Plans against NIST SP 800-171 controls, identifying access control and configuration management gaps to support remediation planning',
-      'Organized audit evidence and mapped security controls to NIST SP 800-171 requirements, supporting risk assessment and audit readiness',
+      "Support enterprise IT security and data-focused initiatives within UC San Diego's ITS organization",
+      'Develop and maintain Python-based scripts and SQL queries to analyze and validate enterprise security data across legacy and modern systems',
+      'Contribute to the design, testing, and documentation of REST-based application components for information security projects',
+      'Work within defined security scopes and confidentiality requirements while collaborating with engineers and administrators',
     ],
   },
   {
@@ -41,9 +42,9 @@ export const experience: Experience[] = [
     start: 'Jun 2026',
     end: 'Sep 2026',
     highlights: [
-      'Built a Windows desktop application in Python/Qt for configuring and validating USB-connected hardware devices',
-      'Implemented read/write and data-integrity logic against published industry specifications',
-      'Extended an existing internal software platform; contributed testing, validation, and documentation',
+      'Built a Windows desktop application in Python/Qt for configuring and validating USB-connected hardware devices, replacing a legacy internal tool and a paid third-party subscription and cutting a 15 to 20 minute task to under 5 minutes',
+      'Implemented read/write and data-integrity logic against published industry specifications as the sole engineer on the project',
+      'Extended an existing internal software platform; contributed testing, validation, documentation, CI/CD, and an installer with auto-update that replaced manual downloads',
     ],
   },
   {
@@ -73,8 +74,9 @@ export const experience: Experience[] = [
     start: 'Aug 2023',
     end: 'Jun 2025',
     highlights: [
-      'Served as Outreach Officer, onboarding new members and connecting them to cybersecurity resources and events',
-      'Organized cybersecurity workshops and supported new members with technical guidance',
+      'Held both Outreach Officer and Treasurer roles, onboarding new members and managing the club budget',
+      'Led 5+ hands-on workshops on penetration testing and network defense for 30+ members',
+      'Mentored 20+ students through ethical hacking labs',
     ],
   },
 ]
