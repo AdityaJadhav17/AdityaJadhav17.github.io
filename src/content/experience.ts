@@ -1,4 +1,7 @@
-// Work/leadership experience, newest first by start date.
+// Work/leadership experience, newest first by END date, with an ongoing
+// role sorting above one that finished later. Start date is the wrong key:
+// it buried the current UC San Diego role under a summer internship that
+// started later but has already ended. Matches the resume ordering.
 //
 // The Lumulus Technologies entry is governed by a signed NDA: the company
 // name and job title are cleared, the technical substance is not. Only the
@@ -21,17 +24,6 @@ export type Experience = {
 
 export const experience: Experience[] = [
   {
-    organization: 'Lumulus Technologies',
-    role: 'Software Engineering Intern',
-    start: 'Jun 2026',
-    end: 'Sep 2026',
-    highlights: [
-      'Built a Windows desktop application in Python/Qt for configuring and validating USB-connected hardware devices',
-      'Implemented read/write and data-integrity logic against published industry specifications',
-      'Extended an existing internal software platform; contributed testing, validation, and documentation',
-    ],
-  },
-  {
     organization: 'UC San Diego (ITS)',
     role: 'IT Security Programmer',
     start: 'Dec 2025',
@@ -41,6 +33,17 @@ export const experience: Experience[] = [
       'Documented findings and remediation recommendations, supporting secure deployment practices while adhering to confidentiality and responsible disclosure guidelines',
       'Risk and compliance assessment: assessed System Security Plans against NIST SP 800-171 controls, identifying access control and configuration management gaps to support remediation planning',
       'Organized audit evidence and mapped security controls to NIST SP 800-171 requirements, supporting risk assessment and audit readiness',
+    ],
+  },
+  {
+    organization: 'Lumulus Technologies',
+    role: 'Software Engineering Intern',
+    start: 'Jun 2026',
+    end: 'Sep 2026',
+    highlights: [
+      'Built a Windows desktop application in Python/Qt for configuring and validating USB-connected hardware devices',
+      'Implemented read/write and data-integrity logic against published industry specifications',
+      'Extended an existing internal software platform; contributed testing, validation, and documentation',
     ],
   },
   {
