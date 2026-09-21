@@ -6,11 +6,19 @@ export type Certification = {
   issuer: string
   year: string
   badge: string
-  pdf: string
+  pdf?: string
   verify: string
 }
 
 export const certifications: Certification[] = [
+  {
+    id: 'aws-ai-practitioner',
+    title: 'AWS Certified AI Practitioner',
+    issuer: 'Amazon Web Services',
+    year: '2026',
+    badge: '/aws-ai-practitioner.png',
+    verify: 'https://www.credly.com/badges/e761ec4f-7806-4d0f-b497-303cc5533086/public_url',
+  },
   {
     id: 'code-generation-ibm',
     title: 'Code Generation and Optimization Using IBM Granite',
