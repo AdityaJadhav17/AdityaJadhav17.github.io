@@ -64,6 +64,36 @@ export const projects: Project[] = [
     context: 'SANDHacks 2026',
   },
   {
+    id: 'stockroom',
+    title: 'Stockroom',
+    problem:
+      'Shared inventory and purchase approvals usually live in a spreadsheet, where nobody can reconstruct who approved what, or when.',
+    contribution:
+      "Built in C# on ASP.NET Core Razor Pages with Entity Framework Core over SQLite. Member and manager roles run through ASP.NET Core Identity, with every permission check resolved against the database rather than trusted from the session, and logout terminating all sessions for an account. Each stock movement carries an audit record with actor, UTC timestamp, quantity change and reason.",
+    stack: ['C#', 'ASP.NET Core', 'Entity Framework Core', 'SQLite', 'xUnit', 'Playwright', 'GitHub Actions'],
+    result:
+      '156 xUnit integration cases covering business rules, authorization, transactions and race conditions, plus 11 Chromium end-to-end cases, gated by a seven-job pipeline running on Ubuntu and Windows with CodeQL scanning.',
+    links: {
+      github: 'https://github.com/AdityaJadhav17/Stockroom',
+    },
+    featured: false,
+  },
+  {
+    id: 'personal-tracker',
+    title: 'Personal Tracker',
+    problem:
+      'Tracking deadlines, courses, notes and goals usually means either four separate apps or one that wants an account and a server.',
+    contribution:
+      'A local-first tracker in React 18 and TypeScript on Vite, spanning nine views with all state in localStorage and no network calls after the page loads. Deliberately takes no runtime dependencies beyond React and React DOM, so the routing, state management, date handling and charts are hand-written rather than pulled from four libraries.',
+    stack: ['React', 'TypeScript', 'Vite', 'Vitest', 'React Testing Library', 'Playwright'],
+    result:
+      'In daily use since September 2026. Repeating deadlines create successors only on completion, notes can be encrypted, every destructive action is undoable, and deadlines export to .ics. Covered by Vitest and React Testing Library unit tests and Playwright end-to-end cases that gate deployment.',
+    links: {
+      github: 'https://github.com/AdityaJadhav17/Personal-Tracker',
+    },
+    featured: false,
+  },
+  {
     id: 'talk-to-robot',
     title: 'Talk-to-Robot',
     problem:
