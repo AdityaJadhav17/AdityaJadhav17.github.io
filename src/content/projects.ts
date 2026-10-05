@@ -76,6 +76,12 @@ export const projects: Project[] = [
     links: {
       github: 'https://github.com/AdityaJadhav17/Stockroom',
     },
+    image: {
+      src: '/stockroom.webp',
+      width: 1200,
+      height: 675,
+      alt: "Stockroom's History page: a read-only log of purchase request events and stock movements, each with its action, request, item, quantity, actor and note",
+    },
     featured: false,
   },
   {
@@ -90,6 +96,12 @@ export const projects: Project[] = [
       'In daily use since September 2026. Repeating deadlines create successors only on completion, notes can be encrypted, every destructive action is undoable, and deadlines export to .ics. Covered by Vitest and React Testing Library unit tests and Playwright end-to-end cases that gate deployment.',
     links: {
       github: 'https://github.com/AdityaJadhav17/Personal-Tracker',
+    },
+    image: {
+      src: '/personal-tracker.webp',
+      width: 1200,
+      height: 675,
+      alt: "Personal Tracker's Home view: today's date, one overdue item first, then the coming days with course tags and a repeating rent deadline, beside a sidebar listing the app's nine views",
     },
     featured: false,
   },
