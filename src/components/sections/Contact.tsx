@@ -137,8 +137,8 @@ export function Contact() {
 
         <Reveal.Item>
           <p className="mt-3 max-w-2xl text-base text-muted-foreground">
-            I&apos;m always interested in new opportunities, collaborations, or just a conversation
-            about technology and development. Feel free to reach out.
+            I&apos;m open to new-grad software engineering roles for after June 2027. Send a note
+            with the form, or email me directly.
           </p>
         </Reveal.Item>
 
@@ -228,7 +228,7 @@ export function Contact() {
 
               {result === 'success' && (
                 <p role="status" aria-live="polite" className="text-sm text-foreground">
-                  Thank you for your message! I&apos;ll get back to you soon.
+                  Sent. I&apos;ll reply to the email address you entered.
                 </p>
               )}
               {result === 'error' && (

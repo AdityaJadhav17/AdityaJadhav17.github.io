@@ -16,8 +16,6 @@ function backToTop() {
 }
 
 export function Footer() {
-  const year = new Date().getFullYear()
-
   return (
     <footer className="border-t border-border">
       <div className="container-site py-10">
@@ -43,11 +41,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 flex flex-col items-start justify-between gap-4 border-t border-border pt-6 sm:flex-row sm:items-center">
-          <p suppressHydrationWarning className="font-mono text-xs text-muted-foreground">
-            &copy; {year} {site.name}. All rights reserved.
-          </p>
-
+        <div className="mt-8 flex flex-col items-start gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-end">
           <Button variant="ghost" size="sm" onClick={backToTop}>
             <ArrowUp aria-hidden="true" className="size-4" />
             Back to top

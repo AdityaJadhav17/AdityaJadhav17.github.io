@@ -35,7 +35,7 @@ describe('Contact', () => {
     await user.click(screen.getByRole('button', { name: /send/i }))
 
     await waitFor(() => {
-      expect(screen.getByRole('status')).toHaveTextContent(/thank you/i)
+      expect(screen.getByRole('status')).toHaveTextContent("Sent. I'll reply to the email address you entered.")
     })
     // The point of the test: reported success, but nothing left the browser.
     expect(fetchMock).not.toHaveBeenCalled()
@@ -55,7 +55,7 @@ describe('Contact', () => {
     render(<Contact />)
     await fillAndSubmit()
     await waitFor(() => {
-      expect(screen.getByRole('status')).toHaveTextContent(/thank you/i)
+      expect(screen.getByRole('status')).toHaveTextContent("Sent. I'll reply to the email address you entered.")
     })
   })
 

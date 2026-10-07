@@ -2,46 +2,41 @@ import { certifications } from '@/content/certifications'
 import { site } from '@/content/site'
 import { Reveal } from '@/components/motion/Reveal'
 
-// Skills list carried over unchanged from the previous site's technical
-// skills.
-const SKILLS = [
-  'Python',
-  'C++',
-  'Java',
-  'JavaScript',
-  'TypeScript',
-  'React',
-  'HTML/CSS',
-  'PyTorch',
-  'TensorFlow',
-  'NumPy',
-  'OpenCV',
-  'YOLOv8',
-  'Node.js',
-  'SQL',
-  'Git',
-  'Linux',
-  'Bash',
-  'Nmap',
-  'OWASP',
-  'Docker',
-  'AWS',
-  'IBM Cloud',
+// Skills grouped for scanning. Extended 2026-10-06: each added item comes
+// from a project or role already on the page (C# and ASP.NET Core from
+// Stockroom, LangGraph and FastAPI from TravelAGNTCY, Supabase from
+// WatchTower, Playwright from WatchTower/Stockroom/Personal Tracker, Qt from
+// the Lumulus highlight). The owner reviews this list at PR.
+const SKILL_GROUPS: { group: string; items: string[] }[] = [
+  {
+    group: 'Languages',
+    items: ['Python', 'C++', 'Java', 'JavaScript', 'TypeScript', 'C#', 'SQL', 'Bash', 'HTML/CSS'],
+  },
+  {
+    group: 'AI and ML',
+    items: ['PyTorch', 'TensorFlow', 'NumPy', 'OpenCV', 'YOLOv8', 'LangGraph'],
+  },
+  {
+    group: 'Web, backend and desktop',
+    items: ['React', 'Node.js', 'FastAPI', 'ASP.NET Core', 'Supabase', 'Qt'],
+  },
+  { group: 'Security', items: ['Nmap', 'OWASP'] },
+  {
+    group: 'Tools and cloud',
+    items: ['Git', 'Linux', 'Docker', 'AWS', 'IBM Cloud', 'Playwright'],
+  },
 ]
 
-// The previous About.tsx carried three paragraphs; every claim below traces
-// to one of them. Dropped, not reworded: the AI Club mention only (now its
-// own Experience entry). "Leading workshops for other students" is a
-// distinct claim from a different sentence in the original prose (an
-// organizational role vs. a teaching activity) and is kept.
+// Rewritten 2026-10-06 from facts already on the page.
 const ABOUT_PARAGRAPH =
-  "I've always been curious about how technology powers the world, and that curiosity pulled " +
-  "me into tech. I went from small coding projects to building full AI pipelines, interactive " +
-  'web apps, and leading workshops for other students. I learn by doing, whether it was ' +
-  'training a bird classifier on 1,200+ forest images or building a responsive ' +
-  'portfolio site, and each project has pushed me to take on bigger challenges. What excites ' +
-  'me most now is using AI/ML and software development to solve real problems. I like ' +
-  'collaborating with others, sharing ideas, and staying open to learning something new.'
+  "I'm a computer science student at UC San Diego, graduating in June 2027. I like building a " +
+  'system and then hunting for the input that breaks it. On Talk-to-Robot, a CSE 190 team ' +
+  'project, we watched end-to-end success fall from 98% to 50% while the controller held up, ' +
+  "which put the failures in the language model's grounding. At Lumulus Technologies I was the " +
+  'sole engineer on a Windows desktop application that cut a 15 to 20 minute task to under 5 ' +
+  "minutes. Before UC San Diego I founded Irvine Valley College's first AI club, which grew " +
+  'past 150 members, and led workshops on penetration testing and network defense for its ' +
+  'cybersecurity club.'
 
 // About: one condensed paragraph (was three), skills as font-mono tags
 // matching ProjectCard's stack-tag treatment, and education pulled from
@@ -55,29 +50,33 @@ export function About() {
         </Reveal.Item>
 
         <div className="mt-8 grid gap-10 md:mt-12 md:grid-cols-[3fr_2fr]">
-          <Reveal.Item>
-            <p className="max-w-2xl text-base text-foreground">{ABOUT_PARAGRAPH}</p>
-          </Reveal.Item>
-
-          <div className="space-y-6">
+          <div className="space-y-8">
             <Reveal.Item>
-              <div>
-                <h3 className="label">
-                  Skills
-                </h3>
-                <ul className="mt-3 flex flex-wrap gap-1.5">
-                  {SKILLS.map((skill) => (
-                    <li
-                      key={skill}
-                      className="rounded-md border border-border bg-muted px-2 py-0.5 font-mono text-xs text-muted-foreground"
-                    >
-                      {skill}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <p className="max-w-2xl text-base text-foreground">{ABOUT_PARAGRAPH}</p>
             </Reveal.Item>
 
+            <Reveal.Item>
+              <div className="space-y-4">
+                {SKILL_GROUPS.map(({ group, items }) => (
+                  <div key={group}>
+                    <h3 className="label">{group}</h3>
+                    <ul className="mt-3 flex flex-wrap gap-1.5">
+                      {items.map((skill) => (
+                        <li
+                          key={skill}
+                          className="rounded-md border border-border bg-muted px-2 py-0.5 font-mono text-xs text-muted-foreground"
+                        >
+                          {skill}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </Reveal.Item>
+          </div>
+
+          <div className="space-y-6">
             <Reveal.Item>
               <div>
                 <h3 className="label">
