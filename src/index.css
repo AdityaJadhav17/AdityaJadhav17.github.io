@@ -1,2 +1,5 @@
 @import "tailwindcss";
+@import "@fontsource-variable/archivo";
+@import "@fontsource-variable/space-grotesk";
+@import "@fontsource-variable/jetbrains-mono";
 @import "./styles/theme.css";
