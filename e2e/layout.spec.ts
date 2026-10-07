@@ -69,3 +69,46 @@ test('work controls have 44px touch targets', async ({ page }, testInfo) => {
     expect(misses, `${name} (#${i}) misses at offsets`).toEqual([])
   }
 })
+
+// B4: the primary CTA is in the first phone screen; proof labels do not
+// sprawl; the two profile buttons share a row.
+test.describe('hero on a phone', () => {
+  test.use({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true })
+
+  test('résumé link is in the first screen, labels stay short, profiles share a row', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
+    await page.goto('/')
+    const cta = await page.getByRole('link', { name: /download résumé/i }).boundingBox()
+    expect(cta!.y).toBeGreaterThanOrEqual(0)
+    expect(cta!.y + cta!.height).toBeLessThanOrEqual(844)
+
+    const labels = page.locator('#home ul li p:last-child')
+    expect(await labels.count()).toBeGreaterThan(0)
+    const tooTall = await labels.evaluateAll((els) =>
+      els
+        .map((el) => {
+          const lh = parseFloat(getComputedStyle(el).lineHeight)
+          return { text: el.textContent, h: el.getBoundingClientRect().height, max: 2 * lh + 1 }
+        })
+        .filter((l) => l.h > l.max),
+    )
+    expect(tooTall).toEqual([])
+
+    const gh = await page.locator('#home a[href*="github.com"]').boundingBox()
+    const li = await page.locator('#home a[href*="linkedin.com"]').boundingBox()
+    expect(gh!.y).toBe(li!.y)
+  })
+})
+
+// B4: no dead band, and the portrait stays clear of the Capabilities list.
+test('portrait clears the capabilities list by 24px at 1440x900', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto('/')
+  const capsBottom = await page
+    .locator('#home p', { hasText: /^Capabilities$/ })
+    .locator('xpath=..')
+    .evaluate((el) => el.getBoundingClientRect().bottom)
+  const portraitTop = await page.locator('#home picture img').evaluate((el) => el.getBoundingClientRect().top)
+  expect(portraitTop - capsBottom).toBeGreaterThanOrEqual(24)
+})
