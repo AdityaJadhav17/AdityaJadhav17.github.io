@@ -35,8 +35,7 @@ for (const viewport of [
     await page.waitForFunction(() => [...document.images].every((i) => i.complete))
     const oversized = await page.evaluate(() =>
       [...document.images]
-        // Phase B (B6) removes this exemption
-        .filter((i) => i.clientWidth > 0 && !i.closest('#work'))
+        .filter((i) => i.clientWidth > 0)
         .filter((i) => i.naturalWidth > i.clientWidth * 2 + 1)
         .map((i) => `${i.currentSrc} natural ${i.naturalWidth} shown ${i.clientWidth}`),
     )
@@ -55,11 +54,11 @@ test('fonts are self-hosted and load', async ({ page, browserName }) => {
   const loaded = await page.evaluate(() =>
     [...document.fonts].filter((f) => f.status === 'loaded').map((f) => f.family),
   )
-  expect(loaded).toEqual(expect.arrayContaining(['Archivo Variable', 'Space Grotesk Variable']))
+  expect(loaded).toEqual(expect.arrayContaining(['Archivo Variable']))
   const stacks = await page.evaluate(() => [
     getComputedStyle(document.querySelector('h1')!).fontFamily,
     getComputedStyle(document.querySelector('#about p')!).fontFamily,
   ])
   expect(stacks[0]).toContain('Archivo Variable')
-  expect(stacks[1]).toContain('Space Grotesk Variable')
+  expect(stacks[1]).toContain('Archivo Variable')
 })

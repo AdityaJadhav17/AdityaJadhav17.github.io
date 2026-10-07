@@ -7,12 +7,18 @@
 export type Project = {
   id: string
   title: string
+  // One line shown on the collapsed card. `metric` is a substring of it, set in mono.
+  outcome: string
+  metric?: string
   problem: string
   contribution: string
   stack: string[]
   result?: string
   links: { github?: string; demo?: string; live?: string; paper?: string }
-  image?: { src: string; width: number; height: number; alt: string }
+  // `src` is the largest variant and the fallback; `srcSet` lists the cropped
+  // WebP widths (480 plus the largest the crop supports). width/height are the
+  // intrinsic size of `src`.
+  image?: { src: string; width: number; height: number; alt: string; srcSet?: string }
   featured: boolean
   context?: string
 }
@@ -21,6 +27,8 @@ export const projects: Project[] = [
   {
     id: 'watchtower',
     title: 'WatchTower',
+    outcome: 'Led 11 engineers to a deployed SDK, ingest API and live dashboard',
+    metric: '11 engineers',
     problem:
       'Web teams need lightweight production visibility for JS errors, latency, and user activity without a heavyweight vendor agent.',
     contribution:
@@ -28,8 +36,9 @@ export const projects: Project[] = [
     stack: ['JavaScript', 'Node.js', 'Supabase', 'Clerk', 'Jest', 'Playwright', 'Render'],
     result: 'Deployable observability platform with live backend and SDK test app.',
     image: {
-      src: '/watchtower.webp',
-      width: 800,
+      src: '/watchtower-656.webp',
+      srcSet: '/watchtower-480.webp 480w, /watchtower-656.webp 656w',
+      width: 656,
       height: 410,
       alt: "WatchTower's triage queue showing live captured JavaScript errors with severity, version, and assignment",
     },
@@ -44,6 +53,8 @@ export const projects: Project[] = [
   {
     id: 'travel-agntcy',
     title: 'TravelAGNTCY',
+    outcome: "Won Cisco's AGNTCY track at SANDHacks 2026, with ~40% lower inter-service latency",
+    metric: '~40%',
     problem:
       'Travel planning spans flights, hotels, and activities, but stitching those sources into a coherent plan is slow and fragmented.',
     contribution:
@@ -56,8 +67,9 @@ export const projects: Project[] = [
       demo: 'https://youtu.be/T0EkJ9J_IQU',
     },
     image: {
-      src: '/travel-agntcy.webp',
-      width: 1136,
+      src: '/travel-agntcy-947.webp',
+      srcSet: '/travel-agntcy-480.webp 480w, /travel-agntcy-947.webp 947w',
+      width: 947,
       height: 592,
       alt: 'TravelAGNTCY running: an agent chat panel beside ranked flight options with airline, price, and layover detail',
     },
@@ -67,6 +79,8 @@ export const projects: Project[] = [
   {
     id: 'stockroom',
     title: 'Stockroom',
+    outcome: '156 integration tests and 11 end-to-end cases gate a seven-job CI pipeline',
+    metric: '156',
     problem:
       'Shared inventory and purchase approvals usually live in a spreadsheet, where nobody can reconstruct who approved what, or when.',
     contribution:
@@ -78,16 +92,19 @@ export const projects: Project[] = [
       github: 'https://github.com/AdityaJadhav17/Stockroom',
     },
     image: {
-      src: '/stockroom.webp',
-      width: 1200,
-      height: 675,
-      alt: "Stockroom's History page: a read-only log of purchase request events and stock movements, each with its action, request, item, quantity, actor and note",
+      src: '/stockroom-920.webp',
+      srcSet: '/stockroom-480.webp 480w, /stockroom-920.webp 920w',
+      width: 920,
+      height: 575,
+      alt: "Stockroom's History page: a read-only log of purchase request events, each with its time, action, request, item, quantity, stock change and actor",
     },
     featured: true,
   },
   {
     id: 'talk-to-robot',
     title: 'Talk-to-Robot',
+    outcome: 'End-to-end success falls from 98% to 50% while policy success holds at 93 to 100%',
+    metric: '98% to 50%',
     problem:
       'Natural-language robot commands fail when spatial grounding is mixed with control, making it hard to see where LLM understanding breaks.',
     contribution:
@@ -104,8 +121,8 @@ export const projects: Project[] = [
       'End-to-end success falls from 98% on literal coordinates to 50% on functional intent, while policy success held between 93 and 100%, which places the failures in grounding rather than control. Each tier fails differently rather than degrading smoothly: relative offsets land goals off the table, where a plain regex beat the LLM 85% to 77%; reference objects are off by a consistent 6 cm bias that controller retraining can absorb; and functional intent is not a coordinate problem at all, since annotators disagreed with each other about as much as the model did.',
     image: {
       src: '/talk-to-robot.svg',
-      width: 800,
-      height: 450,
+      width: 480,
+      height: 240,
       alt: 'Bar chart of end-to-end success by instruction tier: 98.3% on literal coordinates, 93.3% on named regions, 76.7% on relative offsets, 73.3% on reference objects, and 50% on functional intent',
     },
     links: {
@@ -118,6 +135,8 @@ export const projects: Project[] = [
   {
     id: 'sim2real',
     title: 'Synthetic-to-Real Object Detection',
+    outcome: 'Final mAP 0.9175, with 22% better real-world generalization',
+    metric: '0.9175',
     problem:
       'Models trained only on synthetic images often fail on real photos; this Kaggle challenge measured that sim-to-real gap directly.',
     contribution:
@@ -133,10 +152,11 @@ export const projects: Project[] = [
       demo: 'https://www.kaggle.com/competitions/synthetic-2-real-object-detection-challenge',
     },
     image: {
-      src: '/sim2real.webp',
+      src: '/sim2real-560.webp',
+      srcSet: '/sim2real-480.webp 480w, /sim2real-560.webp 560w',
       width: 560,
       height: 280,
-      alt: 'Synthetic-to-Real Object Detection project visualization',
+      alt: 'Two photos of a Cheerios box side by side, labelled Real and Synthetic, each with a detection box and a 0.99 confidence score',
     },
     featured: false,
     context: 'Kaggle competition',
@@ -144,6 +164,7 @@ export const projects: Project[] = [
   {
     id: 'personal-tracker',
     title: 'Personal Tracker',
+    outcome: 'In daily use since September 2026, with no runtime dependencies beyond React',
     problem:
       'Tracking deadlines, courses, notes and goals usually means either four separate apps or one that wants an account and a server.',
     contribution:
@@ -155,16 +176,19 @@ export const projects: Project[] = [
       github: 'https://github.com/AdityaJadhav17/Personal-Tracker',
     },
     image: {
-      src: '/personal-tracker.webp',
-      width: 1200,
-      height: 675,
-      alt: "Personal Tracker's Home view: today's date, one overdue item first, then the coming days with course tags and a repeating rent deadline, beside a sidebar listing the app's nine views",
+      src: '/personal-tracker-840.webp',
+      srcSet: '/personal-tracker-480.webp 480w, /personal-tracker-840.webp 840w',
+      width: 840,
+      height: 420,
+      alt: "Personal Tracker's Home view: today's date, one overdue item first, then the coming days with course tags",
     },
     featured: false,
   },
   {
     id: 'bird-classifier',
     title: 'Bird Classifier in a Forest',
+    outcome: '96.7% validation accuracy from a fine-tuned ResNet18',
+    metric: '96.7%',
     problem:
       'Identifying bird species from cluttered forest imagery is hard for models trained on clean, centred subjects.',
     contribution:
@@ -176,9 +200,10 @@ export const projects: Project[] = [
     result:
       '96.7% validation accuracy from a fine-tuned ResNet18, with preprocessing and class balancing over a 1,200+ image dataset improving generalization by 18%.',
     image: {
-      src: '/bird-classifier.webp',
+      src: '/bird-classifier-512.webp',
+      srcSet: '/bird-classifier-480.webp 480w, /bird-classifier-512.webp 512w',
       width: 512,
-      height: 288,
+      height: 256,
       alt: 'A common kingfisher perched on a branch against a blurred green background, one of the test images used to evaluate the classifier',
     },
     links: {

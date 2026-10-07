@@ -130,15 +130,15 @@ export function Contact() {
           and cannot receive pointer events. */}
       <div aria-hidden="true" className="dot-grid pointer-events-none absolute inset-0" />
 
-      <div className="relative mx-auto max-w-5xl px-4 md:px-6">
+      <div className="container-site relative">
         <Reveal.Item>
-          <h2 className="font-heading text-3xl font-semibold text-foreground">Contact</h2>
+          <h2 className="section-title">Contact</h2>
         </Reveal.Item>
 
         <Reveal.Item>
           <p className="mt-3 max-w-2xl text-base text-muted-foreground">
-            I&apos;m always interested in new opportunities, collaborations, or just a conversation
-            about technology and development. Feel free to reach out.
+            I&apos;m open to new-grad software engineering roles for after June 2027. Send a note
+            with the form, or email me directly.
           </p>
         </Reveal.Item>
 
@@ -228,7 +228,7 @@ export function Contact() {
 
               {result === 'success' && (
                 <p role="status" aria-live="polite" className="text-sm text-foreground">
-                  Thank you for your message! I&apos;ll get back to you soon.
+                  Sent. I&apos;ll reply to the email address you entered.
                 </p>
               )}
               {result === 'error' && (

@@ -211,14 +211,13 @@ test.describe('keyboard traversal never hides focus under the sticky navbar', ()
 })
 
 test.describe('theme toggle', () => {
-  test('round-trips to dark, persists across reload, and round-trips back', async ({ page }) => {
+  test('cycles to dark, persists across reload, and cycles back to system', async ({ page }) => {
     await page.goto('/')
 
+    // Fresh storage means the system state; the headless default scheme is light.
     const html = page.locator('html')
-    const isDark = await html.evaluate((el) => el.classList.contains('dark'))
-    if (!isDark) {
-      await page.getByRole('button', { name: /switch to dark theme/i }).click()
-    }
+    await page.getByRole('button', { name: /switch to light theme/i }).click()
+    await page.getByRole('button', { name: /switch to dark theme/i }).click()
 
     await expect(html).toHaveClass(/dark/)
     const darkBg = await page.locator('body').evaluate((el) => getComputedStyle(el).backgroundColor)
@@ -229,8 +228,9 @@ test.describe('theme toggle', () => {
     const darkBgAfterReload = await page.locator('body').evaluate((el) => getComputedStyle(el).backgroundColor)
     expect(darkBgAfterReload).toBe('rgb(9, 9, 11)')
 
-    await page.getByRole('button', { name: /switch to light theme/i }).click()
+    await page.getByRole('button', { name: /switch to system theme/i }).click()
     await expect(html).not.toHaveClass(/dark/)
+    await expect(page.getByRole('button', { name: /switch to light theme/i })).toBeVisible()
   })
 })
 
@@ -248,5 +248,51 @@ test.describe('no console errors on load', () => {
     await page.goto('/')
     await page.waitForLoadState('networkidle')
     expect(errors).toEqual([])
+  })
+})
+
+test.describe('Experience rail under reduced motion', () => {
+  test.use({ contextOptions: { reducedMotion: 'reduce' } })
+
+  // The server renders the rail at scaleY(0), so the first client render must
+  // too; it is drawn fully only after hydration. The hydration mismatch itself
+  // is guarded by src/components/sections/Experience.test.tsx (React only
+  // reports it in development builds, so the console check here is a backstop
+  // that cannot fail alone on this production bundle). What this test proves
+  // is the end state: the rail is fully drawn.
+  test('Experience rail ends fully drawn under reduced motion', async ({ page }) => {
+    const errors = await collectConsoleErrors(page)
+    await page.goto('/')
+    await page.waitForLoadState('networkidle')
+
+    expect(errors.filter((message) => /hydrat/i.test(message))).toEqual([])
+
+    const rail = page.locator('#experience span.origin-top')
+    await expect
+      .poll(() => rail.evaluate((el) => getComputedStyle(el).transform))
+      .toMatch(/^(none|matrix\(1, 0, 0, 1, 0, 0\))$/)
+  })
+})
+
+test.describe('back to top', () => {
+  test('scrolls to the top and moves focus to the hero', async ({ page }) => {
+    await page.goto('/')
+    await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' }))
+    await page.getByRole('button', { name: 'Back to top' }).click()
+
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0)
+    await expect.poll(() => page.evaluate(() => document.activeElement?.id)).toBe('home')
+  })
+
+  test.describe('with reduced motion', () => {
+    test.use({ contextOptions: { reducedMotion: 'reduce' } })
+
+    test('the scroll is instant', async ({ page }) => {
+      await page.goto('/')
+      await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' }))
+      await page.getByRole('button', { name: 'Back to top' }).click()
+      await page.waitForTimeout(100)
+      expect(await page.evaluate(() => window.scrollY)).toBe(0)
+    })
   })
 })

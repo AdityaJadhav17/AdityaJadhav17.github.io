@@ -18,17 +18,13 @@ export function HeroPortrait() {
     // dark clothing behind dark type in the light theme. Offsetting right
     // keeps the two clear of each other while they still share the frame.
     //
-    // 7% was measured, not guessed. The binding constraint is the proof row
-    // and the action buttons, not the claim: they reach further right, and
-    // they overlap the portrait vertically. Clearance between them and the
-    // portrait's left edge, by padding value:
-    //   6%  98px at 1440, 66px at 1920
-    //   7%  84px at 1440, 50px at 1920
-    //   8%  70px at 1440, 34px at 1920
-    // Below roughly 50px the proof numbers start reading as though they sit
-    // on the subject's arm, which is dark text on dark clothing in the light
-    // theme.
-    className="pointer-events-none flex justify-center lg:absolute lg:inset-x-0 lg:bottom-0 lg:justify-end lg:pr-[7%]"
+    // 5% was measured, not guessed. The binding constraint is the proof row,
+    // which reaches furthest right and overlaps the portrait vertically. At
+    // 62vh the portrait is narrower than it was at 66vh, so the 7% used then
+    // left only ~41px at 1440; 5% restores ~70px. Below roughly 50px the proof
+    // labels start reading as though they sit on the subject's arm, which is
+    // dark text on dark clothing in the light theme.
+    className="pointer-events-none flex justify-center lg:absolute lg:inset-x-0 lg:bottom-0 lg:justify-end lg:pr-[5%]"
     >
       <div className="relative">
         {/* Sits behind the portrait. Purely presentational, so it is hidden
@@ -48,7 +44,7 @@ export function HeroPortrait() {
             loading="eager"
             decoding="async"
             fetchPriority="high"
-            className="relative h-[38vh] w-auto max-w-none object-contain object-bottom sm:h-[46vh] lg:h-[66vh]"
+            className="relative h-[38vh] w-auto max-w-none object-contain object-bottom sm:h-[46vh] lg:h-[62vh]"
           />
         </picture>
       </div>
