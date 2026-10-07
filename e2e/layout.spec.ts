@@ -25,3 +25,47 @@ for (const width of [390, 768, 1440]) {
     expect(Math.max(...all) - Math.min(...all), JSON.stringify(lefts)).toBeLessThanOrEqual(1)
   })
 }
+
+// Closed cards keep the page short: the full story is behind <details>.
+for (const [width, height, max] of [
+  [1440, 900, 6300],
+  [390, 844, 9900],
+] as const) {
+  test(`page stays under ${max}px tall at ${width}px with details closed`, async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
+    await page.setViewportSize({ width, height })
+    await page.goto('/')
+    await page.waitForLoadState('networkidle')
+    expect(await page.locator('#work details[open]').count()).toBe(0)
+    const h = await page.evaluate(() => document.documentElement.scrollHeight)
+    expect(h).toBeLessThanOrEqual(max)
+  })
+}
+
+// Every control in Work has a >= 44x44 hit box on touch. Probe with
+// elementFromPoint 21px off the centre in each direction, so it sees the
+// ::after hit areas as the browser does.
+test('work controls have 44px touch targets', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'iphone', 'iPhone only')
+  await page.goto('/')
+  const controls = page.locator('#work :is(a, button, summary)')
+  const count = await controls.count()
+  expect(count).toBeGreaterThan(0)
+  for (let i = 0; i < count; i++) {
+    const el = controls.nth(i)
+    await el.scrollIntoViewIfNeeded()
+    const misses = await el.evaluate((node) => {
+      const r = node.getBoundingClientRect()
+      const cx = r.left + r.width / 2
+      const cy = r.top + r.height / 2
+      return [[-21, 0], [21, 0], [0, -21], [0, 21]]
+        .filter(([dx, dy]) => {
+          const hit = document.elementFromPoint(cx + dx, cy + dy)
+          return !hit || !node.contains(hit)
+        })
+        .map(([dx, dy]) => `${dx},${dy}`)
+    })
+    const name = await el.evaluate((n) => n.textContent?.trim())
+    expect(misses, `${name} (#${i}) misses at offsets`).toEqual([])
+  }
+})

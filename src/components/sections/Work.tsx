@@ -3,12 +3,13 @@ import { ProjectCard } from '@/components/ProjectCard'
 import { Reveal } from '@/components/motion/Reveal'
 
 // Featured projects (the three `featured: true` projects, in array order) render full width,
-// one per row; the rest render in a responsive grid. Same ProjectCard
-// shape throughout: only the container width differs.
+// one per row; the rest render in a two-column grid. Same collapsed ProjectCard
+// throughout (outcome line, tags, links; the full story is behind a <details>),
+// so only the container width differs and the page stays short.
 //
 // Each card is its own Reveal.Item so the grid arrives as a sequence rather
 // than as one slab. Stack tags inside a card are deliberately not staggered:
-// at six per card that reads as a loading state, not as choreography.
+// at five per card that reads as a loading state, not as choreography.
 export function Work() {
   const featured = projects.filter((project) => project.featured)
   const rest = projects.filter((project) => !project.featured)

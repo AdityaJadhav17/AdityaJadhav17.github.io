@@ -7,6 +7,9 @@
 export type Project = {
   id: string
   title: string
+  // One line shown on the collapsed card. `metric` is a substring of it, set in mono.
+  outcome: string
+  metric?: string
   problem: string
   contribution: string
   stack: string[]
@@ -21,6 +24,8 @@ export const projects: Project[] = [
   {
     id: 'watchtower',
     title: 'WatchTower',
+    outcome: 'Led 11 engineers to a deployed SDK, ingest API and live dashboard',
+    metric: '11 engineers',
     problem:
       'Web teams need lightweight production visibility for JS errors, latency, and user activity without a heavyweight vendor agent.',
     contribution:
@@ -44,6 +49,8 @@ export const projects: Project[] = [
   {
     id: 'travel-agntcy',
     title: 'TravelAGNTCY',
+    outcome: "Won Cisco's AGNTCY track at SANDHacks 2026, with ~40% lower inter-service latency",
+    metric: '~40%',
     problem:
       'Travel planning spans flights, hotels, and activities, but stitching those sources into a coherent plan is slow and fragmented.',
     contribution:
@@ -67,6 +74,8 @@ export const projects: Project[] = [
   {
     id: 'stockroom',
     title: 'Stockroom',
+    outcome: '156 integration tests and 11 end-to-end cases gate a seven-job CI pipeline',
+    metric: '156',
     problem:
       'Shared inventory and purchase approvals usually live in a spreadsheet, where nobody can reconstruct who approved what, or when.',
     contribution:
@@ -88,6 +97,8 @@ export const projects: Project[] = [
   {
     id: 'talk-to-robot',
     title: 'Talk-to-Robot',
+    outcome: 'End-to-end success falls from 98% to 50% while policy success holds at 93 to 100%',
+    metric: '98% to 50%',
     problem:
       'Natural-language robot commands fail when spatial grounding is mixed with control, making it hard to see where LLM understanding breaks.',
     contribution:
@@ -118,6 +129,8 @@ export const projects: Project[] = [
   {
     id: 'sim2real',
     title: 'Synthetic-to-Real Object Detection',
+    outcome: 'Final mAP 0.9175, with 22% better real-world generalization',
+    metric: '0.9175',
     problem:
       'Models trained only on synthetic images often fail on real photos; this Kaggle challenge measured that sim-to-real gap directly.',
     contribution:
@@ -144,6 +157,7 @@ export const projects: Project[] = [
   {
     id: 'personal-tracker',
     title: 'Personal Tracker',
+    outcome: 'In daily use since September 2026, with no runtime dependencies beyond React',
     problem:
       'Tracking deadlines, courses, notes and goals usually means either four separate apps or one that wants an account and a server.',
     contribution:
@@ -165,6 +179,8 @@ export const projects: Project[] = [
   {
     id: 'bird-classifier',
     title: 'Bird Classifier in a Forest',
+    outcome: '96.7% validation accuracy from a fine-tuned ResNet18',
+    metric: '96.7%',
     problem:
       'Identifying bird species from cluttered forest imagery is hard for models trained on clean, centred subjects.',
     contribution:
