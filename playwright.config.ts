@@ -1,16 +1,12 @@
 import { defineConfig, devices } from '@playwright/test'
 
-// These are local end-to-end / accessibility verification tests, not part of
-// the deploy gate. They intentionally do NOT run in .github/workflows/deploy.yml:
-// that workflow already gates on typecheck, lint, and the Vitest unit suite,
-// and adding a ~300MB browser download to every deploy is an ongoing cost
-// (CI minutes, cache maintenance) with no benefit for a static portfolio site
-// that changes infrequently. Run `npm run test:e2e` locally (or in a manually
-// triggered workflow) before a release that touches theming, motion, or
-// keyboard/focus behavior, since those are exactly what this suite checks and
-// what the previous (non-Playwright) test harness could not observe:
-// prefers-reduced-motion emulation, real OS focus for Tab-driven scrolling,
-// and a JavaScript-disabled render.
+// End-to-end / accessibility verification tests. They run on every pull
+// request to main via .github/workflows/ci.yml (a required check), not in
+// deploy.yml: by the time a commit reaches main it has already passed here,
+// so repeating the ~300MB browser download on every deploy buys nothing.
+// They cover what the Vitest suite cannot observe: prefers-reduced-motion
+// emulation, real OS focus for Tab-driven scrolling, and a JavaScript-disabled
+// render.
 //
 // webServer builds the production bundle and serves it with `vite preview`
 // rather than `vite dev`, so the suite exercises the actual deployed
@@ -30,6 +26,12 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // WebKit is Safari's engine; the device preset adds the iPhone viewport,
+      // touch, and mobile user agent. Closest stand-in for a real iPhone on CI.
+      name: 'iphone',
+      use: { ...devices['iPhone 15'] },
     },
   ],
   webServer: {
