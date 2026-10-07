@@ -6,6 +6,10 @@ const TITLE = `${site.name} | Software Engineer`
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
 
+export function jsonLdScript(data: unknown): string {
+  return `<script type="application/ld+json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>`
+}
+
 // Every tag here used to be hand-copied into index.html and drifted (an ended
 // role kept reading as current). Generated at build time from content now.
 export function buildHead(): string {
@@ -36,6 +40,6 @@ export function buildHead(): string {
     `<meta name="twitter:description" content="${d}" />`,
     `<meta name="twitter:image" content="${ORIGIN}og-image.png" />`,
     `<link rel="preload" as="image" type="image/avif" imagesrcset="${srcSet('avif')}" imagesizes="${PORTRAIT_SIZES}" fetchpriority="high" />`,
-    `<script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, '\u003c')}</script>`,
+    jsonLdScript(jsonLd),
   ].join('\n    ')
 }
