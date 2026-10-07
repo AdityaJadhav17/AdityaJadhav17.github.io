@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://adityajadhav.dev/sitemap.xml
