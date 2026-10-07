@@ -11,6 +11,12 @@ const html = readFileSync(file, 'utf8')
 if (!html.includes('<!--app-head-->') || !html.includes('<!--app-html-->')) {
   throw new Error('prerender: placeholders missing from dist/index.html')
 }
-writeFileSync(file, html.replace('<!--app-head-->', ssr.buildHead()).replace('<!--app-html-->', ssr.render()))
+const app = ssr.render()
+if (!app) throw new Error('prerender: render() returned an empty string')
+// Function replacers: a string replacement would interpret $&, $' and $` in the content.
+writeFileSync(
+  file,
+  html.replace('<!--app-head-->', () => ssr.buildHead()).replace('<!--app-html-->', () => app),
+)
 rmSync('dist-ssr', { recursive: true, force: true })
 console.log('prerender: dist/index.html written')
