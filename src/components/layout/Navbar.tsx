@@ -4,20 +4,14 @@ import {
   useId,
   useRef,
   useState,
+  type ComponentType,
   type ComponentProps,
   type MouseEvent,
 } from 'react'
 import { Menu } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet'
+import type { MobileSheet } from '@/components/layout/MobileSheet'
 import { ThemeToggle } from '@/components/layout/ThemeToggle'
 import { useActiveSection } from '@/hooks/useActiveSection'
 
@@ -99,6 +93,11 @@ export function Navbar({ sectionIds }: NavbarProps) {
   const active = useActiveSection(sectionIds)
   const showBrand = useScrolledPastHero()
   const [open, setOpen] = useState(false)
+  // The Radix Dialog behind the menu loads on first touch of the button. If
+  // the tap lands before the chunk does, `open` is already true and the sheet
+  // opens the moment the chunk mounts.
+  const [Sheet, setSheet] = useState<ComponentType<ComponentProps<typeof MobileSheet>> | null>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
   const mobileMenuId = useId()
   const pendingTarget = useRef<string | null>(null)
   // Separate from pendingTarget on purpose. The scroll effect clears
@@ -129,6 +128,13 @@ export function Navbar({ sectionIds }: NavbarProps) {
   // section ourselves and scroll. Focusing the destination is also the right
   // behaviour for a keyboard user, who should land in the section they chose
   // rather than back on the menu button.
+  function loadSheet() {
+    import('@/components/layout/MobileSheet').then(
+      (m) => setSheet(() => m.MobileSheet),
+      () => {}, // offline: the next tap retries
+    )
+  }
+
   function handleMobileNavigate(event: MouseEvent<HTMLAnchorElement>, id: string) {
     // Let the browser handle anything that is not a plain left click.
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
@@ -205,35 +211,45 @@ export function Navbar({ sectionIds }: NavbarProps) {
         <div className="flex items-center gap-2">
           <ThemeToggle />
 
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="md:hidden"
-                aria-label="Open menu"
-                aria-controls={mobileMenuId}
-              >
-                <Menu aria-hidden="true" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent
+          <Button
+            ref={triggerRef}
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            aria-label="Open menu"
+            aria-controls={mobileMenuId}
+            // The three attributes and data-state Radix's SheetTrigger used to
+            // set; button.tsx styles off aria-haspopup and aria-expanded.
+            aria-haspopup="dialog"
+            aria-expanded={open}
+            data-state={open ? 'open' : 'closed'}
+            onPointerDown={loadSheet}
+            onFocus={loadSheet}
+            onClick={() => {
+              loadSheet()
+              setOpen(true)
+            }}
+          >
+            <Menu aria-hidden="true" />
+          </Button>
+          {Sheet && (
+            <Sheet
+              open={open}
+              onOpenChange={setOpen}
               id={mobileMenuId}
-              side="right"
-              // Radix returns focus to the trigger on close. The trigger is in
-              // the sticky header, so that scrolls the page to the top and
-              // cancels the scroll we just started. Suppress it only when a
-              // navigation is pending; the effect above then owns focus.
+              // Radix returns focus to its trigger on close, but the trigger
+              // lives outside the dialog now, so restore it by hand. That
+              // focus scrolls the page to the top (the trigger is in the
+              // sticky header) and cancels the scroll we just started, so skip
+              // it when a navigation is pending; the effect above then owns
+              // focus.
               onCloseAutoFocus={(event) => {
-                if (!suppressFocusRestore.current) return
-                suppressFocusRestore.current = false
                 event.preventDefault()
+                if (suppressFocusRestore.current) suppressFocusRestore.current = false
+                else triggerRef.current?.focus()
               }}
             >
-              <SheetHeader>
-                <SheetTitle>Menu</SheetTitle>
-                <SheetDescription className="sr-only">Site navigation</SheetDescription>
-              </SheetHeader>
               <nav aria-label="Mobile" className="flex flex-col gap-1 px-4">
                 {NAV.map((item) => (
                   <NavLink
@@ -246,8 +262,8 @@ export function Navbar({ sectionIds }: NavbarProps) {
                   />
                 ))}
               </nav>
-            </SheetContent>
-          </Sheet>
+            </Sheet>
+          )}
         </div>
       </div>
     </header>
