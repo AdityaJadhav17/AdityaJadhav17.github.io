@@ -16,12 +16,8 @@ const SOCIAL_ICONS: Record<string, typeof FaGithub> = {
   LinkedIn: FaLinkedin,
 }
 
-// The small mono-uppercase label above each metadata column. Shared so the
-// four of them cannot drift apart.
 // Hero entrance step: the .hero-in CSS class staggers by --i (theme.css).
 const step = (i: number) => ({ '--i': i }) as CSSProperties
-
-const LABEL = 'font-mono text-xs tracking-[0.18em] text-muted-foreground uppercase'
 
 // Hero: a multi-column editorial composition rather than a centred stack.
 //
@@ -40,23 +36,21 @@ const LABEL = 'font-mono text-xs tracking-[0.18em] text-muted-foreground upperca
 // portrait. The 4rem is the header's `h-16` and the 1px its `border-b`. Keep
 // both in sync with Navbar.tsx.
 //
-// Width: deliberately full-bleed rather than the site's max-w-5xl. This is
-// the cover, and the wider measure is what gives the claim and the portrait
-// room to sit side by side. The padding steps up decisively at lg so the
-// offset from the header's content box reads as intentional rather than as a
-// near-miss alignment.
+// Width: the same container-site as the header and every section, so the
+// name, the section titles and the footer all start on one left edge. The
+// portrait is absolutely positioned inside it.
 export function Hero() {
   return (
     <section
       id="home"
-      className="relative mx-auto grid min-h-[calc(100dvh-4rem-1px)] w-full max-w-[1600px] grid-cols-1 content-start gap-y-8 overflow-hidden px-6 py-20 lg:grid-cols-4 lg:content-stretch lg:gap-x-8 lg:grid-rows-[auto_1fr_auto_auto_auto] lg:px-12 lg:py-12"
+      className="container-site relative grid min-h-[calc(100dvh-4rem-1px)] grid-cols-1 content-start gap-y-8 overflow-hidden py-20 lg:grid-cols-4 lg:content-stretch lg:gap-x-8 lg:grid-rows-[auto_1fr_auto_auto_auto] lg:py-12"
     >
       {/* Identity */}
       <div style={step(0)} className="hero-in relative z-10 lg:col-start-1 lg:row-start-1">
         <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground lg:text-4xl">
           {site.name}
         </h1>
-        <p className="mt-2 font-mono text-[0.8125rem] tracking-[0.16em] text-muted-foreground uppercase">
+        <p className="label mt-2">
           {site.discipline}
         </p>
       </div>
@@ -78,7 +72,7 @@ export function Hero() {
 
       {/* Current roles */}
       <div style={step(2)} className="hero-in relative z-10 lg:col-start-3 lg:row-start-1">
-        <p id="hero-currently" className={LABEL}>Currently</p>
+        <p id="hero-currently" className="label">Currently</p>
         <ul aria-labelledby="hero-currently" className="mt-3 space-y-1.5">
           {currentRoles.map((role) => (
             <li key={role} className="text-sm leading-snug text-foreground">
@@ -91,7 +85,7 @@ export function Hero() {
 
       {/* Capabilities */}
       <div style={step(3)} className="hero-in relative z-10 lg:col-start-4 lg:row-start-1">
-        <p className={LABEL}>Capabilities</p>
+        <p className="label">Capabilities</p>
         <ul className="mt-3 space-y-1.5">
           {site.capabilities.map((capability) => (
             <li key={capability} className="text-sm leading-snug text-muted-foreground">

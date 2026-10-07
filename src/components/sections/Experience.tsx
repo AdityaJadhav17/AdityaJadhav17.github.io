@@ -33,10 +33,10 @@ export function Experience() {
   })
 
   return (
-    <Reveal as="section" id="experience" className="border-t border-border py-16 md:py-24">
-      <div className="mx-auto max-w-5xl px-4 md:px-6">
+    <Reveal as="section" id="experience" className="py-16 md:py-20">
+      <div className="container-site">
         <Reveal.Item>
-          <h2 className="font-heading text-3xl font-semibold text-foreground">Experience</h2>
+          <h2 className="section-title">Experience</h2>
         </Reveal.Item>
 
         {/* Wrapper supplies the positioning context for the track and drawn

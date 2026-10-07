@@ -12,9 +12,9 @@
   muted-foreground  #475569 on card       #FFFFFF                  7.58:1   need 4.5:1   PASS
   primary-foreground#FAFAFA on primary    #18181B                 16.97:1   need 4.5:1   PASS
   secondary-fg      #18181B on secondary  #E8ECF0                 14.92:1   need 4.5:1   PASS
-  accent-foreground #FFFFFF on accent     #2563EB                  5.17:1   need 4.5:1   PASS
+  accent-foreground #FFFFFF on accent     #B23A12                  5.99:1   need 4.5:1   PASS
   destructive-fg    #FFFFFF on destructive#DC2626                  4.83:1   need 4.5:1   PASS
-  ring              #2563EB on background #FAFAFA                  4.95:1   need 3.0:1   PASS
+  ring              #B23A12 on background #FAFAFA                  5.74:1   need 3.0:1   PASS
   border            #E4E4E7 on background #FAFAFA                  1.22:1   need 3.0:1   N/A **
   input             #71717A on background #FAFAFA                  4.63:1   need 3.0:1   PASS
   input             #71717A on card       #FFFFFF                  4.83:1   need 3.0:1   PASS
@@ -29,9 +29,9 @@
   muted-foreground  #A1A1AA on card       #18181B                  6.91:1   need 4.5:1   PASS
   primary-foreground#18181B on primary    #FAFAFA                 16.97:1   need 4.5:1   PASS
   secondary-fg       #FAFAFA on secondary #27272A                 14.27:1   need 4.5:1   PASS
-  accent-foreground #09090B on accent     #60A5FA                  7.83:1   need 4.5:1   PASS
+  accent-foreground #09090B on accent     #FB8F67                  8.74:1   need 4.5:1   PASS
   destructive-fg     #09090B on destructive#F87171                 7.19:1   need 4.5:1   PASS
-  ring              #60A5FA on background #09090B                  7.83:1   need 3.0:1   PASS
+  ring              #FB8F67 on background #09090B                  8.74:1   need 3.0:1   PASS
   border            #27272A on background #09090B                  1.34:1   need 3.0:1   N/A **
   input             #71717A on background #09090B                  4.12:1   need 3.0:1   PASS
   input             #71717A on card       #18181B                  3.67:1   need 3.0:1   PASS
@@ -52,10 +52,11 @@
   a thinner margin, 3.28 lowest), #A1A1AA (fails light: 2.46 / 2.56), #52525B (fails dark:
   2.57 / 2.29), #3F3F46 (fails dark: 1.91 / 1.70).
 
-  Accent note: light accent #2563EB on dark background #09090B measures 3.85:1 (previously
-  documented here and in MASTER.md as "~3.6:1", corrected in fix round 1). Below the 4.5:1
-  floor either way, so the documented conclusion (dark mode uses the lightened #60A5FA
-  instead) is unaffected by the correction.
+  Accent note (ember, redesign pass 2): light #B23A12 measures 5.74:1 on background,
+  5.99:1 on card, 5.04:1 on muted. Dark #FB8F67 measures 8.74:1 on background, 7.78:1 on
+  card, 6.54:1 on muted. accent-foreground on accent is 5.99:1 (light, #FFFFFF) and
+  8.74:1 (dark, #09090B). The light ember on the dark background would be well under
+  4.5:1, so dark mode uses the lightened #FB8F67 instead.
 */
 
 @import "tw-animate-css";
@@ -71,8 +72,8 @@
   Numbers computed once with @capsizecss/metrics (run from a throwaway dir, not
   a project dependency): size-adjust = (xWidthAvg / unitsPerEm) of the web font
   over that of the local face; ascent/descent/line-gap overrides = the web
-  font's value / unitsPerEm / size-adjust. Local face is Arial for the two
-  sans fonts and Courier New for the mono. Re-derive if a font is swapped.
+  font's value / unitsPerEm / size-adjust. Local face is Arial for the
+  sans font and Courier New for the mono. Re-derive if a font is swapped.
 */
 @font-face {
   font-family: "Archivo Fallback";
@@ -80,14 +81,6 @@
   size-adjust: 98.7%;
   ascent-override: 88.96%;
   descent-override: 21.28%;
-  line-gap-override: 0%;
-}
-@font-face {
-  font-family: "Space Grotesk Fallback";
-  src: local("Arial");
-  size-adjust: 109.69%;
-  ascent-override: 89.71%;
-  descent-override: 26.62%;
   line-gap-override: 0%;
 }
 @font-face {
@@ -117,7 +110,7 @@
 
 @theme {
   --font-heading: "Archivo Variable", "Archivo Fallback", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Space Grotesk Variable", "Space Grotesk Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Archivo Variable", "Archivo Fallback", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", "JetBrains Mono Fallback", ui-monospace, SFMono-Regular, monospace;
 
   --color-background: #FAFAFA;
@@ -132,13 +125,13 @@
   --color-secondary-foreground: #18181B;
   --color-muted: #E8ECF0;
   --color-muted-foreground: #475569;
-  --color-accent: #2563EB;
+  --color-accent: #B23A12;
   --color-accent-foreground: #FFFFFF;
   --color-destructive: #DC2626;
   --color-destructive-foreground: #FFFFFF;
   --color-border: #E4E4E7;
   --color-input: #71717A;
-  --color-ring: #2563EB;
+  --color-ring: #B23A12;
 
   /* Shadow Depths (MASTER.md): same values in both themes; the table has
      no separate dark ramp, so these live in the flat block, not `.dark`. */
@@ -146,6 +139,37 @@
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+}
+
+@utility container-site {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 75rem;
+  padding-inline: 1.25rem;
+  @media (width >= 48rem) {
+    padding-inline: 2rem;
+  }
+  @media (width >= 64rem) {
+    padding-inline: 3rem;
+  }
+}
+
+@utility section-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  color: var(--color-foreground);
+  text-wrap: balance;
+}
+
+@utility label {
+  font-family: var(--font-heading);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-muted-foreground);
 }
 
 @layer base {
@@ -162,13 +186,13 @@
     --color-secondary-foreground: #FAFAFA;
     --color-muted: #27272A;
     --color-muted-foreground: #A1A1AA;
-    --color-accent: #60A5FA;
+    --color-accent: #FB8F67;
     --color-accent-foreground: #09090B;
     --color-destructive: #F87171;
     --color-destructive-foreground: #09090B;
     --color-border: #27272A;
     --color-input: #71717A;
-    --color-ring: #60A5FA;
+    --color-ring: #FB8F67;
   }
 
   html {

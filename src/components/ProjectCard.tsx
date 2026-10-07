@@ -113,7 +113,7 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
             {project.title}
           </h3>
           {project.context && (
-            <p className="font-mono text-xs tracking-wide text-muted-foreground uppercase">
+            <p className="label">
               {project.context}
             </p>
           )}
@@ -121,13 +121,13 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
 
         <div className="space-y-3 text-sm">
           <div>
-            <p className="font-heading text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+            <p className="label">
               Problem
             </p>
             <p className="mt-1 text-card-foreground">{project.problem}</p>
           </div>
           <div>
-            <p className="font-heading text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+            <p className="label">
               What I built
             </p>
             <p className="mt-1 text-card-foreground">{project.contribution}</p>
@@ -135,7 +135,7 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
         </div>
 
         <div>
-          <p className="font-heading text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+          <p className="label">
             Stack
           </p>
           <ul className="mt-2 flex flex-wrap gap-1.5">
@@ -152,10 +152,10 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
 
         {project.result && (
           <div>
-            <p className="font-heading text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+            <p className="label">
               Result
             </p>
-            {/* Space Grotesk, not JetBrains Mono. Three of the four result
+            {/* Archivo, not JetBrains Mono. Three of the four result
                 lines are sentences rather than figures, and MASTER.md
                 reserves mono for tags, metrics and dates. The one that is a
                 bare figure still reads as one because the label above it

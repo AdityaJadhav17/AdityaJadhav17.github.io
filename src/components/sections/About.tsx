@@ -48,10 +48,10 @@ const ABOUT_PARAGRAPH =
 // site.ts rather than hardcoded.
 export function About() {
   return (
-    <Reveal as="section" id="about" className="border-t border-border py-16 md:py-24">
-      <div className="mx-auto max-w-5xl px-4 md:px-6">
+    <Reveal as="section" id="about" className="py-16 md:py-20">
+      <div className="container-site">
         <Reveal.Item>
-          <h2 className="font-heading text-3xl font-semibold text-foreground">About</h2>
+          <h2 className="section-title">About</h2>
         </Reveal.Item>
 
         <div className="mt-8 grid gap-10 md:mt-12 md:grid-cols-[3fr_2fr]">
@@ -62,7 +62,7 @@ export function About() {
           <div className="space-y-6">
             <Reveal.Item>
               <div>
-                <h3 className="font-heading text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                <h3 className="label">
                   Skills
                 </h3>
                 <ul className="mt-3 flex flex-wrap gap-1.5">
@@ -80,7 +80,7 @@ export function About() {
 
             <Reveal.Item>
               <div>
-                <h3 className="font-heading text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                <h3 className="label">
                   Education
                 </h3>
                 <p className="mt-3 text-sm text-foreground">
@@ -96,7 +96,7 @@ export function About() {
                 where it competed with the call to action. */}
             <Reveal.Item>
               <div>
-                <h3 className="font-heading text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                <h3 className="label">
                   Certifications
                 </h3>
                 <ul className="mt-3 space-y-3">

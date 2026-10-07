@@ -130,9 +130,9 @@ export function Contact() {
           and cannot receive pointer events. */}
       <div aria-hidden="true" className="dot-grid pointer-events-none absolute inset-0" />
 
-      <div className="relative mx-auto max-w-5xl px-4 md:px-6">
+      <div className="container-site relative">
         <Reveal.Item>
-          <h2 className="font-heading text-3xl font-semibold text-foreground">Contact</h2>
+          <h2 className="section-title">Contact</h2>
         </Reveal.Item>
 
         <Reveal.Item>
