@@ -17,7 +17,7 @@ const archivo = readdirSync('dist/assets').find((f) => /^archivo-latin-wght-norm
 if (!archivo) throw new Error('prerender: Archivo latin woff2 not found in dist/assets')
 const preload = `<link rel="preload" as="font" type="font/woff2" href="/assets/${archivo}" crossorigin>
     `
-const app = await ssr.render()
+const app = ssr.render()
 if (!app) throw new Error('prerender: render() returned an empty string')
 // Function replacers: a string replacement would interpret $&, $' and $` in the content.
 writeFileSync(
