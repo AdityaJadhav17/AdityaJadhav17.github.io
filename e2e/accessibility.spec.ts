@@ -211,14 +211,13 @@ test.describe('keyboard traversal never hides focus under the sticky navbar', ()
 })
 
 test.describe('theme toggle', () => {
-  test('round-trips to dark, persists across reload, and round-trips back', async ({ page }) => {
+  test('cycles to dark, persists across reload, and cycles back to system', async ({ page }) => {
     await page.goto('/')
 
+    // Fresh storage means the system state; the headless default scheme is light.
     const html = page.locator('html')
-    const isDark = await html.evaluate((el) => el.classList.contains('dark'))
-    if (!isDark) {
-      await page.getByRole('button', { name: /switch to dark theme/i }).click()
-    }
+    await page.getByRole('button', { name: /switch to light theme/i }).click()
+    await page.getByRole('button', { name: /switch to dark theme/i }).click()
 
     await expect(html).toHaveClass(/dark/)
     const darkBg = await page.locator('body').evaluate((el) => getComputedStyle(el).backgroundColor)
@@ -229,8 +228,9 @@ test.describe('theme toggle', () => {
     const darkBgAfterReload = await page.locator('body').evaluate((el) => getComputedStyle(el).backgroundColor)
     expect(darkBgAfterReload).toBe('rgb(9, 9, 11)')
 
-    await page.getByRole('button', { name: /switch to light theme/i }).click()
+    await page.getByRole('button', { name: /switch to system theme/i }).click()
     await expect(html).not.toHaveClass(/dark/)
+    await expect(page.getByRole('button', { name: /switch to light theme/i })).toBeVisible()
   })
 })
 
