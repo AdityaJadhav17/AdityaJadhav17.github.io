@@ -1,6 +1,5 @@
-import { motion } from 'motion/react'
 import { site } from '@/content/site'
-import { EASE, heroItem } from '@/lib/motion'
+import { PORTRAIT_SIZES, srcSet } from '@/lib/portrait'
 
 // The portrait is the visual centre of the composition, so it gets its own
 // file: its sizing is viewport-relative rather than token-driven, and it has
@@ -13,8 +12,7 @@ import { EASE, heroItem } from '@/lib/motion'
 // overlap will look like a mistake rather than a design.
 export function HeroPortrait() {
   return (
-    <motion.div
-      variants={heroItem}
+    <div
       // Right-anchored at lg rather than centred. A centred portrait puts the
     // subject's arm directly under the display claim's lower-right, which is
     // dark clothing behind dark type in the light theme. Offsetting right
@@ -39,24 +37,21 @@ export function HeroPortrait() {
             stopping at its edge. */}
         <div aria-hidden="true" className="hero-glow pointer-events-none absolute -inset-[18%]" />
 
-        <motion.img
-          src="/portrait.webp"
-          alt={`${site.name}, ${site.discipline}`}
-          width={1467}
-          height={1600}
-          loading="eager"
-          fetchPriority="high"
-          // A slow settle from very slightly oversized. Set as initial/animate
-          // rather than a variant so it runs independently of the band stagger:
-          // the portrait should still be moving while the text has landed.
-          // scale is a transform, so the MotionConfig in App.tsx suppresses
-          // this animation under prefers-reduced-motion; no local check needed.
-          initial={{ scale: 1.04 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 1.4, ease: EASE }}
-          className="relative h-[38vh] w-auto max-w-none object-contain object-bottom sm:h-[46vh] lg:h-[66vh]"
-        />
+        <picture>
+          <source type="image/avif" srcSet={srcSet('avif')} sizes={PORTRAIT_SIZES} />
+          <source type="image/webp" srcSet={srcSet('webp')} sizes={PORTRAIT_SIZES} />
+          <img
+            src="/portrait-800.webp"
+            alt={`${site.name}, ${site.discipline}`}
+            width={1467}
+            height={1600}
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
+            className="relative h-[38vh] w-auto max-w-none object-contain object-bottom sm:h-[46vh] lg:h-[66vh]"
+          />
+        </picture>
       </div>
-    </motion.div>
+    </div>
   )
 }

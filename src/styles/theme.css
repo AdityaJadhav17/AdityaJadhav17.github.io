@@ -66,6 +66,39 @@
    deps, not `--omit=dev`) or this import fails and the build breaks. */
 @import "shadcn/tailwind.css";
 
+/*
+  Metric-matched fallbacks, so the swap to the web font does not shift layout.
+  Numbers computed once with @capsizecss/metrics (run from a throwaway dir, not
+  a project dependency): size-adjust = (xWidthAvg / unitsPerEm) of the web font
+  over that of the local face; ascent/descent/line-gap overrides = the web
+  font's value / unitsPerEm / size-adjust. Local face is Arial for the two
+  sans fonts and Courier New for the mono. Re-derive if a font is swapped.
+*/
+@font-face {
+  font-family: "Archivo Fallback";
+  src: local("Arial");
+  size-adjust: 98.7%;
+  ascent-override: 88.96%;
+  descent-override: 21.28%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Space Grotesk Fallback";
+  src: local("Arial");
+  size-adjust: 109.69%;
+  ascent-override: 89.71%;
+  descent-override: 26.62%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "JetBrains Mono Fallback";
+  src: local("Courier New");
+  size-adjust: 99.98%;
+  ascent-override: 102.02%;
+  descent-override: 30%;
+  line-gap-override: 0%;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
@@ -83,9 +116,9 @@
 }
 
 @theme {
-  --font-heading: "Archivo", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-heading: "Archivo Variable", "Archivo Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Space Grotesk Variable", "Space Grotesk Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", "JetBrains Mono Fallback", ui-monospace, SFMono-Regular, monospace;
 
   --color-background: #FAFAFA;
   --color-foreground: #09090B;
@@ -193,6 +226,23 @@
       color-mix(in oklch, var(--color-muted-foreground) 20%, transparent) 0%,
       transparent 72%
     );
+  }
+
+  /* Hero entrance: plain CSS so the prerendered HTML animates with no JS and
+     hydration never restarts it. Staggered by --i (set inline in Hero.tsx);
+     the last step ends at 4 x 40 + 240 = 400ms. Under reduced motion it
+     fades only, never translates. */
+  @keyframes hero-in {
+    from { opacity: 0; translate: 0 8px; }
+  }
+  .hero-in {
+    animation: hero-in 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--i, 0) * 40ms);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    @keyframes hero-in {
+      from { opacity: 0; }
+    }
   }
 
   /* Decorative dot grid behind the Contact section. Declared here rather than

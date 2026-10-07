@@ -4,11 +4,13 @@ import { Button } from '@/components/ui/button'
 import { getStoredTheme, resolveTheme, setTheme, type Theme } from '@/lib/theme'
 
 export function ThemeToggle() {
-  const [theme, setThemeState] = useState<Theme>('system')
+  const [theme, setThemeState] = useState<Theme | null>(null)
 
   useEffect(() => setThemeState(getStoredTheme()), [])
 
-  const resolved = resolveTheme(theme)
+  // null until the effect reads storage, so the server render and the first
+  // client render agree (both 'light'); the effect then applies the stored theme.
+  const resolved = theme === null ? 'light' : resolveTheme(theme)
   const next: Theme = resolved === 'dark' ? 'light' : 'dark'
 
   return (

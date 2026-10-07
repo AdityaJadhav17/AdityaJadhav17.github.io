@@ -1,6 +1,8 @@
 // Site-wide identity content: name, current roles, contact, and education.
 // Do not add claims beyond what the owner has verified.
 
+import { experience } from './experience'
+
 export type SocialLink = {
   label: string
   url: string
@@ -22,8 +24,7 @@ export type Site = {
   positioning: string
   discipline: string
   capabilities: string[]
-  roles: string[]
-  tagline: string
+  description: string
   availability: string
   proof: ProofPoint[]
   location: string
@@ -32,6 +33,12 @@ export type Site = {
   resumePath: string
   education: Education
 }
+
+// Derived, never hand-copied: the stale-role bug (Lumulus still reading as
+// current after it ended) came from copying experience.ts into this file.
+export const currentRoles = experience
+  .filter((e) => e.end === 'Present')
+  .map((e) => `${e.role} @ ${e.organization}`)
 
 export const site: Site = {
   name: 'Aditya Jadhav',
@@ -52,7 +59,9 @@ export const site: Site = {
   // in About already serves that purpose. Multi-agent traces to TravelAGNTCY,
   // computer vision to Synthetic-to-Real and the bird classifier, evaluation
   // to Talk-to-Robot, observability to WatchTower, and the last two to the
-  // UC San Diego role. Do not add a seventh.
+  // UC San Diego role. Do not add a seventh. Penetration testing and NIST SP
+  // 800-171 were confirmed by the owner on 2026-10-06 as publishable provided
+  // no UC San Diego systems are named. Never name one.
   capabilities: [
     'Multi-agent LLM systems',
     'Computer vision pipelines',
@@ -62,11 +71,9 @@ export const site: Site = {
     'Security compliance (NIST SP 800-171)',
   ],
 
-  roles: [
-    'Software Engineering Intern @ Lumulus Technologies',
-    'IT Security Programmer @ UC San Diego',
-  ],
-  tagline: 'Software Engineering Intern @ Lumulus Technologies · IT Security Programmer @ UC San Diego',
+  // Also the meta description: src/lib/head.ts generates the head tags from it.
+  description:
+    'Aditya Jadhav builds AI systems and finds where they break. Software engineering and security work. Graduating June 2027 and open to new-grad roles.',
 
   // Senior year, so this is new-grad recruiting rather than internships.
   availability: 'Graduating June 2027. Open to new-grad software engineering roles.',

@@ -1,10 +1,15 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import { StrictMode } from 'react'
+import { createRoot, hydrateRoot } from 'react-dom/client'
 import App from './App'
 import './index.css'
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+const root = document.getElementById('root')!
+const app = (
+  <StrictMode>
     <App />
-  </React.StrictMode>,
+  </StrictMode>
 )
+// Production HTML is prerendered (scripts/prerender.mjs). In dev the root
+// holds only the <!--app-html--> comment, so check for an element, not a node.
+if (root.firstElementChild) hydrateRoot(root, app)
+else createRoot(root).render(app)

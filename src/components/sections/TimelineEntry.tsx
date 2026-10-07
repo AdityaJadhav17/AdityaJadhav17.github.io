@@ -1,4 +1,4 @@
-import { motion, useTransform, type MotionValue } from 'motion/react'
+import { m, useTransform, type MotionValue } from 'motion/react'
 import { Reveal } from '@/components/motion/Reveal'
 import type { Experience } from '@/content/experience'
 
@@ -33,7 +33,7 @@ export function TimelineEntry({ entry, index, total, progress, reduced }: Timeli
     <Reveal.Item as="li" className="relative flex gap-4 sm:gap-6">
       <div aria-hidden="true" className="flex w-4 flex-none justify-center">
         <span className="relative mt-1.5 size-2.5 flex-none rounded-full bg-border ring-4 ring-background">
-          <motion.span
+          <m.span
             className="absolute inset-0 rounded-full bg-accent"
             style={{ scale: reduced ? 1 : dotFill }}
           />

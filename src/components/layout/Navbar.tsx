@@ -8,7 +8,6 @@ import {
   type MouseEvent,
 } from 'react'
 import { Menu } from 'lucide-react'
-import { motion } from 'motion/react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -61,19 +60,16 @@ const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(function NavLink(
       {...props}
     >
       {label}
-      {active && (
-        // layoutId is what makes Motion animate this between nav items
-        // rather than cross-fading two separate elements. Scoped per
-        // variant: the desktop nav and the mobile Sheet render this same
-        // component, and both can be mounted at once, so a single shared id
-        // would have Motion trying to animate the indicator between a
-        // visible navbar and a drawer.
-        <motion.span
-          layoutId={variant === 'mobile' ? 'nav-active-mobile' : 'nav-active-desktop'}
-          aria-hidden="true"
-          className="absolute inset-x-0 -bottom-1.5 h-px bg-accent"
-        />
-      )}
+      {/* Static underline that fades with the active state. LazyMotion's
+          domAnimation has no layout animations, so the old layoutId glide
+          between items is gone; opacity is the whole effect now. */}
+      <span
+        aria-hidden="true"
+        className={cn(
+          'absolute inset-x-0 -bottom-1.5 h-px bg-accent transition-opacity',
+          active ? 'opacity-100' : 'opacity-0',
+        )}
+      />
     </a>
   )
 })

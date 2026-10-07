@@ -1,8 +1,9 @@
 # Aditya Jadhav: Portfolio
 
 Personal portfolio site, built as a single-page React app: hero, selected work, experience
-timeline, about/skills, certifications, and a contact form, with light/dark theming and a
-subtle scroll-reveal on each section.
+timeline, and an about section (skills and certifications), with a contact form and light/dark
+theming. It is prerendered at build time, so the full page is in the HTML before any JavaScript
+runs.
 
 Live at [adityajadhav.dev](https://adityajadhav.dev).
 
@@ -13,6 +14,7 @@ Live at [adityajadhav.dev](https://adityajadhav.dev).
   (Radix primitives) for the accessible building blocks: `Button`, `Input`, `Textarea`,
   `Sheet` (mobile nav), etc.
 - **lucide-react** for UI icons, **react-icons** for brand marks (GitHub/LinkedIn)
+- **Motion** (via `LazyMotion` + `m`, `domAnimation` features only, which keeps layout/drag code out of the bundle) for the scroll reveal; fonts self-hosted via **@fontsource-variable**
 - **Vitest** + **Testing Library** for tests
 
 ## Structure
@@ -21,17 +23,20 @@ Live at [adityajadhav.dev](https://adityajadhav.dev).
 src/
 ├── components/
 │   ├── layout/        # Navbar, Footer, ThemeToggle, SkipLink
-│   ├── sections/       # Hero, Work, Experience, About, Certifications, Contact
-│   ├── ui/             # shadcn/ui primitives
+│   ├── motion/        # Reveal
+│   ├── sections/      # Hero, Work, Experience, About, Contact
+│   ├── ui/            # shadcn/ui primitives
 │   └── ProjectCard.tsx
-├── content/            # Typed content: site.ts, projects.ts, experience.ts, certifications.ts
-├── hooks/              # useActiveSection, useScrollReveal
-├── lib/                # theme.ts (persisted light/dark/system), utils.ts
-└── styles/theme.css    # design tokens, dark-mode overrides, motion rules
+├── content/           # Typed content: site.ts, projects.ts, experience.ts, certifications.ts
+├── hooks/             # useActiveSection
+├── lib/               # head.ts (head tags), theme.ts (light/dark/system), motion.ts, utils.ts
+├── entry-server.tsx   # SSR entry used by the prerender step
+└── styles/theme.css   # design tokens, dark-mode overrides, motion rules
+scripts/               # prerender.mjs, check-bundle.mjs, check-links.mjs
 ```
 
 Section content lives in `src/content/*.ts`, not hardcoded in components. Update those files
-to change copy, projects, experience entries, or certifications.
+to change copy, projects, experience entries, or certifications (which render inside About).
 
 ## Getting started
 
@@ -46,41 +51,53 @@ Open `http://localhost:5173`.
 
 ## Scripts
 
-| Command              | Description                                |
-| --------------------- | ------------------------------------------- |
-| `npm run dev`         | Start the Vite dev server                   |
-| `npm run build`       | Production build to `dist/`                 |
-| `npm run preview`     | Preview the production build locally        |
-| `npm test`            | Run the Vitest suite                        |
-| `npm run test:e2e`    | Run the Playwright end-to-end a11y suite    |
-| `npm run typecheck`   | `tsc --noEmit`                              |
-| `npm run lint`        | ESLint                                      |
-| `npm run deploy`      | Build and publish `dist/` via `gh-pages`    |
+| Command               | Description                                                       |
+| --------------------- | ----------------------------------------------------------------- |
+| `npm run dev`         | Start the Vite dev server                                         |
+| `npm run build`       | Client build, SSR build, then prerender into `dist/index.html`    |
+| `npm run preview`     | Preview the production build locally                              |
+| `npm test`            | Run the Vitest suite                                              |
+| `npm run test:e2e`    | Run the Playwright suite (chromium and iPhone/WebKit)             |
+| `npm run typecheck`   | `tsc --noEmit`                                                    |
+| `npm run lint`        | ESLint                                                            |
+| `npm run check:bundle`| Fail if gzipped JS in `dist/assets` is over 130 KB (runs in CI)   |
+| `npm run check:links` | Check every `https://` URL in `src/content` (local only)          |
+| `npm run deploy`      | Build and publish `dist/` via `gh-pages`                          |
 
-## Features
+## How it works
 
-- **Theming**: light/dark/system, resolved and applied before first paint (no flash), persisted
-  to `localStorage` (`src/lib/theme.ts`).
-- **Scroll reveal**: each section fades/rises into view once via `IntersectionObserver`
-  (`src/hooks/useScrollReveal.ts`). It degrades to fully visible with no JS or if the observer is
-  unavailable, and is neutralized under `prefers-reduced-motion`.
+- **Prerendering**: `npm run build` runs `vite build`, then `vite build --ssr
+  src/entry-server.tsx --outDir dist-ssr`, then `node scripts/prerender.mjs`. The script
+  renders the app to a string and injects it, plus the head tags from `src/lib/head.ts`
+  (title, description, Open Graph, JSON-LD, all generated from `src/content`), into
+  `dist/index.html`. Do not hand-write meta tags in `index.html`.
+- **Reveal**: `src/components/motion/Reveal.tsx` wraps below-the-fold sections. The server and
+  first client render are fully visible. Only after JS attaches an `IntersectionObserver` does
+  it hide content that is still below the fold, then fade it in on scroll. With no JS or no
+  observer, everything stays visible. Under `prefers-reduced-motion` nothing translates. Motion runs
+  through `LazyMotion` + `m` with `domAnimation` only, which keeps layout/drag code out of the
+  bundle. The hero entrance is plain CSS.
+- **Theming**: light/dark/system, resolved before first paint (no flash) and persisted to
+  `localStorage` (`src/lib/theme.ts`).
 - **Accessibility**: skip link, visible focus states, `scroll-padding-top` so the sticky navbar
-  never covers a focused element, accessible form validation (errors tied via
-  `aria-describedby`, focus moves to the first invalid field), semantic heading hierarchy.
+  never covers a focused element, form errors tied to fields via `aria-describedby` with focus
+  moved to the first invalid field, semantic heading hierarchy.
 - **Contact form**: client-side validation, submits to Formspree, preserves input on a failed
   submit.
+- **Crawlers**: `public/robots.txt` and `public/sitemap.xml` point at adityajadhav.dev.
 
 ## End-to-end tests
 
-`npm run test:e2e` runs a Playwright suite (`e2e/accessibility.spec.ts`) against a production
-build served locally, covering behavior the unit tests cannot: content visibility with
-JavaScript disabled, `prefers-reduced-motion` handling, keyboard traversal past the sticky
-navbar, and theme persistence across a reload. See `playwright.config.ts` for how the build is
-served.
+`npm run test:e2e` runs the Playwright specs in `e2e/` against a production build served
+locally, in two projects: `chromium` and `iphone` (WebKit). They cover behavior the unit tests
+cannot: content visibility with JavaScript disabled, `prefers-reduced-motion` handling,
+keyboard traversal past the sticky navbar, theme persistence across a reload, and axe
+accessibility checks. See `playwright.config.ts` for how the build is served.
 
 ## Deployment
 
-Pushing to `main` runs `.github/workflows/deploy.yml`: install, typecheck, lint, test, build,
-then publish `dist/` to GitHub Pages. A failing check blocks the deploy. The Playwright suite is
-a local verification tool and intentionally does not run in that workflow (see
-`playwright.config.ts` for why).
+- `.github/workflows/ci.yml` runs on pull requests to `main`: typecheck, lint, unit tests,
+  Playwright, build, and the JS bundle budget. It gates the merge.
+- `.github/workflows/deploy.yml` runs on push to `main`: install, typecheck, lint, test, build,
+  then publish `dist/` to GitHub Pages.
+- `public/CNAME` binds the site to adityajadhav.dev.
