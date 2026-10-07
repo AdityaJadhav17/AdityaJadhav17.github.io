@@ -10,6 +10,7 @@ test.use({ viewport: { width: 412, height: 823 } })
 
 test('the longest main-thread task stays under the ceiling on a throttled phone', async ({ page, browserName }, testInfo) => {
   test.skip(testInfo.project.name !== 'chromium' || browserName !== 'chromium', 'Chromium only (CDP throttling)')
+  test.skip(!!process.env.CI, 'Local measurement tool: CI runners are slower and timing-noisy')
   const cdp = await page.context().newCDPSession(page)
   await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 })
   await page.addInitScript(() => {
