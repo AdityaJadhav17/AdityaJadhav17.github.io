@@ -14,7 +14,7 @@ Live at [adityajadhav.dev](https://adityajadhav.dev).
   (Radix primitives) for the accessible building blocks: `Button`, `Input`, `Textarea`,
   `Sheet` (mobile nav), etc.
 - **lucide-react** for UI icons, **react-icons** for brand marks (GitHub/LinkedIn)
-- **Motion** (loaded lazily) for the scroll reveal; fonts self-hosted via **@fontsource-variable**
+- **Motion** (via `LazyMotion` + `m`, `domAnimation` features only, which keeps layout/drag code out of the bundle) for the scroll reveal; fonts self-hosted via **@fontsource-variable**
 - **Vitest** + **Testing Library** for tests
 
 ## Structure
@@ -74,8 +74,9 @@ Open `http://localhost:5173`.
 - **Reveal**: `src/components/motion/Reveal.tsx` wraps below-the-fold sections. The server and
   first client render are fully visible. Only after JS attaches an `IntersectionObserver` does
   it hide content that is still below the fold, then fade it in on scroll. With no JS or no
-  observer, everything stays visible. Under `prefers-reduced-motion` nothing translates. Motion's
-  features load lazily to keep the bundle small. The hero entrance is plain CSS.
+  observer, everything stays visible. Under `prefers-reduced-motion` nothing translates. Motion runs
+  through `LazyMotion` + `m` with `domAnimation` only, which keeps layout/drag code out of the
+  bundle. The hero entrance is plain CSS.
 - **Theming**: light/dark/system, resolved before first paint (no flash) and persisted to
   `localStorage` (`src/lib/theme.ts`).
 - **Accessibility**: skip link, visible focus states, `scroll-padding-top` so the sticky navbar
