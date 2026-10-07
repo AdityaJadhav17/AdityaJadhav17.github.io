@@ -2,7 +2,7 @@ import { projects } from '@/content/projects'
 import { ProjectCard } from '@/components/ProjectCard'
 import { Reveal } from '@/components/motion/Reveal'
 
-// Featured projects (the first two, `featured: true`) render full width,
+// Featured projects (the three `featured: true` projects, in array order) render full width,
 // one per row; the rest render in a responsive grid. Same ProjectCard
 // shape throughout: only the container width differs.
 //
@@ -28,7 +28,7 @@ export function Work() {
           ))}
         </div>
 
-        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 grid gap-6 sm:grid-cols-2">
           {rest.map((project) => (
             <Reveal.Item key={project.id} className="flex">
               <ProjectCard project={project} className="flex-1" />

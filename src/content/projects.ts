@@ -38,7 +38,8 @@ export const projects: Project[] = [
       live: 'https://cse110-sp26-group09.github.io/Watchtower-Course-Project/',
     },
     featured: true,
-    context: 'UCSD CSE 110, 11-person team',
+    // Owner, 2026-10-06: he led 11 engineers. "11-person team" contradicted that, so the team size is not stated.
+    context: 'UCSD CSE 110',
   },
   {
     id: 'travel-agntcy',
@@ -82,28 +83,7 @@ export const projects: Project[] = [
       height: 675,
       alt: "Stockroom's History page: a read-only log of purchase request events and stock movements, each with its action, request, item, quantity, actor and note",
     },
-    featured: false,
-  },
-  {
-    id: 'personal-tracker',
-    title: 'Personal Tracker',
-    problem:
-      'Tracking deadlines, courses, notes and goals usually means either four separate apps or one that wants an account and a server.',
-    contribution:
-      'A local-first tracker in React 18 and TypeScript on Vite, spanning nine views with all state in localStorage and no network calls after the page loads. Deliberately takes no runtime dependencies beyond React and React DOM, so the routing, state management, date handling and charts are hand-written rather than pulled from four libraries.',
-    stack: ['React', 'TypeScript', 'Vite', 'Vitest', 'React Testing Library', 'Playwright'],
-    result:
-      'In daily use since September 2026. Repeating deadlines create successors only on completion, notes can be encrypted, every destructive action is undoable, and deadlines export to .ics. Covered by Vitest and React Testing Library unit tests and Playwright end-to-end cases that gate deployment.',
-    links: {
-      github: 'https://github.com/AdityaJadhav17/Personal-Tracker',
-    },
-    image: {
-      src: '/personal-tracker.webp',
-      width: 1200,
-      height: 675,
-      alt: "Personal Tracker's Home view: today's date, one overdue item first, then the coming days with course tags and a repeating rent deadline, beside a sidebar listing the app's nine views",
-    },
-    featured: false,
+    featured: true,
   },
   {
     id: 'talk-to-robot',
@@ -160,6 +140,27 @@ export const projects: Project[] = [
     },
     featured: false,
     context: 'Kaggle competition',
+  },
+  {
+    id: 'personal-tracker',
+    title: 'Personal Tracker',
+    problem:
+      'Tracking deadlines, courses, notes and goals usually means either four separate apps or one that wants an account and a server.',
+    contribution:
+      'A local-first tracker in React 18 and TypeScript on Vite, spanning nine views with all state in localStorage and no network calls after the page loads. Deliberately takes no runtime dependencies beyond React and React DOM, so the routing, state management, date handling and charts are hand-written rather than pulled from four libraries.',
+    stack: ['React', 'TypeScript', 'Vite', 'Vitest', 'React Testing Library', 'Playwright'],
+    result:
+      'In daily use since September 2026. Repeating deadlines create successors only on completion, notes can be encrypted, every destructive action is undoable, and deadlines export to .ics. Covered by Vitest and React Testing Library unit tests and Playwright end-to-end cases that gate deployment.',
+    links: {
+      github: 'https://github.com/AdityaJadhav17/Personal-Tracker',
+    },
+    image: {
+      src: '/personal-tracker.webp',
+      width: 1200,
+      height: 675,
+      alt: "Personal Tracker's Home view: today's date, one overdue item first, then the coming days with course tags and a repeating rent deadline, beside a sidebar listing the app's nine views",
+    },
+    featured: false,
   },
   {
     id: 'bird-classifier',

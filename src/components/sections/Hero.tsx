@@ -4,7 +4,7 @@ import { FaGithub, FaLinkedin } from 'react-icons/fa'
 import { CountUp } from '@/components/motion/CountUp'
 import { HeroPortrait } from '@/components/sections/HeroPortrait'
 import { Button } from '@/components/ui/button'
-import { site } from '@/content/site'
+import { currentRoles, site } from '@/content/site'
 import { heroContainer, heroItem } from '@/lib/motion'
 
 // lucide-react ships no brand/logo marks (Github/Linkedin/Youtube all
@@ -80,9 +80,9 @@ export function Hero() {
 
       {/* Current roles */}
       <motion.div variants={heroItem} className="relative z-10 lg:col-start-3 lg:row-start-1">
-        <p className={LABEL}>Currently</p>
-        <ul className="mt-3 space-y-1.5">
-          {site.roles.map((role) => (
+        <p id="hero-currently" className={LABEL}>Currently</p>
+        <ul aria-labelledby="hero-currently" className="mt-3 space-y-1.5">
+          {currentRoles.map((role) => (
             <li key={role} className="text-sm leading-snug text-foreground">
               {role}
             </li>

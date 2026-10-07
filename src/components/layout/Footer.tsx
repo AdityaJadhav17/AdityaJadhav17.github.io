@@ -1,6 +1,6 @@
 import { ArrowUp, Download } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { site } from '@/content/site'
+import { currentRoles, site } from '@/content/site'
 
 export function Footer() {
   const year = new Date().getFullYear()
@@ -11,7 +11,7 @@ export function Footer() {
         <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
           <div>
             <p className="font-heading text-base font-semibold text-foreground">{site.name}</p>
-            <p className="mt-1 text-sm text-muted-foreground">{site.tagline}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{currentRoles.join(' · ')}</p>
           </div>
 
           {/* Email, GitHub and LinkedIn used to repeat here. Contact is the

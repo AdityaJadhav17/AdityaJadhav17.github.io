@@ -38,7 +38,7 @@ const ABOUT_PARAGRAPH =
   "I've always been curious about how technology powers the world, and that curiosity pulled " +
   "me into tech. I went from small coding projects to building full AI pipelines, interactive " +
   'web apps, and leading workshops for other students. I learn by doing, whether it was ' +
-  'training a bird classifier on thousands of rainforest images or building a responsive ' +
+  'training a bird classifier on 1,200+ forest images or building a responsive ' +
   'portfolio site, and each project has pushed me to take on bigger challenges. What excites ' +
   'me most now is using AI/ML and software development to solve real problems. I like ' +
   'collaborating with others, sharing ideas, and staying open to learning something new.'
