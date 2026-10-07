@@ -94,6 +94,9 @@ cannot: content visibility with JavaScript disabled, `prefers-reduced-motion` ha
 keyboard traversal past the sticky navbar, theme persistence across a reload, and axe
 accessibility checks. See `playwright.config.ts` for how the build is served.
 
+`e2e/perf.spec.ts` (main-thread long-task ceiling at 4x CPU throttle) is skipped unless asked for:
+`PERF=1 npx playwright test e2e/perf.spec.ts --project=chromium`.
+
 ## Deployment
 
 - `.github/workflows/ci.yml` runs on pull requests to `main`: typecheck, lint, unit tests,
