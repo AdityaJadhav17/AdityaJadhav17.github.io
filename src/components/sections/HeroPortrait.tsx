@@ -1,4 +1,5 @@
 import { site } from '@/content/site'
+import { PORTRAIT_SIZES, srcSet } from '@/lib/portrait'
 
 // The portrait is the visual centre of the composition, so it gets its own
 // file: its sizing is viewport-relative rather than token-driven, and it has
@@ -36,15 +37,20 @@ export function HeroPortrait() {
             stopping at its edge. */}
         <div aria-hidden="true" className="hero-glow pointer-events-none absolute -inset-[18%]" />
 
-        <img
-          src="/portrait.webp"
-          alt={`${site.name}, ${site.discipline}`}
-          width={1467}
-          height={1600}
-          loading="eager"
-          fetchPriority="high"
-          className="relative h-[38vh] w-auto max-w-none object-contain object-bottom sm:h-[46vh] lg:h-[66vh]"
-        />
+        <picture>
+          <source type="image/avif" srcSet={srcSet('avif')} sizes={PORTRAIT_SIZES} />
+          <source type="image/webp" srcSet={srcSet('webp')} sizes={PORTRAIT_SIZES} />
+          <img
+            src="/portrait-800.webp"
+            alt={`${site.name}, ${site.discipline}`}
+            width={1467}
+            height={1600}
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
+            className="relative h-[38vh] w-auto max-w-none object-contain object-bottom sm:h-[46vh] lg:h-[66vh]"
+          />
+        </picture>
       </div>
     </div>
   )

@@ -15,3 +15,32 @@ test('without JS the page carries the claim, every project and every role', asyn
   await expect(page.locator('noscript')).toHaveCount(0)
   await context.close()
 })
+
+for (const viewport of [
+  { width: 390, height: 844 },
+  { width: 1440, height: 900 },
+]) {
+  test(`images are not oversized at ${viewport.width}px`, async ({ browser, browserName }) => {
+    test.skip(browserName !== 'chromium', 'Chromium only')
+    const context = await browser.newContext({ viewport, deviceScaleFactor: 1 })
+    const page = await context.newPage()
+    await page.goto('/')
+    // Scroll through so lazy images load.
+    await page.evaluate(async () => {
+      for (let y = 0; y < document.body.scrollHeight; y += 400) {
+        window.scrollTo(0, y)
+        await new Promise((r) => setTimeout(r, 50))
+      }
+    })
+    await page.waitForFunction(() => [...document.images].every((i) => i.complete))
+    const oversized = await page.evaluate(() =>
+      [...document.images]
+        // Phase B (B6) removes this exemption
+        .filter((i) => i.clientWidth > 0 && !i.closest('#work'))
+        .filter((i) => i.naturalWidth > i.clientWidth * 2 + 1)
+        .map((i) => `${i.currentSrc} natural ${i.naturalWidth} shown ${i.clientWidth}`),
+    )
+    expect(oversized).toEqual([])
+    await context.close()
+  })
+}

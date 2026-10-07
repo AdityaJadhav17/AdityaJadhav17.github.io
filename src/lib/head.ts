@@ -1,4 +1,5 @@
 import { currentRoles, site } from '@/content/site'
+import { PORTRAIT_SIZES, srcSet } from './portrait'
 
 const ORIGIN = 'https://adityajadhav.dev/'
 const TITLE = `${site.name} | Software Engineer`
@@ -34,6 +35,7 @@ export function buildHead(): string {
     `<meta name="twitter:title" content="${esc(TITLE)}" />`,
     `<meta name="twitter:description" content="${d}" />`,
     `<meta name="twitter:image" content="${ORIGIN}og-image.png" />`,
+    `<link rel="preload" as="image" type="image/avif" imagesrcset="${srcSet('avif')}" imagesizes="${PORTRAIT_SIZES}" fetchpriority="high" />`,
     `<script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, '\u003c')}</script>`,
   ].join('\n    ')
 }
