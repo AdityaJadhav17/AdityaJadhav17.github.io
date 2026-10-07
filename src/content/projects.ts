@@ -16,7 +16,7 @@ export type Project = {
   result?: string
   links: { github?: string; demo?: string; live?: string; paper?: string }
   // `src` is the largest variant and the fallback; `srcSet` lists the cropped
-  // WebP widths (480 plus the largest the crop supports). width/height are the
+  // WebP widths (480, 640 where the crop is wider, plus the largest the crop supports). width/height are the
   // intrinsic size of `src`.
   image?: { src: string; width: number; height: number; alt: string; srcSet?: string }
   featured: boolean
@@ -68,7 +68,7 @@ export const projects: Project[] = [
     },
     image: {
       src: '/travel-agntcy-947.webp',
-      srcSet: '/travel-agntcy-480.webp 480w, /travel-agntcy-947.webp 947w',
+      srcSet: '/travel-agntcy-480.webp 480w, /travel-agntcy-640.webp 640w, /travel-agntcy-947.webp 947w',
       width: 947,
       height: 592,
       alt: 'TravelAGNTCY running: an agent chat panel beside ranked flight options with airline, price, and layover detail',
@@ -93,7 +93,7 @@ export const projects: Project[] = [
     },
     image: {
       src: '/stockroom-920.webp',
-      srcSet: '/stockroom-480.webp 480w, /stockroom-920.webp 920w',
+      srcSet: '/stockroom-480.webp 480w, /stockroom-640.webp 640w, /stockroom-920.webp 920w',
       width: 920,
       height: 575,
       alt: "Stockroom's History page: a read-only log of purchase request events, each with its time, action, request, item, quantity, stock change and actor",
@@ -177,7 +177,7 @@ export const projects: Project[] = [
     },
     image: {
       src: '/personal-tracker-840.webp',
-      srcSet: '/personal-tracker-480.webp 480w, /personal-tracker-840.webp 840w',
+      srcSet: '/personal-tracker-480.webp 480w, /personal-tracker-640.webp 640w, /personal-tracker-840.webp 840w',
       width: 840,
       height: 420,
       alt: "Personal Tracker's Home view: today's date, one overdue item first, then the coming days with course tags",

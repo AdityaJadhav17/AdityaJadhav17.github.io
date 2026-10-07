@@ -24,6 +24,20 @@ type ProjectCardProps = {
 // a typographic treatment built entirely from design tokens, with no
 // AI-generated art.
 const MAX_TAGS = 5
+// `sizes` for the poster, written from measured renders (CSS px at viewport
+// widths 360/390/412/640/768/1024/1280/1440/1920). The container pads 20px
+// (<768), 32px (768+), 48px (1024+) and stops at 1200px; the poster adds
+// 12px padding a side and, in the wide layout, a 1px divider.
+// Wide (md:w-2/5 column from 768): 294/324/346 at 360/390/412, 574 at 640,
+// 256 at 768, 345 at 1024, 416 from 1280 up.
+// Stacked (two columns from 640): 294/324/346 at 360/390/412, 262 at 640,
+// 314 at 768, 426 at 1024, 514 from 1280 up.
+const SIZES = {
+  wide:
+    '(min-width: 1200px) 417px, (min-width: 1024px) calc(40vw - 63px), (min-width: 768px) calc(40vw - 51px), calc(100vw - 66px)',
+  stacked:
+    '(min-width: 1200px) 514px, (min-width: 1024px) calc(50vw - 86px), (min-width: 768px) calc(50vw - 70px), (min-width: 640px) calc(50vw - 58px), calc(100vw - 66px)',
+}
 const tagClass =
   'rounded-md border border-border bg-muted px-2 py-0.5 font-mono text-xs text-muted-foreground'
 // Visible text stays 14px; the pseudo-element grows the hit area to 44px
@@ -87,7 +101,7 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
           <img
             src={project.image.src}
             srcSet={project.image.srcSet}
-            sizes={isWide ? '(min-width: 768px) 40vw, 100vw' : '(min-width: 640px) 50vw, 100vw'}
+            sizes={isWide ? SIZES.wide : SIZES.stacked}
             alt={project.image.alt}
             width={project.image.width}
             height={project.image.height}

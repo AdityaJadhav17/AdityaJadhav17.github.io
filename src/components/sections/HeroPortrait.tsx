@@ -37,7 +37,7 @@ export function HeroPortrait() {
           <source type="image/avif" srcSet={srcSet('avif')} sizes={PORTRAIT_SIZES} />
           <source type="image/webp" srcSet={srcSet('webp')} sizes={PORTRAIT_SIZES} />
           <img
-            src="/portrait-800.webp"
+            src="/portrait-720.webp"
             alt={`${site.name}, ${site.discipline}`}
             width={1467}
             height={1600}

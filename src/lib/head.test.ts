@@ -6,7 +6,7 @@ test('head is generated from content and never mentions an ended role', () => {
   const head = buildHead()
   expect(head).toContain('<link rel="canonical" href="https://adityajadhav.dev/"')
   expect(head).toContain('og:image')
-  expect(head).toMatch(/<link rel="preload" as="image" type="image\/avif" imagesrcset="\/portrait-480\.avif 480w/)
+  expect(head).toMatch(/<link rel="preload" as="image" type="image\/avif" imagesrcset="\/portrait-400.avif 400w/)
   for (const role of currentRoles) expect(head).toContain(role.split(' @ ')[0])
   expect(head).not.toMatch(/Lumulus|github\.io/)
   expect(head).not.toMatch(/\u2014/)
