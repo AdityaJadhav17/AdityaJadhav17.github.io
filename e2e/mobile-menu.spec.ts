@@ -35,3 +35,21 @@ test('the first tap opens the lazy mobile menu even when its chunk is slow', asy
   await expect(page.getByRole('navigation', { name: 'Mobile' })).toBeHidden()
   await expect(page.getByRole('button', { name: 'Open menu' })).toBeFocused()
 })
+
+// Hydration must be ready for a tap that lands right after `load`: a tap on a
+// not-yet-hydrated button is simply lost, so this guards any change that
+// delays the module script (e.g. a lower fetch priority).
+test.describe('first tap right after load', () => {
+  test.use({ viewport: { width: 412, height: 823 }, isMobile: true, hasTouch: true })
+
+  test('opens the menu and flips the theme within 1 s of load', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
+    await page.addInitScript(() => localStorage.setItem('theme', 'light'))
+    await page.goto('/', { waitUntil: 'load' })
+    // No settling wait: the point is the first tap after load.
+    await page.getByRole('button', { name: 'Switch to dark theme' }).tap()
+    await expect(page.locator('html')).toHaveClass(/dark/, { timeout: 1000 })
+    await page.getByRole('button', { name: 'Open menu' }).tap()
+    await expect(page.getByRole('navigation', { name: 'Mobile' })).toBeVisible({ timeout: 1000 })
+  })
+})
