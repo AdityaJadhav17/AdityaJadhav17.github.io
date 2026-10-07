@@ -42,9 +42,22 @@ for (const [width, height, max] of [
   })
 }
 
-// Every control in Work has a >= 44x44 hit box on touch. Probe with
-// elementFromPoint 21px off the centre in each direction, so it sees the
-// ::after hit areas as the browser does.
+// Probe with elementFromPoint 21px off the centre in each direction, so it
+// sees the ::after hit areas as the browser does. Returns the offsets that
+// land outside the element. Runs in the page (passed to evaluate).
+const hitMisses = (node: Element) => {
+  const r = node.getBoundingClientRect()
+  const cx = r.left + r.width / 2
+  const cy = r.top + r.height / 2
+  return [[-21, 0], [21, 0], [0, -21], [0, 21]]
+    .filter(([dx, dy]) => {
+      const hit = document.elementFromPoint(cx + dx, cy + dy)
+      return !hit || !node.contains(hit)
+    })
+    .map(([dx, dy]) => `${dx},${dy}`)
+}
+
+// Every control in Work has a >= 44x44 hit box on touch.
 test('work controls have 44px touch targets', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'iphone', 'iPhone only')
   await page.goto('/')
@@ -54,20 +67,49 @@ test('work controls have 44px touch targets', async ({ page }, testInfo) => {
   for (let i = 0; i < count; i++) {
     const el = controls.nth(i)
     await el.scrollIntoViewIfNeeded()
-    const misses = await el.evaluate((node) => {
-      const r = node.getBoundingClientRect()
-      const cx = r.left + r.width / 2
-      const cy = r.top + r.height / 2
-      return [[-21, 0], [21, 0], [0, -21], [0, 21]]
-        .filter(([dx, dy]) => {
-          const hit = document.elementFromPoint(cx + dx, cy + dy)
-          return !hit || !node.contains(hit)
-        })
-        .map(([dx, dy]) => `${dx},${dy}`)
-    })
+    const misses = await el.evaluate(hitMisses)
     const name = await el.evaluate((n) => n.textContent?.trim())
     expect(misses, `${name} (#${i}) misses at offsets`).toEqual([])
   }
+})
+
+// Site-wide: every control that is not an inline link in prose, including the
+// ones inside the mobile nav sheet. Hidden (sr-only, aria-hidden, display:none)
+// controls are skipped.
+test('every control has a 44px touch target', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'iphone', 'iPhone only')
+  await page.goto('/')
+  // Past the hero so the header brand link is shown (aria-hidden before that).
+  await page.evaluate(() => window.scrollTo({ top: 400, behavior: 'instant' }))
+  await expect(page.locator('header a[href="#home"]')).not.toHaveAttribute('aria-hidden', 'true')
+  const controls = page.locator('button, a[href], summary')
+  const check = async () => {
+    const count = await controls.count()
+    const failures: string[] = []
+    let checked = 0
+    for (let i = 0; i < count; i++) {
+      const el = controls.nth(i)
+      if (!(await el.isVisible())) continue
+      const skip = await el.evaluate(
+        (n) => !!n.closest('p, [aria-hidden="true"]') || n.getBoundingClientRect().width < 2,
+      )
+      if (skip) continue
+      await el.scrollIntoViewIfNeeded()
+      checked++
+      const misses = await el.evaluate(hitMisses)
+      if (misses.length) {
+        const name = await el.evaluate((n) => (n.textContent?.trim() || n.getAttribute('aria-label') || n.tagName))
+        failures.push(`${name}: ${misses.join(' | ')}`)
+      }
+    }
+    expect(checked).toBeGreaterThan(0)
+    return failures
+  }
+  const page_ = await check()
+  await page.getByRole('button', { name: 'Open menu' }).click()
+  await expect(page.getByRole('navigation', { name: 'Mobile' })).toBeVisible()
+  const sheet = await check()
+  expect([...page_, ...sheet]).toEqual([])
 })
 
 // B4: the primary CTA is in the first phone screen; proof labels do not

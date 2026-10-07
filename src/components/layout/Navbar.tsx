@@ -54,7 +54,7 @@ const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(function NavLink(
         // Nav is Archivo per MASTER.md's "Heading Font: ... nav" entry.
         'relative font-heading text-sm font-medium transition-colors',
         active ? 'text-accent hover:text-accent' : 'text-muted-foreground hover:text-foreground',
-        variant === 'mobile' && 'rounded-md px-3 py-2 hover:bg-muted',
+        variant === 'mobile' && 'rounded-md px-3 py-2 hover:bg-muted pointer-coarse:py-3',
         className,
       )}
       {...props}
@@ -185,7 +185,7 @@ export function Navbar({ sectionIds }: NavbarProps) {
           className={cn(
             // Kept mounted at all times: removing it would collapse the
             // justify-between layout and shift the nav links sideways.
-            'font-heading text-base font-semibold text-foreground transition-opacity duration-300',
+            'font-heading text-base font-semibold text-foreground transition-opacity duration-300 pointer-coarse:py-2.5',
             showBrand ? 'opacity-100' : 'pointer-events-none opacity-0',
           )}
         >
@@ -210,17 +210,7 @@ export function Navbar({ sectionIds }: NavbarProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                // Expands the hit area without growing the glyph. The
-                // measured rendered size is 46x46, not the naively expected
-                // 48x48: the inset on an absolutely positioned pseudo-element
-                // resolves against the button's padding box, so its 1px
-                // border eats 1px per side before the -8px inset adds it
-                // back. 46px still clears WCAG 2.5.8's 44x44 minimum. If more
-                // icon-only controls are ever placed beside this one, their
-                // container gap must be at least 16px (8px of growth per
-                // side) or the hit areas overlap and 2.5.8's spacing
-                // exception stops applying.
-                className="relative md:hidden before:absolute before:-inset-2 before:content-['']"
+                className="md:hidden"
                 aria-label="Open menu"
                 aria-controls={mobileMenuId}
               >
