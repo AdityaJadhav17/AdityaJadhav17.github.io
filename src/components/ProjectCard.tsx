@@ -141,8 +141,9 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
             </li>
           ))}
           {hiddenCount > 0 && (
-            <li aria-label={`and ${hiddenCount} more`} className={tagClass}>
-              +{hiddenCount}
+            <li className={tagClass}>
+              <span aria-hidden="true">+{hiddenCount}</span>
+              <span className="sr-only">and {hiddenCount} more</span>
             </li>
           )}
         </ul>
@@ -202,6 +203,7 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
         <details className="group -mb-2 border-t border-border">
           <summary className="flex min-h-11 w-fit cursor-pointer list-none items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors duration-200 select-none hover:text-foreground [&::-webkit-details-marker]:hidden">
             Read the details
+            <span className="sr-only"> about {project.title}</span>
             <ChevronDown
               aria-hidden="true"
               className="size-4 transition-transform duration-200 group-open:rotate-180"

@@ -29,8 +29,8 @@ describe('ProjectCard', () => {
     const visible = [...container.querySelectorAll('li')].filter((li) => !details.contains(li))
     expect(visible).toHaveLength(6)
     expect(visible.slice(0, 5).map((li) => li.textContent)).toEqual(p.stack.slice(0, 5))
-    const more = screen.getByLabelText('and 3 more')
-    expect(more).toHaveTextContent('+3')
+    expect(screen.getByText('and 3 more')).toBeInTheDocument()
+    expect(screen.getByText('+3')).toBeVisible()
   })
 
   it('shows no +N item when the stack fits', () => {

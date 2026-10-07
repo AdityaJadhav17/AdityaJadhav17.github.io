@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, type Page } from '@playwright/test'
 
 // One container: header, hero text, every section title and the footer all
 // start at the same x at every width.
@@ -57,10 +57,17 @@ const hitMisses = (node: Element) => {
     .map(([dx, dy]) => `${dx},${dy}`)
 }
 
+const expectCoarsePointer = async (page: Page) =>
+  expect(
+    await page.evaluate(() => matchMedia('(pointer: coarse)').matches),
+    'iphone project must emulate a coarse pointer',
+  ).toBe(true)
+
 // Every control in Work has a >= 44x44 hit box on touch.
 test('work controls have 44px touch targets', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'iphone', 'iPhone only')
   await page.goto('/')
+  await expectCoarsePointer(page)
   const controls = page.locator('#work :is(a, button, summary)')
   const count = await controls.count()
   expect(count).toBeGreaterThan(0)
@@ -79,6 +86,7 @@ test('work controls have 44px touch targets', async ({ page }, testInfo) => {
 test('every control has a 44px touch target', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'iphone', 'iPhone only')
   await page.goto('/')
+  await expectCoarsePointer(page)
   // Past the hero so the header brand link is shown (aria-hidden before that).
   await page.evaluate(() => window.scrollTo({ top: 400, behavior: 'instant' }))
   await expect(page.locator('header a[href="#home"]')).not.toHaveAttribute('aria-hidden', 'true')
