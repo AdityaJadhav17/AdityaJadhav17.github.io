@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useSyncExternalStore } from 'react'
 import { m, useReducedMotion, useScroll, useSpring } from 'motion/react'
 import { experience } from '@/content/experience'
 import { Reveal } from '@/components/motion/Reveal'
@@ -13,14 +13,25 @@ import { TimelineEntry } from '@/components/sections/TimelineEntry'
 // one continuous track down the whole list, with an accent line drawn over it
 // whose height follows scroll position, because a scrubbed draw needs a single
 // element to scale rather than five independent ones.
+// False on the server and during hydration, true on every client render after.
+// Lets reduced motion switch on only once hydration is done, so the first
+// client render matches the server's.
+const subscribeNever = () => () => {}
+const useHydrated = () =>
+  useSyncExternalStore(subscribeNever, () => true, () => false)
+
 export function Experience() {
   const listRef = useRef<HTMLOListElement>(null)
 
   // Explicit check, deliberately not delegated to the MotionConfig in
   // App.tsx. That handles animations; the line below is a MotionValue bound
   // to a style, which MotionConfig does not touch. Under reduced motion the
-  // timeline renders fully drawn and every dot filled, statically.
-  const reduced = useReducedMotion() ?? false
+  // timeline renders fully drawn and every dot filled, statically. Gated on
+  // hydration: the server cannot know the preference and renders the rail at
+  // scaleY(0), so a reduced-motion client's first render must do the same;
+  // it then swaps to the drawn rail right after hydrating.
+  const hydrated = useHydrated()
+  const reduced = (useReducedMotion() ?? false) && hydrated
 
   const { scrollYProgress } = useScroll({
     target: listRef,

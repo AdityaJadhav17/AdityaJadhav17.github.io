@@ -251,6 +251,28 @@ test.describe('no console errors on load', () => {
   })
 })
 
+test.describe('Experience rail under reduced motion', () => {
+  test.use({ contextOptions: { reducedMotion: 'reduce' } })
+
+  // The server renders the rail at scaleY(0), so the first client render must
+  // too; it is drawn fully only after hydration. The console check guards the
+  // mismatch (React only reports it in development builds, so on this
+  // production bundle it cannot fail alone); the transform check is what
+  // proves the rail ends fully drawn.
+  test('hydrates without a mismatch and ends fully drawn', async ({ page }) => {
+    const errors = await collectConsoleErrors(page)
+    await page.goto('/')
+    await page.waitForLoadState('networkidle')
+
+    expect(errors.filter((message) => /hydrat/i.test(message))).toEqual([])
+
+    const rail = page.locator('#experience span.origin-top')
+    await expect
+      .poll(() => rail.evaluate((el) => getComputedStyle(el).transform))
+      .toMatch(/^(none|matrix\(1, 0, 0, 1, 0, 0\))$/)
+  })
+})
+
 test.describe('back to top', () => {
   test('scrolls to the top and moves focus to the hero', async ({ page }) => {
     await page.goto('/')
