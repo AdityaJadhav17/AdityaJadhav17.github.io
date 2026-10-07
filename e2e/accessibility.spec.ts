@@ -250,3 +250,26 @@ test.describe('no console errors on load', () => {
     expect(errors).toEqual([])
   })
 })
+
+test.describe('back to top', () => {
+  test('scrolls to the top and moves focus to the hero', async ({ page }) => {
+    await page.goto('/')
+    await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' }))
+    await page.getByRole('button', { name: 'Back to top' }).click()
+
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0)
+    await expect.poll(() => page.evaluate(() => document.activeElement?.id)).toBe('home')
+  })
+
+  test.describe('with reduced motion', () => {
+    test.use({ contextOptions: { reducedMotion: 'reduce' } })
+
+    test('the scroll is instant', async ({ page }) => {
+      await page.goto('/')
+      await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' }))
+      await page.getByRole('button', { name: 'Back to top' }).click()
+      await page.waitForTimeout(100)
+      expect(await page.evaluate(() => window.scrollY)).toBe(0)
+    })
+  })
+})

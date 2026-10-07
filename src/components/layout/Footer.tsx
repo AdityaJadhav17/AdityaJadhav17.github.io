@@ -2,6 +2,19 @@ import { ArrowUp, Download } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { currentRoles, site } from '@/content/site'
 
+// No `behavior` on purpose: theme.css sets `scroll-behavior` (smooth, or auto
+// under prefers-reduced-motion), so the CSS decides. Focus then follows the
+// scroll to the hero, same pattern as the Navbar section jumps, so a keyboard
+// user does not stay parked on a button at the bottom of the page.
+function backToTop() {
+  window.scrollTo({ top: 0 })
+  const home = document.getElementById('home')
+  if (!home) return
+  home.setAttribute('tabindex', '-1')
+  home.addEventListener('blur', () => home.removeAttribute('tabindex'), { once: true })
+  home.focus({ preventScroll: true })
+}
+
 export function Footer() {
   const year = new Date().getFullYear()
 
@@ -35,11 +48,7 @@ export function Footer() {
             &copy; {year} {site.name}. All rights reserved.
           </p>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          >
+          <Button variant="ghost" size="sm" onClick={backToTop}>
             <ArrowUp aria-hidden="true" className="size-4" />
             Back to top
           </Button>
