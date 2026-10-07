@@ -31,7 +31,7 @@ export function Footer() {
         </div>
 
         <div className="mt-8 flex flex-col items-start justify-between gap-4 border-t border-border pt-6 sm:flex-row sm:items-center">
-          <p className="font-mono text-xs text-muted-foreground">
+          <p suppressHydrationWarning className="font-mono text-xs text-muted-foreground">
             &copy; {year} {site.name}. All rights reserved.
           </p>
 
