@@ -1,5 +1,5 @@
-import { motion, type Variants } from 'motion/react'
-import type { AriaAttributes, ReactNode } from 'react'
+import { motion, useAnimationControls } from 'motion/react'
+import { useEffect, useRef, type AriaAttributes, type ReactNode } from 'react'
 import { revealContainer, revealItem } from '@/lib/motion'
 
 // A closed, type-checked set of tags rather than an index into `motion` by
@@ -16,19 +16,16 @@ const TAGS = {
 
 export type RevealTag = keyof typeof TAGS
 
-// Feature-detected once, at module scope. useScrollReveal (which this
-// replaces) was deliberately built "start visible, then enhance": no
-// JavaScript, an unsupported observer, and an observer that throws all had
-// to resolve to visible content rather than content stranded at opacity 0.
-// Motion's whileInView defaults to the opposite, holding content at
-// `initial` until an observer fires, so the guard in renderReveal below
-// preserves the original guarantee. Rendering the plain element is stronger
-// than a try/catch: Motion is never constructed at all.
-const CAN_OBSERVE = typeof IntersectionObserver !== 'undefined'
-
+// The guarantee: the server and the first client render are the same plain,
+// fully visible element, so the prerendered HTML shows all content with no
+// JavaScript and hydration cannot mismatch. Content is hidden only after JS
+// has run, an IntersectionObserver exists, and the element is below the fold;
+// the observer then reveals it. No observer, or already on screen, means it
+// is simply left visible, never stranded at opacity 0.
+//
 // Matches the rootMargin useScrollReveal used, so the trigger point does not
 // shift as part of this change.
-const VIEWPORT = { once: true, margin: '0px 0px -10% 0px' } as const
+const VIEWPORT_MARGIN = '0px 0px -10% 0px'
 
 type RevealProps = {
   as?: RevealTag
@@ -37,55 +34,58 @@ type RevealProps = {
   children: ReactNode
 } & Pick<AriaAttributes, 'aria-label' | 'aria-labelledby' | 'aria-hidden'>
 
-// The extra whileInView wiring that only the outermost container needs.
-// Kept off RevealProps itself so RevealItem never carries its own
-// initial/whileInView/viewport: an item's variant state is meant to come
-// from the nearest parent motion component's context, not from an observer
-// of its own.
-type ContainerMotionProps = {
-  initial: 'hidden'
-  whileInView: 'visible'
-  viewport: typeof VIEWPORT
-}
+export function Reveal({ as = 'div', children, ...rest }: RevealProps) {
+  const el = useRef<HTMLElement | null>(null)
+  const controls = useAnimationControls()
 
-// The single home for the no-observer fallback. Both Reveal and Reveal.Item
-// funnel through here so the safety property, "no observer means render the
-// plain element, never a Motion component stuck at its hidden variant", is
-// expressed exactly once. Duplicating this guard per call site would let a
-// future edit fix one copy and miss the other, silently stranding content at
-// opacity 0.
-function renderReveal(
-  variants: Variants,
-  containerMotionProps: ContainerMotionProps | undefined,
-  { as = 'div', children, ...rest }: RevealProps,
-) {
-  if (!CAN_OBSERVE) {
-    const Plain = as
-    return <Plain {...rest}>{children}</Plain>
-  }
+  useEffect(() => {
+    const node = el.current
+    if (!node || typeof IntersectionObserver === 'undefined') return
+    // Already on screen at hydration: leave it alone, never flash it out.
+    if (node.getBoundingClientRect().top < window.innerHeight * 0.9) return
+    controls.set('hidden')
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          controls.start('visible')
+          io.disconnect()
+        }
+      },
+      { rootMargin: VIEWPORT_MARGIN },
+    )
+    io.observe(node)
+    return () => io.disconnect()
+  }, [controls])
 
   const Motion = TAGS[as]
   return (
-    <Motion variants={variants} {...containerMotionProps} {...rest}>
+    <Motion
+      // Callback ref: a RefObject<HTMLElement> does not satisfy the tag union.
+      ref={(node: HTMLElement | null) => {
+        el.current = node
+      }}
+      variants={revealContainer}
+      initial={false}
+      animate={controls}
+      {...rest}
+    >
       {children}
     </Motion>
   )
 }
 
-export function Reveal(props: RevealProps) {
-  return renderReveal(
-    revealContainer,
-    { initial: 'hidden', whileInView: 'visible', viewport: VIEWPORT },
-    props,
+function RevealItem({ as = 'div', children, ...rest }: RevealProps) {
+  // Variants only, no initial/animate: an item's variant state comes from the
+  // nearest parent motion component through React context, so intervening
+  // plain elements (the max-w wrappers, the ol in Experience) do not break
+  // the chain. Reveal drives it with controls.set('hidden') then
+  // controls.start('visible').
+  const Motion = TAGS[as]
+  return (
+    <Motion variants={revealItem} {...rest}>
+      {children}
+    </Motion>
   )
-}
-
-function RevealItem(props: RevealProps) {
-  // No initial/whileInView here on purpose. Motion propagates variant state
-  // from the nearest parent motion component through React context, so
-  // intervening plain elements (the max-w wrappers, the ol in Experience) do
-  // not break the chain.
-  return renderReveal(revealItem, undefined, props)
 }
 
 Reveal.Item = RevealItem

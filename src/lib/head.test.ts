@@ -1,0 +1,12 @@
+import { expect, test } from 'vitest'
+import { buildHead } from './head'
+import { currentRoles } from '@/content/site'
+
+test('head is generated from content and never mentions an ended role', () => {
+  const head = buildHead()
+  expect(head).toContain('<link rel="canonical" href="https://adityajadhav.dev/"')
+  expect(head).toContain('og:image')
+  for (const role of currentRoles) expect(head).toContain(role.split(' @ ')[0])
+  expect(head).not.toMatch(/Lumulus|github\.io/)
+  expect(head).not.toMatch(/\u2014/)
+})

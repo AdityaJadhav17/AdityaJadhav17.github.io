@@ -195,6 +195,23 @@
     );
   }
 
+  /* Hero entrance: plain CSS so the prerendered HTML animates with no JS and
+     hydration never restarts it. Staggered by --i (set inline in Hero.tsx);
+     the last step ends at 4 x 40 + 240 = 400ms. Under reduced motion it
+     fades only, never translates. */
+  @keyframes hero-in {
+    from { opacity: 0; translate: 0 8px; }
+  }
+  .hero-in {
+    animation: hero-in 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--i, 0) * 40ms);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    @keyframes hero-in {
+      from { opacity: 0; }
+    }
+  }
+
   /* Decorative dot grid behind the Contact section. Declared here rather than
      inline because the dot colour has to resolve from a token, and theme.css
      is the only place colour is allowed to be resolved. Masked radially so it

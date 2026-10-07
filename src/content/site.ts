@@ -71,7 +71,7 @@ export const site: Site = {
     'Security compliance (NIST SP 800-171)',
   ],
 
-  // Also the meta description (index.html), kept in step by hand.
+  // Also the meta description: src/lib/head.ts generates the head tags from it.
   description:
     'Aditya Jadhav builds AI systems and finds where they break. Software engineering and security work. Graduating June 2027 and open to new-grad roles.',
 

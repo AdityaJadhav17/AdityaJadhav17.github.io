@@ -1,11 +1,9 @@
-import { motion } from 'motion/react'
+import type { CSSProperties } from 'react'
 import { Download, ExternalLink } from 'lucide-react'
 import { FaGithub, FaLinkedin } from 'react-icons/fa'
-import { CountUp } from '@/components/motion/CountUp'
 import { HeroPortrait } from '@/components/sections/HeroPortrait'
 import { Button } from '@/components/ui/button'
 import { currentRoles, site } from '@/content/site'
-import { heroContainer, heroItem } from '@/lib/motion'
 
 // lucide-react ships no brand/logo marks (Github/Linkedin/Youtube all
 // resolve undefined), so official brand glyphs come from react-icons,
@@ -20,6 +18,9 @@ const SOCIAL_ICONS: Record<string, typeof FaGithub> = {
 
 // The small mono-uppercase label above each metadata column. Shared so the
 // four of them cannot drift apart.
+// Hero entrance step: the .hero-in CSS class staggers by --i (theme.css).
+const step = (i: number) => ({ '--i': i }) as CSSProperties
+
 const LABEL = 'font-mono text-xs tracking-[0.18em] text-muted-foreground uppercase'
 
 // Hero: a multi-column editorial composition rather than a centred stack.
@@ -46,40 +47,37 @@ const LABEL = 'font-mono text-xs tracking-[0.18em] text-muted-foreground upperca
 // near-miss alignment.
 export function Hero() {
   return (
-    <motion.section
+    <section
       id="home"
-      variants={heroContainer}
-      initial="hidden"
-      animate="visible"
       className="relative mx-auto grid min-h-[calc(100dvh-4rem-1px)] w-full max-w-[1600px] grid-cols-1 content-start gap-y-8 overflow-hidden px-6 py-20 lg:grid-cols-4 lg:content-stretch lg:gap-x-8 lg:grid-rows-[auto_1fr_auto_auto_auto] lg:px-12 lg:py-12"
     >
       {/* Identity */}
-      <motion.div variants={heroItem} className="relative z-10 lg:col-start-1 lg:row-start-1">
+      <div style={step(0)} className="hero-in relative z-10 lg:col-start-1 lg:row-start-1">
         <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground lg:text-4xl">
           {site.name}
         </h1>
         <p className="mt-2 font-mono text-[0.8125rem] tracking-[0.16em] text-muted-foreground uppercase">
           {site.discipline}
         </p>
-      </motion.div>
+      </div>
 
       {/* The claim. The single most important sentence on the site, so it is
           the largest element and it stays in the accessibility tree. z-10
           puts it in front of the portrait, which is what makes the two read
           as one composition rather than a photo with a caption. */}
-      <motion.p
-        variants={heroItem}
-        className="relative z-10 max-w-[14ch] font-heading text-[clamp(2rem,5vw,4rem)] leading-[0.95] font-bold tracking-tight text-balance text-foreground uppercase lg:col-span-2 lg:col-start-1 lg:row-start-3 lg:max-w-[14ch]"
+      <p
+        style={step(1)}
+        className="hero-in relative z-10 max-w-[14ch] font-heading text-[clamp(2rem,5vw,4rem)] leading-[0.95] font-bold tracking-tight text-balance text-foreground uppercase lg:col-span-2 lg:col-start-1 lg:row-start-3 lg:max-w-[14ch]"
       >
         {site.positioning}
-      </motion.p>
+      </p>
 
       {/* Portrait. Absolute at lg only, so at mobile widths it sits in flow
           here in the reading order instead of overlapping the text stack. */}
       <HeroPortrait />
 
       {/* Current roles */}
-      <motion.div variants={heroItem} className="relative z-10 lg:col-start-3 lg:row-start-1">
+      <div style={step(2)} className="hero-in relative z-10 lg:col-start-3 lg:row-start-1">
         <p id="hero-currently" className={LABEL}>Currently</p>
         <ul aria-labelledby="hero-currently" className="mt-3 space-y-1.5">
           {currentRoles.map((role) => (
@@ -89,10 +87,10 @@ export function Hero() {
           ))}
         </ul>
         <p className="mt-3 font-mono text-xs text-muted-foreground">{site.location}</p>
-      </motion.div>
+      </div>
 
       {/* Capabilities */}
-      <motion.div variants={heroItem} className="relative z-10 lg:col-start-4 lg:row-start-1">
+      <div style={step(3)} className="hero-in relative z-10 lg:col-start-4 lg:row-start-1">
         <p className={LABEL}>Capabilities</p>
         <ul className="mt-3 space-y-1.5">
           {site.capabilities.map((capability) => (
@@ -101,7 +99,7 @@ export function Hero() {
             </li>
           ))}
         </ul>
-      </motion.div>
+      </div>
 
       {/* Footer band: availability left, proof right. A recruiter who reads
           nothing else should still leave with a number.
@@ -109,9 +107,9 @@ export function Hero() {
           Confined to the left two columns at lg. The portrait is absolutely
           positioned over the right half at that breakpoint, and these numbers
           set over the subject's arms are unreadable in both themes. */}
-      <motion.div
-        variants={heroItem}
-        className="relative z-10 flex flex-col gap-5 lg:col-span-2 lg:col-start-1 lg:row-start-4"
+      <div
+        style={step(4)}
+        className="hero-in relative z-10 flex flex-col gap-5 lg:col-span-2 lg:col-start-1 lg:row-start-4"
       >
         <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
           {site.availability}
@@ -120,20 +118,17 @@ export function Hero() {
         <ul className="flex flex-wrap gap-x-8 gap-y-4">
           {site.proof.map((point) => (
             <li key={point.label} className="max-w-[12rem] flex-1">
-              {/* tabular-nums on the parent keeps the digits from jittering
-                  while the value counts up. */}
               <p className="font-mono text-xl font-medium text-accent tabular-nums">
-                <CountUp value={point.value} />
+                {point.value}
               </p>
               <p className="mt-1 text-[0.8125rem] leading-snug text-muted-foreground">{point.label}</p>
             </li>
           ))}
         </ul>
-      </motion.div>
+      </div>
 
       {/* Actions */}
-      <motion.div
-        variants={heroItem}
+      <div
         className="relative z-10 flex flex-wrap items-center gap-3 lg:col-span-2 lg:col-start-1 lg:row-start-5"
       >
         <Button asChild size="lg">
@@ -157,7 +152,7 @@ export function Hero() {
             </Button>
           )
         })}
-      </motion.div>
-    </motion.section>
+      </div>
+    </section>
   )
 }
