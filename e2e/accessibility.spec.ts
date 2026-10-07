@@ -73,6 +73,15 @@ function midRiseCount(samples: string[]): number {
 }
 
 async function sampleRevealEntrance(page: Page) {
+  // Sections hydrate in their own Suspense boundaries, after load. Reveal
+  // leaves an element that is already on screen at hydration visible, so
+  // scrolling before Work has hydrated would skip the entrance entirely.
+  // React tags hydrated DOM nodes with a __reactFiber key; the rAF lets the
+  // passive effect that arms the reveal run.
+  await page.waitForFunction(() =>
+    Object.keys(document.querySelector('#work h2') ?? {}).some((k) => k.startsWith('__reactFiber')),
+  )
+  await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))))
   return page.locator('#work h2').evaluate(async (heading) => {
     const wrapper = heading.parentElement as HTMLElement
     const samples: string[] = []

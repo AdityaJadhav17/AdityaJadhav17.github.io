@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { LazyMotion, MotionConfig, domAnimation } from 'motion/react'
 import { SkipLink } from '@/components/layout/SkipLink'
 import { Navbar } from '@/components/layout/Navbar'
@@ -28,12 +29,22 @@ export default function App() {
       <LazyMotion features={domAnimation} strict>
         <SkipLink />
         <Navbar sectionIds={SECTION_IDS} />
+        {/* Each Suspense boundary is its own hydration unit, so React can yield
+            between sections instead of hydrating the page in one long task. */}
         <main id="main">
           <Hero />
-          <Work />
-          <Experience />
-          <About />
-          <Contact />
+          <Suspense fallback={null}>
+            <Work />
+          </Suspense>
+          <Suspense fallback={null}>
+            <Experience />
+          </Suspense>
+          <Suspense fallback={null}>
+            <About />
+          </Suspense>
+          <Suspense fallback={null}>
+            <Contact />
+          </Suspense>
         </main>
         <Footer />
       </LazyMotion>
