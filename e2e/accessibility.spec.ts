@@ -145,7 +145,10 @@ test.describe('keyboard traversal never hides focus under the sticky navbar', ()
   // describe block above for why this goes through `contextOptions`.)
   test.use({ contextOptions: { reducedMotion: 'reduce' } })
 
-  test('every focused element clears the sticky navbar, and the skip link is first', async ({ page }) => {
+  test('every focused element clears the sticky navbar, and the skip link is first', async ({ page }, testInfo) => {
+    // WebKit's Tab skips links unless Safari's "Press Tab to highlight each
+    // item" is on, and a phone has no Tab key. Desktop Chromium covers this.
+    test.skip(testInfo.project.name === 'iphone', 'no Tab-key traversal on iPhone')
     await page.goto('/')
 
     const navbar = page.locator('header').first()

@@ -27,6 +27,12 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    {
+      // WebKit is Safari's engine; the device preset adds the iPhone viewport,
+      // touch, and mobile user agent. Closest stand-in for a real iPhone on CI.
+      name: 'iphone',
+      use: { ...devices['iPhone 15'] },
+    },
   ],
   webServer: {
     command: 'npm run build && npm run preview',
