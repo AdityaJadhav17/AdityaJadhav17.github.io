@@ -8,6 +8,7 @@
     "dev": "vite",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "check:bundle": "node scripts/check-bundle.mjs",
     "build": "vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",

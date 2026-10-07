@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { motion, useReducedMotion, useScroll, useSpring } from 'motion/react'
+import { m, useReducedMotion, useScroll, useSpring } from 'motion/react'
 import { experience } from '@/content/experience'
 import { Reveal } from '@/components/motion/Reveal'
 import { TimelineEntry } from '@/components/sections/TimelineEntry'
@@ -53,7 +53,7 @@ export function Experience() {
             aria-hidden="true"
             className="absolute top-2 bottom-2 left-[7px] w-px bg-border"
           />
-          <motion.span
+          <m.span
             aria-hidden="true"
             className="absolute top-2 bottom-2 left-[7px] w-px origin-top bg-accent"
             style={{ scaleY: reduced ? 1 : progress }}

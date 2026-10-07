@@ -1,4 +1,4 @@
-import { motion, useAnimationControls } from 'motion/react'
+import { m, useAnimationControls } from 'motion/react'
 import { useEffect, useRef, type AriaAttributes, type ReactNode } from 'react'
 import { revealContainer, revealItem } from '@/lib/motion'
 
@@ -7,11 +7,11 @@ import { revealContainer, revealItem } from '@/lib/motion'
 // document's semantics into divs: a section stays a section, a list row
 // stays an li.
 const TAGS = {
-  section: motion.section,
-  div: motion.div,
-  ul: motion.ul,
-  ol: motion.ol,
-  li: motion.li,
+  section: m.section,
+  div: m.div,
+  ul: m.ul,
+  ol: m.ol,
+  li: m.li,
 } as const
 
 export type RevealTag = keyof typeof TAGS
