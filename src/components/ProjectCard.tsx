@@ -77,29 +77,28 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
     >
       <div
         className={cn(
-          'shrink-0 border-b border-border',
-          isWide && 'md:w-2/5 md:self-stretch md:border-r md:border-b-0',
+          // The padding and muted ground frame the screenshot as an artefact
+          // instead of a white slab running edge to edge.
+          'shrink-0 border-b border-border bg-muted p-3',
+          isWide && 'md:flex md:w-2/5 md:items-center md:border-r md:border-b-0',
         )}
       >
         {project.image ? (
           <img
             src={project.image.src}
+            srcSet={project.image.srcSet}
+            sizes={isWide ? '(min-width: 768px) 40vw, 100vw' : '(min-width: 640px) 50vw, 100vw'}
             alt={project.image.alt}
             width={project.image.width}
             height={project.image.height}
             loading="lazy"
             className={cn(
-              'w-full object-cover',
-              // In the wide layout the poster fills its column's full height,
-              // so the card is sized by its text rather than by the image.
-              // Anchored top-left rather than centre: these are screenshots of
-              // real interfaces, and the top-left is where the heading and the
-              // first rows live, so the crop stays readable and looks like a
-              // deliberate product detail. A centred crop lands on an
-              // arbitrary middle slice, and object-contain shrinks the whole
-              // screenshot to an unreadable thumbnail floating in dead space.
-              // Both were tried in the browser before settling here.
-              isWide ? 'aspect-video object-left-top md:aspect-auto md:h-full' : 'aspect-video',
+              // Every image is pre-cropped to its slot (16:10 wide, 2:1 in the
+              // grid), so object-cover only absorbs rounding. The dark filter
+              // keeps light screenshots and the chart from glaring on the
+              // dark ground.
+              'w-full rounded-md object-cover ring-1 ring-border dark:brightness-[.85] dark:contrast-[.95]',
+              isWide ? 'aspect-[16/10]' : 'aspect-[2/1]',
             )}
           />
         ) : (

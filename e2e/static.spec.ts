@@ -35,8 +35,7 @@ for (const viewport of [
     await page.waitForFunction(() => [...document.images].every((i) => i.complete))
     const oversized = await page.evaluate(() =>
       [...document.images]
-        // Phase B (B6) removes this exemption
-        .filter((i) => i.clientWidth > 0 && !i.closest('#work'))
+        .filter((i) => i.clientWidth > 0)
         .filter((i) => i.naturalWidth > i.clientWidth * 2 + 1)
         .map((i) => `${i.currentSrc} natural ${i.naturalWidth} shown ${i.clientWidth}`),
     )
