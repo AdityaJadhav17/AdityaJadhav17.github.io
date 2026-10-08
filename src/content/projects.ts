@@ -25,6 +25,9 @@ export type Project = {
     alt: string
     srcSet?: string
     tone: 'light' | 'dark'
+    // The owner's own dark-theme capture of the same app, cropped to the same slot.
+    // When set, each theme shows (and downloads) only its own file.
+    dark?: { src: string; srcSet?: string; alt: string }
   }
   // The only chart is the Talk-to-Robot tier chart, drawn from tokens by TierChart instead of an <img>.
   chart?: { alt: string }
@@ -109,6 +112,12 @@ export const projects: Project[] = [
       height: 575,
       alt: "Stockroom's History page: a read-only log of purchase request events, each with its time, action, request, item, quantity, stock change and actor",
       tone: 'light',
+      dark: {
+        src: '/stockroom-dark-799.webp',
+        srcSet:
+          '/stockroom-dark-480.webp 480w, /stockroom-dark-640.webp 640w, /stockroom-dark-680.webp 680w, /stockroom-dark-799.webp 799w',
+        alt: "Stockroom's Dashboard in dark mode: three counts for requests to review, approved deliveries and low stock, above a table of pending purchase requests",
+      },
     },
     featured: true,
   },
@@ -192,6 +201,12 @@ export const projects: Project[] = [
       height: 420,
       alt: "Personal Tracker's Home view: today's date, one overdue item first, then the coming days with course tags",
       tone: 'light',
+      dark: {
+        src: '/personal-tracker-dark-840.webp',
+        srcSet:
+          '/personal-tracker-dark-480.webp 480w, /personal-tracker-dark-640.webp 640w, /personal-tracker-dark-840.webp 840w',
+        alt: "Personal Tracker's Home view in dark mode: today's date, one overdue item first, then the coming days with course tags",
+      },
     },
     featured: false,
   },

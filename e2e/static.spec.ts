@@ -43,7 +43,7 @@ for (const viewport of [
         await new Promise((r) => setTimeout(r, 50))
       }
     })
-    await page.waitForFunction(() => [...document.images].every((i) => i.complete))
+    await page.waitForFunction(() => [...document.images].filter((i) => i.clientWidth > 0).every((i) => i.complete))
     const oversized = await page.evaluate(() =>
       [...document.images]
         .filter((i) => i.clientWidth > 0)
