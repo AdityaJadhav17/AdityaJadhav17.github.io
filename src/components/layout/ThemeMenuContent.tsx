@@ -19,12 +19,15 @@ export function ThemeMenuContent({
   id,
   labelledBy,
   value,
+  startAtLast,
   onSelect,
   onClose,
 }: {
   id: string
   labelledBy: string
   value: Theme
+  /** Open on the last item (ArrowUp on the trigger) instead of the active one. */
+  startAtLast: boolean
   onSelect: (theme: Theme) => void
   /** `restoreFocus` is false when the user clicked elsewhere on purpose. */
   onClose: (restoreFocus: boolean) => void
@@ -32,11 +35,12 @@ export function ThemeMenuContent({
   const menuRef = useRef<HTMLDivElement>(null)
   const items = () => Array.from(menuRef.current?.querySelectorAll<HTMLElement>('[role="menuitemradio"]') ?? [])
 
-  // Focus the active choice on open. Close on Escape from anywhere (Safari
+  // Focus the active choice (or the last item) on open. Close on Escape from anywhere (Safari
   // does not focus a button on click, so focus may not be in the menu yet) and
   // on any press outside the trigger-and-menu wrapper (the trigger toggles).
   useEffect(() => {
-    items().find((el) => el.getAttribute('aria-checked') === 'true')?.focus()
+    const list = items()
+    ;(startAtLast ? list.at(-1) : list.find((el) => el.getAttribute('aria-checked') === 'true'))?.focus()
     const wrapper = menuRef.current?.parentElement
     const away = (event: PointerEvent) => {
       if (!wrapper?.contains(event.target as Node)) onClose(false)

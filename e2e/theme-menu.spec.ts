@@ -64,6 +64,23 @@ test('keyboard: Enter opens, ArrowDown and Enter select, focus returns', async (
   await expect(trigger(page)).toBeFocused()
 })
 
+test('keyboard: ArrowUp opens on the last item; arrows on an open trigger jump to the ends', async ({ page }, ti) => {
+  test.skip(ti.project.name === 'iphone', 'no hardware keyboard')
+  await page.addInitScript(() => localStorage.setItem('theme', 'light'))
+  await page.goto('/')
+  await expect(trigger(page)).toHaveAccessibleName(/^Theme: Light/)
+  await trigger(page).focus()
+  await page.keyboard.press('ArrowUp')
+  await expect(item(page, 'System')).toBeFocused() // not the checked Light
+  await expect(trigger(page)).toHaveAttribute('aria-controls', /.+/)
+  await trigger(page).focus()
+  await page.keyboard.press('ArrowDown')
+  await expect(item(page, 'Light')).toBeFocused()
+  await trigger(page).focus()
+  await page.keyboard.press('ArrowUp')
+  await expect(item(page, 'System')).toBeFocused()
+})
+
 // Hold the app bundle back so only the inline pre-paint script and the CSS
 // have run: the icon must already be right, not swapped in by an effect.
 for (const [stored, shown, hidden] of [['dark', 'moon', 'sun'], ['light', 'sun', 'moon']] as const) {

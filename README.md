@@ -71,6 +71,8 @@ Open `http://localhost:5173`.
   renders the app to a string and injects it, plus the head tags from `src/lib/head.ts`
   (title, description, Open Graph, JSON-LD, all generated from `src/content`), into
   `dist/index.html`. Do not hand-write meta tags in `index.html`.
+- **Generated assets**: `public/favicon.svg` and `public/404.html` are generated from
+  `src/styles/theme.css` by `scripts/palette.mjs` (runs on `predev` and `prebuild`) and are gitignored.
 - **Reveal**: `src/components/motion/Reveal.tsx` wraps below-the-fold sections. The server and
   first client render are fully visible. Only after JS attaches an `IntersectionObserver` does
   it hide content that is still below the fold, then fade it in on scroll. With no JS or no

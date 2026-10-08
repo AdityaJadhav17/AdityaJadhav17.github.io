@@ -102,6 +102,14 @@ describe('accent discipline', () => {
     expect(users.sort()).toEqual(METRIC_FILES.slice().sort())
   })
 
+  it('accent-signal is never a text colour', () => {
+    // Signal is for non-text marks (bars, rings, borders); it only clears 3:1.
+    const users = src
+      .filter((f) => f.endsWith('.tsx') && /text-accent-signal/.test(readFileSync(f, 'utf8')))
+      .map(rel)
+    expect(users).toEqual([])
+  })
+
   it('no palette hex outside theme.css', () => {
     const hex = /#[0-9a-fA-F]{3,8}\b/
     // favicon.svg and 404.html are generated into public/ from the tokens (gitignored).
