@@ -85,7 +85,7 @@ export function About() {
                 <p className="mt-3 text-sm text-foreground">
                   {site.education.degree}, {site.education.institution}
                 </p>
-                <p className="font-mono text-xs text-muted-foreground">{site.education.status}</p>
+                <p className="text-xs text-muted-foreground">{site.education.status}</p>
               </div>
             </Reveal.Item>
 
@@ -113,7 +113,7 @@ export function About() {
                       </div>
                       <div className="min-w-0">
                         <p className="text-sm leading-snug text-foreground">{cert.title}</p>
-                        <p className="font-mono text-xs text-muted-foreground">
+                        <p className="text-xs text-muted-foreground tabular-nums">
                           {cert.issuer} · {cert.year} ·{' '}
                           <a
                             href={cert.verify}

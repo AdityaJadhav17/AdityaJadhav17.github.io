@@ -18,7 +18,7 @@ type ProjectCardProps = {
 }
 
 // One shape for every project card. Collapsed it is poster, title, context,
-// one outcome line (the metric in mono), five stack tags, links; the Problem
+// one outcome line (the metric in accent ink), five stack tags, links; the Problem
 // -> What I built -> Stack -> Result story sits in a <details> below.
 // `result` is optional and the card reads as complete without it;
 // `project.image` is optional (watchtower, talk-to-robot) and falls back to
@@ -152,7 +152,7 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
 
         <p className="text-base text-card-foreground">
           {before}
-          {metric && <span className="font-mono font-medium text-accent-ink">{metric}</span>}
+          {metric && <span className="font-semibold text-accent-ink tabular-nums">{metric}</span>}
           {after}
         </p>
 

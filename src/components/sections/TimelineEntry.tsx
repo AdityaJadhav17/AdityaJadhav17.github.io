@@ -43,7 +43,7 @@ export function TimelineEntry({ entry, index, total, progress, reduced }: Timeli
       <div className="flex-1 pb-2">
         <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
           <h3 className="font-heading text-lg font-semibold text-foreground">{entry.role}</h3>
-          <span className="font-mono text-xs whitespace-nowrap text-muted-foreground">
+          <span className="text-xs whitespace-nowrap text-muted-foreground tabular-nums">
             {entry.start} – {entry.end}
           </span>
         </div>
@@ -51,7 +51,7 @@ export function TimelineEntry({ entry, index, total, progress, reduced }: Timeli
           {entry.organization}
           {entry.location ? ` · ${entry.location}` : ''}
         </p>
-        <ul className="mt-3 list-disc space-y-1.5 pl-5 text-[0.9375rem] text-foreground">
+        <ul className="mt-3 max-w-[70ch] list-disc space-y-1.5 pl-5 text-[0.9375rem] text-foreground">
           {entry.highlights.map((highlight) => (
             <li key={highlight}>{highlight}</li>
           ))}

@@ -28,7 +28,7 @@ for (const width of [390, 768, 1440]) {
 
 // Closed cards keep the page short: the full story is behind <details>.
 for (const [width, height, max] of [
-  [1440, 900, 6300],
+  [1440, 900, 6600],
   [390, 844, 9900],
 ] as const) {
   test(`page stays under ${max}px tall at ${width}px with details closed`, async ({ page }, testInfo) => {

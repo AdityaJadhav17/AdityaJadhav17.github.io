@@ -102,7 +102,7 @@
 @theme {
   --font-heading: "Archivo Variable", "Archivo Fallback", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Archivo Variable", "Archivo Fallback", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono Variable", "JetBrains Mono Fallback", ui-monospace, SFMono-Regular, monospace;
+  --font-mono: "JetBrains Mono", "JetBrains Mono Fallback", ui-monospace, SFMono-Regular, monospace;
 
   --color-background: #FAFAF9;
   --color-foreground: #0C0A09;

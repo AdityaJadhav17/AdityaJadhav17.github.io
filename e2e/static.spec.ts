@@ -58,7 +58,11 @@ test('fonts are self-hosted and load', async ({ page, browserName }) => {
   const stacks = await page.evaluate(() => [
     getComputedStyle(document.querySelector('h1')!).fontFamily,
     getComputedStyle(document.querySelector('#about p')!).fontFamily,
+    getComputedStyle(document.querySelector('#home ul li p')!).fontFamily, // hero stat value
+    getComputedStyle(document.querySelector('#about ul li')!).fontFamily, // skill tag
   ])
   expect(stacks[0]).toContain('Archivo Variable')
   expect(stacks[1]).toContain('Archivo Variable')
+  expect(stacks[2]).toContain('Archivo Variable')
+  expect(stacks[3]).toContain('JetBrains Mono')
 })

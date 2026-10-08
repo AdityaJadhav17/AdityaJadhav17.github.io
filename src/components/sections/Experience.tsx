@@ -7,7 +7,7 @@ import { TimelineEntry } from '@/components/sections/TimelineEntry'
 // Vertical timeline, newest first (order comes from src/content/experience.ts,
 // which also carries a code comment noting the UC San Diego entry's
 // highlights are scope-derived pending real accomplishments; not repeated
-// or altered here). Dates render in font-mono per MASTER.md's typography rule.
+// or altered here). Dates render in tabular Archivo; mono is for stack tags only.
 //
 // The connector was previously a per-entry segment inside each row. It is now
 // one continuous track down the whole list, with an accent line drawn over it
