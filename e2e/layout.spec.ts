@@ -275,3 +275,12 @@ test('loading #project-<id> opens that card', async ({ page }, testInfo) => {
   await expect(page.locator('#project-sim2real details')).toHaveAttribute('open', '')
   await expect(page.locator('#project-watchtower details')).not.toHaveAttribute('open', '')
 })
+
+// Only project cards open on a hash; section and skip-link targets do not.
+for (const hash of ['work', 'main']) {
+  test(`loading #${hash} leaves every card closed`, async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
+    await page.goto(`/#${hash}`)
+    await expect(page.locator('#work details[open]')).toHaveCount(0)
+  })
+}
