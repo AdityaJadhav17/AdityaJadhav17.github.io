@@ -12,7 +12,7 @@ import { Menu } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import type { MobileSheet } from '@/components/layout/MobileSheet'
-import { ThemeToggle } from '@/components/layout/ThemeToggle'
+import { ThemeMenu } from '@/components/layout/ThemeMenu'
 import { useActiveSection } from '@/hooks/useActiveSection'
 
 const NAV = [
@@ -209,7 +209,7 @@ export function Navbar({ sectionIds }: NavbarProps) {
         </nav>
 
         <div className="flex items-center gap-2">
-          <ThemeToggle />
+          <ThemeMenu />
 
           <Button
             ref={triggerRef}

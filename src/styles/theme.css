@@ -262,6 +262,22 @@
     }
   }
 
+  /* Theme menu (ThemeMenuContent): scales in from the trigger corner, 150 ms,
+     strong ease-out. Entrance only; it unmounts on close, which is instant.
+     Reduced motion: opacity only. */
+  @keyframes theme-menu-in {
+    from { opacity: 0; transform: scale(0.96); }
+  }
+  .theme-menu {
+    transform-origin: top right;
+    animation: theme-menu-in 150ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    @keyframes theme-menu-in {
+      from { opacity: 0; }
+    }
+  }
+
   /* Decorative dot grid behind the Contact section. Declared here rather than
      inline because the dot colour has to resolve from a token, and theme.css
      is the only place colour is allowed to be resolved. Masked radially so it

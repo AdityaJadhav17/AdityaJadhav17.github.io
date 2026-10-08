@@ -210,14 +210,16 @@ test.describe('keyboard traversal never hides focus under the sticky navbar', ()
   })
 })
 
-test.describe('theme toggle', () => {
-  test('cycles to dark, persists across reload, and cycles back to system', async ({ page }) => {
+test.describe('theme menu', () => {
+  test('picks dark, persists across reload, and picks system again', async ({ page }) => {
     await page.goto('/')
 
     // Fresh storage means the system state; the headless default scheme is light.
     const html = page.locator('html')
-    await page.getByRole('button', { name: /switch to light theme/i }).click()
-    await page.getByRole('button', { name: /switch to dark theme/i }).click()
+    const trigger = page.getByRole('button', { name: /^theme/i })
+    await expect(trigger).toHaveAccessibleName('Theme: System (light)')
+    await trigger.click()
+    await page.getByRole('menuitemradio', { name: 'Dark' }).click()
 
     await expect(html).toHaveClass(/dark/)
     const darkBg = await page.locator('body').evaluate((el) => getComputedStyle(el).backgroundColor)
@@ -228,9 +230,10 @@ test.describe('theme toggle', () => {
     const darkBgAfterReload = await page.locator('body').evaluate((el) => getComputedStyle(el).backgroundColor)
     expect(darkBgAfterReload).toBe('rgb(12, 10, 9)')
 
-    await page.getByRole('button', { name: /switch to system theme/i }).click()
+    await trigger.click()
+    await page.getByRole('menuitemradio', { name: 'System' }).click()
     await expect(html).not.toHaveClass(/dark/)
-    await expect(page.getByRole('button', { name: /switch to light theme/i })).toBeVisible()
+    await expect(trigger).toHaveAccessibleName('Theme: System (light)')
   })
 })
 

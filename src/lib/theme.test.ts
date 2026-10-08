@@ -27,6 +27,20 @@ describe('theme', () => {
     expect(document.documentElement.classList.contains('dark')).toBe(false)
   })
 
+  it('keeps data-theme-pref in sync with the choice', () => {
+    setTheme('system')
+    expect(document.documentElement.dataset.themePref).toBe('system')
+    setTheme('dark')
+    expect(document.documentElement.dataset.themePref).toBe('dark')
+  })
+
+  it('keeps data-theme-pref in sync with the choice', () => {
+    setTheme('system')
+    expect(document.documentElement.dataset.themePref).toBe('system')
+    setTheme('dark')
+    expect(document.documentElement.dataset.themePref).toBe('dark')
+  })
+
   it('resolves system using the media query', () => {
     expect(['light', 'dark']).toContain(resolveTheme('system'))
   })
