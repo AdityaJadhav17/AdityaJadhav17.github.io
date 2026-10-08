@@ -17,8 +17,17 @@ export type Project = {
   links: { github?: string; demo?: string; live?: string; paper?: string }
   // `src` is the largest variant and the fallback; `srcSet` lists the cropped
   // WebP widths (480, 640 where the crop is wider, plus the largest the crop supports). width/height are the
-  // intrinsic size of `src`.
-  image?: { src: string; width: number; height: number; alt: string; srcSet?: string }
+  // intrinsic size of `src`. `tone` is the screenshot's own ground: only 'light' ones are dimmed in dark theme.
+  image?: {
+    src: string
+    width: number
+    height: number
+    alt: string
+    srcSet?: string
+    tone: 'light' | 'dark'
+  }
+  // The only chart is the Talk-to-Robot tier chart, drawn from tokens by TierChart instead of an <img>.
+  chart?: { alt: string }
   featured: boolean
   context?: string
 }
@@ -41,6 +50,7 @@ export const projects: Project[] = [
       width: 656,
       height: 410,
       alt: "WatchTower's triage queue showing live captured JavaScript errors with severity, version, and assignment",
+      tone: 'dark',
     },
     links: {
       github: 'https://github.com/cse110-sp26-group09/Watchtower-Course-Project',
@@ -67,11 +77,12 @@ export const projects: Project[] = [
       demo: 'https://youtu.be/T0EkJ9J_IQU',
     },
     image: {
-      src: '/travel-agntcy-947.webp',
-      srcSet: '/travel-agntcy-480.webp 480w, /travel-agntcy-640.webp 640w, /travel-agntcy-947.webp 947w',
-      width: 947,
-      height: 592,
-      alt: 'TravelAGNTCY running: an agent chat panel beside ranked flight options with airline, price, and layover detail',
+      src: '/travel-agntcy-640.webp',
+      srcSet: '/travel-agntcy-480.webp 480w, /travel-agntcy-640.webp 640w',
+      width: 640,
+      height: 400,
+      alt: 'TravelAGNTCY running: ranked one-way flight options, each with airline, price, stops, and departure and arrival times',
+      tone: 'dark',
     },
     featured: true,
     context: 'SANDHacks 2026',
@@ -93,10 +104,11 @@ export const projects: Project[] = [
     },
     image: {
       src: '/stockroom-920.webp',
-      srcSet: '/stockroom-480.webp 480w, /stockroom-640.webp 640w, /stockroom-920.webp 920w',
+      srcSet: '/stockroom-480.webp 480w, /stockroom-640.webp 640w, /stockroom-680.webp 680w, /stockroom-920.webp 920w',
       width: 920,
       height: 575,
       alt: "Stockroom's History page: a read-only log of purchase request events, each with its time, action, request, item, quantity, stock change and actor",
+      tone: 'light',
     },
     featured: true,
   },
@@ -119,10 +131,7 @@ export const projects: Project[] = [
     // paper itself calls misleading. Do not quote it as the headline result.
     result:
       'End-to-end success falls from 98% on literal coordinates to 50% on functional intent, while policy success held between 93 and 100%, which places the failures in grounding rather than control. Each tier fails differently rather than degrading smoothly: relative offsets land goals off the table, where a plain regex beat the LLM 85% to 77%; reference objects are off by a consistent 6 cm bias that controller retraining can absorb; and functional intent is not a coordinate problem at all, since annotators disagreed with each other about as much as the model did.',
-    image: {
-      src: '/talk-to-robot.svg',
-      width: 480,
-      height: 240,
+    chart: {
       alt: 'Bar chart of end-to-end success by instruction tier: 98.3% on literal coordinates, 93.3% on named regions, 76.7% on relative offsets, 73.3% on reference objects, and 50% on functional intent',
     },
     links: {
@@ -157,6 +166,7 @@ export const projects: Project[] = [
       width: 560,
       height: 280,
       alt: 'Two photos of a Cheerios box side by side, labelled Real and Synthetic, each with a detection box and a 0.99 confidence score',
+      tone: 'light',
     },
     featured: false,
     context: 'Kaggle competition',
@@ -181,6 +191,7 @@ export const projects: Project[] = [
       width: 840,
       height: 420,
       alt: "Personal Tracker's Home view: today's date, one overdue item first, then the coming days with course tags",
+      tone: 'light',
     },
     featured: false,
   },
@@ -200,11 +211,11 @@ export const projects: Project[] = [
     result:
       '96.7% validation accuracy from a fine-tuned ResNet18, with preprocessing and class balancing over a 1,200+ image dataset improving generalization by 18%.',
     image: {
-      src: '/bird-classifier-512.webp',
-      srcSet: '/bird-classifier-480.webp 480w, /bird-classifier-512.webp 512w',
-      width: 512,
-      height: 256,
+      src: '/bird-classifier-400.webp',
+      width: 400,
+      height: 200,
       alt: 'A common kingfisher perched on a branch against a blurred green background, one of the test images used to evaluate the classifier',
+      tone: 'light',
     },
     links: {
       github: 'https://github.com/AdityaJadhav17/bird-classifier-forest',

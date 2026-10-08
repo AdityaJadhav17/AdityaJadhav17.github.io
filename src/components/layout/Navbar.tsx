@@ -12,7 +12,7 @@ import { Menu } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import type { MobileSheet } from '@/components/layout/MobileSheet'
-import { ThemeToggle } from '@/components/layout/ThemeToggle'
+import { ThemeMenu } from '@/components/layout/ThemeMenu'
 import { useActiveSection } from '@/hooks/useActiveSection'
 
 const NAV = [
@@ -47,7 +47,7 @@ const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(function NavLink(
       className={cn(
         // Nav is Archivo per MASTER.md's "Heading Font: ... nav" entry.
         'relative font-heading text-sm font-medium transition-colors',
-        active ? 'text-accent hover:text-accent' : 'text-muted-foreground hover:text-foreground',
+        active ? 'text-foreground' : 'text-muted-foreground hover:text-foreground',
         variant === 'mobile' && 'rounded-md px-3 py-2 hover:bg-muted pointer-coarse:py-3',
         className,
       )}
@@ -55,12 +55,12 @@ const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(function NavLink(
     >
       {label}
       {/* Static underline that fades with the active state. LazyMotion's
-          domAnimation has no layout animations, so the old layoutId glide
+          domMin has no layout animations, so the old layoutId glide
           between items is gone; opacity is the whole effect now. */}
       <span
         aria-hidden="true"
         className={cn(
-          'absolute inset-x-0 -bottom-1.5 h-px bg-accent transition-opacity',
+          'absolute inset-x-0 -bottom-1.5 h-px bg-foreground transition-opacity',
           active ? 'opacity-100' : 'opacity-0',
         )}
       />
@@ -209,7 +209,7 @@ export function Navbar({ sectionIds }: NavbarProps) {
         </nav>
 
         <div className="flex items-center gap-2">
-          <ThemeToggle />
+          <ThemeMenu />
 
           <Button
             ref={triggerRef}

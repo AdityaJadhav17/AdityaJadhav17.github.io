@@ -60,5 +60,9 @@ karpathy-report.json
 # and unpublished drafts; only the rendered PDF in public/ is versioned.
 resume/
 
+# Generated from src/styles/theme.css by scripts/palette.mjs
+/public/favicon.svg
+/public/404.html
+
 # Visual regression baselines are per-OS; generated locally by the first run
 e2e/*-snapshots/

@@ -1,8 +1,9 @@
-import type { CSSProperties } from 'react'
+import type { CSSProperties, MouseEvent } from 'react'
 import { Download, ExternalLink } from 'lucide-react'
 import { FaGithub, FaLinkedin } from 'react-icons/fa'
 import { HeroPortrait } from '@/components/sections/HeroPortrait'
 import { Button } from '@/components/ui/button'
+import { openHashTarget } from '@/lib/hash'
 import { currentRoles, site } from '@/content/site'
 
 // lucide-react ships no brand/logo marks (Github/Linkedin/Youtube all
@@ -19,6 +20,11 @@ const SOCIAL_ICONS: Record<string, typeof FaGithub> = {
 // Hero entrance step: the .hero-in CSS class staggers by --i (theme.css).
 const step = (i: number) => ({ '--i': i }) as CSSProperties
 
+// A proof link opens the project's <details> as well as scrolling to it (the
+// hash itself does the scroll, and still works with JS off).
+const openDetails = (e: MouseEvent<HTMLAnchorElement>) =>
+  openHashTarget(e.currentTarget.getAttribute('href')!)
+
 // Hero: a multi-column editorial composition rather than a centred stack.
 //
 // One CSS grid drives both layouts. The DOM order below is the mobile
@@ -26,8 +32,8 @@ const step = (i: number) => ({ '--i': i }) as CSSProperties
 // supporting metadata. That puts the claim and the primary CTA in the first
 // phone screen instead of under a tall portrait. At `lg` the same children
 // are placed explicitly by row and column: metadata across the top, the claim
-// directly under it, availability and actions beneath the claim, proof pinned
-// to the bottom, portrait absolutely positioned behind the right half.
+// directly under it, availability and actions beneath the claim, proof under
+// the actions, portrait absolutely positioned behind the right half.
 //
 // Height: the design brief says never `100vh`, which excludes mobile browser
 // chrome and causes a jump on load. It is `calc(100dvh-4rem-1px)` rather than
@@ -46,7 +52,7 @@ export function Hero() {
       className="container-site relative grid min-h-[calc(100dvh-4rem-1px)] grid-cols-1 content-start gap-y-6 overflow-hidden pt-8 pb-16 lg:grid-cols-4 lg:content-stretch lg:gap-x-8 lg:grid-rows-[auto_auto_auto_auto_1fr] lg:gap-y-0 lg:py-12"
     >
       {/* Identity */}
-      <div style={step(0)} className="hero-in relative z-10 lg:col-start-1 lg:row-start-1">
+      <div style={step(0)} className="hero-in relative z-10 lg:col-span-2 lg:col-start-1 lg:row-start-1">
         <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground lg:text-4xl">
           {site.name}
         </h1>
@@ -61,7 +67,7 @@ export function Hero() {
           as one composition rather than a photo with a caption. */}
       <p
         style={step(1)}
-        className="hero-in relative z-10 max-w-[14ch] font-heading text-[clamp(2rem,5vw,4rem)] leading-[0.95] font-bold tracking-tight text-balance text-foreground uppercase lg:col-span-2 lg:col-start-1 lg:row-start-2 lg:mt-16 lg:max-w-[14ch]"
+        className="hero-in relative z-10 max-w-[14ch] font-heading text-[clamp(2rem,5vw,4rem)] lg:text-[clamp(3.5rem,5.2vw,5rem)] leading-[0.95] font-bold tracking-tight text-balance text-foreground uppercase lg:col-span-2 lg:col-start-1 lg:row-start-2 lg:mt-8 lg:max-w-[14ch]"
       >
         {site.positioning}
       </p>
@@ -107,7 +113,10 @@ export function Hero() {
       <HeroPortrait />
 
       {/* Current roles */}
-      <div style={step(3)} className="hero-in relative z-10 lg:col-start-3 lg:row-start-1">
+      {/* The two metadata columns span the identity and claim rows and sit
+          at the top of them, so their height no longer sets the identity
+          row's: the claim starts right under the name. */}
+      <div style={step(3)} className="hero-in relative z-10 lg:col-start-3 lg:row-span-2 lg:row-start-1 lg:self-start">
         <p id="hero-currently" className="label">Currently</p>
         <ul aria-labelledby="hero-currently" className="mt-3 space-y-1.5">
           {currentRoles.map((role) => (
@@ -116,11 +125,11 @@ export function Hero() {
             </li>
           ))}
         </ul>
-        <p className="mt-3 font-mono text-xs text-muted-foreground">{site.location}</p>
+        <p className="mt-3 text-xs text-muted-foreground">{site.location}</p>
       </div>
 
       {/* Capabilities */}
-      <div style={step(3)} className="hero-in relative z-10 lg:col-start-4 lg:row-start-1">
+      <div style={step(3)} className="hero-in relative z-10 lg:col-start-4 lg:row-span-2 lg:row-start-1 lg:self-start">
         <p className="label">Capabilities</p>
         <ul className="mt-3 space-y-1.5">
           {site.capabilities.map((capability) => (
@@ -136,14 +145,20 @@ export function Hero() {
           Left two columns at lg, for the same reason as availability. */}
       <ul
         style={step(4)}
-        className="hero-in relative z-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-x-8 sm:gap-y-4 lg:col-span-2 lg:col-start-1 lg:row-start-5 lg:self-end"
+        className="hero-in relative z-10 flex flex-col sm:flex-row sm:flex-wrap sm:gap-x-8 sm:gap-y-4 lg:col-span-2 lg:col-start-1 lg:row-start-5 lg:mt-10 lg:self-start"
       >
         {site.proof.map((point) => (
-          <li key={point.label} className="flex items-baseline gap-4 sm:block sm:max-w-[12rem] sm:flex-1">
-            <p className="w-20 shrink-0 font-mono text-xl font-medium text-accent tabular-nums sm:w-auto">
-              {point.value}
-            </p>
-            <p className="text-[0.8125rem] leading-snug text-muted-foreground sm:mt-1">{point.label}</p>
+          <li key={point.label} className="sm:max-w-[12rem] sm:flex-1">
+            <a
+              href={point.href}
+              onClick={openDetails}
+              className="group flex min-h-11 items-center gap-4 sm:block sm:min-h-0"
+            >
+              <p className="w-20 shrink-0 text-xl font-semibold text-accent-ink tabular-nums underline-offset-4 group-hover:underline group-focus-visible:underline sm:w-auto">
+                {point.value}
+              </p>
+              <p className="text-[0.8125rem] leading-snug text-muted-foreground sm:mt-1">{point.label}</p>
+            </a>
           </li>
         ))}
       </ul>

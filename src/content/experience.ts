@@ -15,6 +15,8 @@
 // still ahead of him, so do not restate them in the past tense anywhere.
 
 export type Experience = {
+  // Anchor suffix: the entry renders as #experience-<id> (hero stats link to it).
+  id: string
   organization: string
   role: string
   start: string
@@ -27,6 +29,7 @@ export const experience: Experience[] = [
   {
     organization: 'UC San Diego (ITS)',
     role: 'IT Security Programmer',
+    id: 'uc-san-diego-its',
     start: 'Dec 2025',
     end: 'Present',
     highlights: [
@@ -39,6 +42,7 @@ export const experience: Experience[] = [
   {
     organization: 'Lumulus Technologies',
     role: 'Software Engineering Intern',
+    id: 'lumulus',
     start: 'Jun 2026',
     end: 'Sep 2026',
     highlights: [
@@ -50,6 +54,7 @@ export const experience: Experience[] = [
   {
     organization: 'NutrifitWorld',
     role: 'Web Development Intern',
+    id: 'nutrifitworld',
     start: 'Jun 2025',
     end: 'Oct 2025',
     highlights: [
@@ -60,6 +65,7 @@ export const experience: Experience[] = [
   {
     organization: 'Irvine Valley College',
     role: 'Founder & President, AI Club',
+    id: 'ai-club',
     start: 'Aug 2024',
     end: 'Jun 2025',
     highlights: [
@@ -71,6 +77,7 @@ export const experience: Experience[] = [
   {
     organization: 'Irvine Valley College',
     role: 'Board Member, Cybersecurity Club',
+    id: 'cybersecurity-club',
     start: 'Aug 2023',
     end: 'Jun 2025',
     highlights: [

@@ -33,15 +33,16 @@ test('the first tap opens the lazy mobile menu even when its chunk is slow', asy
   await expect(page.getByRole('button', { name: 'Open menu' })).toBeFocused()
 })
 
-// Touch smoke test: the lazy menu and the theme toggle respond to a tap.
+// Touch smoke test: the lazy nav menu and the lazy theme menu respond to a tap.
 test.describe('touch', () => {
   test.use({ viewport: { width: 412, height: 823 }, isMobile: true, hasTouch: true })
 
-  test('menu and theme toggle respond to the first tap', async ({ page }, testInfo) => {
+  test('menu and theme menu respond to the first tap', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
     await page.addInitScript(() => localStorage.setItem('theme', 'light'))
     await page.goto('/', { waitUntil: 'load' })
-    await page.getByRole('button', { name: 'Switch to dark theme' }).tap()
+    await page.getByRole('button', { name: 'Theme: Light' }).tap()
+    await page.getByRole('menuitemradio', { name: 'Dark' }).tap()
     await expect(page.locator('html')).toHaveClass(/dark/)
     await page.getByRole('button', { name: 'Open menu' }).tap()
     await expect(page.getByRole('navigation', { name: 'Mobile' })).toBeVisible()

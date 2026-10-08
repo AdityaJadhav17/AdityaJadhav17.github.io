@@ -1,4 +1,4 @@
 @import "tailwindcss";
 @import "@fontsource-variable/archivo";
-@import "@fontsource-variable/jetbrains-mono";
+@import "@fontsource/jetbrains-mono/latin-400.css";
 @import "./styles/theme.css";

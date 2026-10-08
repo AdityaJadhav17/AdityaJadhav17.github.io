@@ -14,7 +14,7 @@ Live at [adityajadhav.dev](https://adityajadhav.dev).
   (Radix primitives) for the accessible building blocks: `Button`, `Input`, `Textarea`,
   `Sheet` (mobile nav), etc.
 - **lucide-react** for UI icons, **react-icons** for brand marks (GitHub/LinkedIn)
-- **Motion** (via `LazyMotion` + `m`, `domAnimation` features only, which keeps layout/drag code out of the bundle) for the scroll reveal; fonts self-hosted via **@fontsource-variable**
+- **Motion** (via `LazyMotion` + `m`, `domMin` features only, which keeps gesture, layout and drag code out of the bundle) for the scroll reveal; fonts self-hosted via **@fontsource-variable** (Archivo) and **@fontsource** (JetBrains Mono, stack tags only)
 - **Vitest** + **Testing Library** for tests
 
 ## Structure
@@ -22,7 +22,7 @@ Live at [adityajadhav.dev](https://adityajadhav.dev).
 ```
 src/
 ├── components/
-│   ├── layout/        # Navbar, Footer, ThemeToggle, SkipLink
+│   ├── layout/        # Navbar, MobileSheet, Footer, ThemeMenu, SkipLink
 │   ├── motion/        # Reveal
 │   ├── sections/      # Hero, Work, Experience, About, Contact
 │   ├── ui/            # shadcn/ui primitives
@@ -71,11 +71,13 @@ Open `http://localhost:5173`.
   renders the app to a string and injects it, plus the head tags from `src/lib/head.ts`
   (title, description, Open Graph, JSON-LD, all generated from `src/content`), into
   `dist/index.html`. Do not hand-write meta tags in `index.html`.
+- **Generated assets**: `public/favicon.svg` and `public/404.html` are generated from
+  `src/styles/theme.css` by `scripts/palette.mjs` (runs on `predev` and `prebuild`) and are gitignored.
 - **Reveal**: `src/components/motion/Reveal.tsx` wraps below-the-fold sections. The server and
   first client render are fully visible. Only after JS attaches an `IntersectionObserver` does
   it hide content that is still below the fold, then fade it in on scroll. With no JS or no
   observer, everything stays visible. Under `prefers-reduced-motion` nothing translates. Motion runs
-  through `LazyMotion` + `m` with `domAnimation` only, which keeps layout/drag code out of the
+  through `LazyMotion` + `m` with `domMin` only, which keeps gesture, layout and drag code out of the
   bundle. The hero entrance is plain CSS.
 - **Theming**: light/dark/system, resolved before first paint (no flash) and persisted to
   `localStorage` (`src/lib/theme.ts`).

@@ -4,6 +4,7 @@
 import { readFileSync, readdirSync, writeFileSync, rmSync } from 'node:fs'
 import { pathToFileURL } from 'node:url'
 import { resolve } from 'node:path'
+import { fill, readTokens } from './tokens.mjs'
 
 const ssr = await import(pathToFileURL(resolve('dist-ssr/entry-server.js')).href)
 const file = resolve('dist/index.html')
@@ -22,7 +23,9 @@ if (!app) throw new Error('prerender: render() returned an empty string')
 // Function replacers: a string replacement would interpret $&, $' and $` in the content.
 writeFileSync(
   file,
-  html.replace('<!--app-head-->', () => preload + ssr.buildHead()).replace('<!--app-html-->', () => app),
+  fill(html, readTokens())
+    .replace('<!--app-head-->', () => preload + ssr.buildHead())
+    .replace('<!--app-html-->', () => app),
 )
 rmSync('dist-ssr', { recursive: true, force: true })
 console.log('prerender: dist/index.html written')

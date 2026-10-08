@@ -23,5 +23,6 @@ export function setTheme(theme: Theme): void {
   } catch {
     // storage unavailable (private mode): apply without persisting
   }
+  document.documentElement.dataset.themePref = theme
   document.documentElement.classList.toggle('dark', resolveTheme(theme) === 'dark')
 }

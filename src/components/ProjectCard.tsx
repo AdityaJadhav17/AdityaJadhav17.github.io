@@ -1,23 +1,22 @@
 import { ChevronDown, ExternalLink, FileText } from 'lucide-react'
 import { FaGithub, FaYoutube } from 'react-icons/fa'
 import type { Project } from '@/content/projects'
+import { TierChart } from '@/components/TierChart'
 import { cn } from '@/lib/utils'
 
 type ProjectCardProps = {
   project: Project
   className?: string
-  // 'stacked' puts the poster above the text, which is right in the narrow
-  // grid. 'wide' puts it alongside, for the full-width featured cards: at
-  // 1024px an aspect-video poster is 576px tall, so a stacked featured card
-  // spent its first screenful on a screenshot rendered too small to read
-  // anything in, and pushed the text that actually sells the project below
-  // the fold. Cropping it to a letterbox would only have made a smaller
-  // unreadable screenshot.
+  // 'stacked' is the grid card: poster above the text, inside a bordered card.
+  // 'wide' is the featured treatment: no card chrome at all, the poster at 45%
+  // of the container width with the text beside it from md up (stacked below).
+  // The hierarchy between featured and grid reads from layout, not from a
+  // heavier border or shadow.
   layout?: 'stacked' | 'wide'
 }
 
 // One shape for every project card. Collapsed it is poster, title, context,
-// one outcome line (the metric in mono), five stack tags, links; the Problem
+// one outcome line (the metric in accent ink), five stack tags, links; the Problem
 // -> What I built -> Stack -> Result story sits in a <details> below.
 // `result` is optional and the card reads as complete without it;
 // `project.image` is optional (watchtower, talk-to-robot) and falls back to
@@ -26,15 +25,16 @@ type ProjectCardProps = {
 const MAX_TAGS = 5
 // `sizes` for the poster, written from measured renders (CSS px at viewport
 // widths 360/390/412/640/768/1024/1280/1440/1920). The container pads 20px
-// (<768), 32px (768+), 48px (1024+) and stops at 1200px; the poster adds
-// 12px padding a side and, in the wide layout, a 1px divider.
-// Wide (md:w-2/5 column from 768): 294/324/346 at 360/390/412, 574 at 640,
-// 256 at 768, 345 at 1024, 416 from 1280 up.
-// Stacked (two columns from 640): 294/324/346 at 360/390/412, 262 at 640,
-// 314 at 768, 426 at 1024, 514 from 1280 up.
+// (<768), 32px (768+), 48px (1024+) and stops at 1200px.
+// Wide (no wrapper padding; 45% of the container from 768, full width below):
+// 320/350/372 at 360/390/412, 600 at 640, 727 at 767, 317 at 768, 418 at 1024,
+// 497 from 1200 up.
+// Stacked (two columns from 640; the poster adds 12px padding a side):
+// 294/324/346 at 360/390/412, 262 at 640, 314 at 768, 426 at 1024, 514 from
+// 1280 up.
 const SIZES = {
   wide:
-    '(min-width: 1200px) 417px, (min-width: 1024px) calc(40vw - 63px), (min-width: 768px) calc(40vw - 51px), calc(100vw - 66px)',
+    '(min-width: 1200px) 497px, (min-width: 1024px) calc(45vw - 43px), (min-width: 768px) calc(45vw - 29px), calc(100vw - 40px)',
   stacked:
     '(min-width: 1200px) 514px, (min-width: 1024px) calc(50vw - 86px), (min-width: 768px) calc(50vw - 70px), (min-width: 640px) calc(50vw - 58px), calc(100vw - 66px)',
 }
@@ -43,10 +43,11 @@ const tagClass =
 // Visible text stays 14px; the pseudo-element grows the hit area to 44px
 // without overlapping its neighbour (gap-4 = 16px, each side adds 8px).
 const linkClass =
-  "relative inline-flex items-center gap-1.5 font-sans text-sm font-medium text-accent transition-colors duration-200 after:absolute after:-inset-x-2 after:-inset-y-3 after:content-[''] hover:text-foreground"
+  "relative inline-flex items-center gap-1.5 font-sans text-sm font-medium text-foreground underline underline-offset-4 transition-colors duration-200 after:absolute after:-inset-x-2 after:-inset-y-3 after:content-[''] hover:decoration-2"
 
 export function ProjectCard({ project, className, layout = 'stacked' }: ProjectCardProps) {
   const isWide = layout === 'wide'
+  const ratio = isWide ? 'aspect-[16/10]' : 'aspect-[2/1]'
   const shownStack = project.stack.slice(0, MAX_TAGS)
   const hiddenCount = project.stack.length - shownStack.length
   const { outcome, metric } = project
@@ -71,6 +72,7 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
 
   return (
     <article
+      id={`project-${project.id}`}
       className={cn(
         // The shadow lift alone is invisible in dark theme: the shadow colour
         // is black at 10%, so on a rgb(9,9,11) ground it darkens an already
@@ -82,22 +84,30 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
         // article is not clickable, only the Code and Live links inside it
         // are, so a strong affordance here would promise something the card
         // does not do.
-        'flex flex-col overflow-hidden rounded-xl border border-border bg-card text-card-foreground shadow-md transition-[box-shadow,border-color] duration-200 hover:border-muted-foreground/40 hover:shadow-lg',
-        // Side by side only from md up. Below that the column is too narrow
-        // to carry both, so every card stacks.
-        isWide && 'md:flex-row',
+        'flex flex-col',
+        // Featured: bare layout, no border, ground or shadow. Side by side
+        // only from md up; below that the column is too narrow, so it stacks.
+        isWide
+          ? 'gap-5 md:flex-row md:items-center md:gap-10'
+          : 'overflow-hidden rounded-xl border border-border bg-card text-card-foreground shadow-md transition-[box-shadow,border-color] duration-200 hover:border-muted-foreground/40 hover:shadow-lg',
         className,
       )}
     >
       <div
         className={cn(
-          // The padding and muted ground frame the screenshot as an artefact
-          // instead of a white slab running edge to edge.
-          'shrink-0 border-b border-border bg-muted p-3',
-          isWide && 'md:flex md:w-2/5 md:items-center md:border-r md:border-b-0',
+          // Grid cards: the padding and muted ground frame the screenshot as
+          // an artefact instead of a white slab running edge to edge.
+          // Featured: the image stands alone at half width.
+          'shrink-0',
+          isWide ? 'md:w-[45%]' : 'border-b border-border bg-muted p-3',
         )}
       >
-        {project.image ? (
+        {project.chart ? (
+          <TierChart
+            alt={project.chart.alt}
+            className={cn('w-full bg-card ring-1 ring-border', isWide ? 'rounded-lg' : 'rounded-md', ratio)}
+          />
+        ) : project.image ? (
           <img
             src={project.image.src}
             srcSet={project.image.srcSet}
@@ -108,11 +118,13 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
             loading="lazy"
             className={cn(
               // Every image is pre-cropped to its slot (16:10 wide, 2:1 in the
-              // grid), so object-cover only absorbs rounding. The dark filter
-              // keeps light screenshots and the chart from glaring on the
-              // dark ground.
-              'w-full rounded-md object-cover ring-1 ring-border dark:brightness-[.85] dark:contrast-[.95]',
-              isWide ? 'aspect-[16/10]' : 'aspect-[2/1]',
+              // grid), so object-cover only absorbs rounding. Light screenshots
+              // are dimmed in dark theme so they do not glare; dark ones keep
+              // their own ground. Never inverted.
+              'w-full object-cover ring-1 ring-border',
+              isWide ? 'rounded-lg' : 'rounded-md',
+              project.image.tone === 'light' && 'dark:brightness-[.85]',
+              ratio,
             )}
           />
         ) : (
@@ -120,7 +132,7 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
             aria-hidden="true"
             className={cn(
               'flex w-full flex-col justify-center gap-2 bg-muted p-6',
-              isWide ? 'aspect-video md:aspect-auto md:h-full' : 'aspect-video',
+              isWide ? 'aspect-[16/10] rounded-lg' : 'aspect-video',
             )}
           >
             <p className="font-heading text-2xl leading-tight font-semibold tracking-tight text-foreground uppercase md:text-3xl">
@@ -134,9 +146,9 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
         )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-4 p-6">
+      <div className={cn('flex flex-1 flex-col gap-4', !isWide && 'p-6')}>
         <div className="space-y-1">
-          <h3 className="font-heading text-xl font-semibold text-card-foreground">
+          <h3 className={cn('font-heading text-xl font-semibold text-card-foreground', isWide && 'md:text-2xl')}>
             {project.title}
           </h3>
           {project.context && <p className="label">{project.context}</p>}
@@ -144,7 +156,7 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
 
         <p className="text-base text-card-foreground">
           {before}
-          {metric && <span className="font-mono font-medium text-accent">{metric}</span>}
+          {metric && <span className="font-semibold text-accent-ink tabular-nums">{metric}</span>}
           {after}
         </p>
 

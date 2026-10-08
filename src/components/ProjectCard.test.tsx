@@ -6,13 +6,14 @@ import { ProjectCard } from './ProjectCard'
 const byId = (id: string) => projects.find((p) => p.id === id)!
 
 describe('ProjectCard', () => {
-  it('shows title, context and outcome, with the metric in mono', () => {
+  it('shows title, context and outcome, with the metric in accent ink, semibold', () => {
     const p = byId('sim2real')
     render(<ProjectCard project={p} />)
     expect(screen.getByRole('heading', { name: p.title })).toBeInTheDocument()
     expect(screen.getByText(p.context!)).toBeInTheDocument()
     const metric = screen.getByText(p.metric!)
-    expect(metric).toHaveClass('font-mono')
+    expect(metric).toHaveClass('font-semibold', 'tabular-nums', 'text-accent-ink')
+    expect(metric).not.toHaveClass('font-mono')
     expect(metric.parentElement).toHaveTextContent(p.outcome)
   })
 

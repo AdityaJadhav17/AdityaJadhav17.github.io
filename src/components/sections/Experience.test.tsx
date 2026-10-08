@@ -1,7 +1,7 @@
 import { act } from 'react'
 import { hydrateRoot } from 'react-dom/client'
 import { renderToString } from 'react-dom/server'
-import { LazyMotion, MotionConfig, domAnimation } from 'motion/react'
+import { LazyMotion, MotionConfig, domMin } from 'motion/react'
 import { expect, it, vi } from 'vitest'
 import { Experience } from '@/components/sections/Experience'
 
@@ -23,7 +23,7 @@ it('hydrates the reduced-motion rail without a mismatch, then draws it fully', a
 
   const tree = (
     <MotionConfig reducedMotion="user">
-      <LazyMotion features={domAnimation} strict>
+      <LazyMotion features={domMin} strict>
         <Experience />
       </LazyMotion>
     </MotionConfig>

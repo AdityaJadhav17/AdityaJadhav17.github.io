@@ -4,21 +4,21 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate icon" href="/favicon.svg" />
-    <link rel="mask-icon" href="/favicon.svg" color="#FB8F67" />
+    <link rel="mask-icon" href="/favicon.svg" color="{{dark.accent-signal}}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#FAFAFA" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#09090B" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="{{light.background}}" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="{{dark.background}}" media="(prefers-color-scheme: dark)" />
     <!--
       Filled at build time by scripts/prerender.mjs from src/lib/head.ts.
-      Do not hand-write meta tags here. Keep the two theme-color values above
-      in sync with --color-background in src/styles/theme.css, and the
-      favicon/mask-icon color in sync with --color-accent (dark theme).
+      Do not hand-write meta tags here. The light.* and dark.* colour
+      placeholders above are filled from src/styles/theme.css by
+      scripts/prerender.mjs (dev serves them unfilled, which is harmless).
       public/CNAME keeps the custom domain bound; the canonical and og URLs
       in head.ts point at adityajadhav.dev, not the github.io origin.
     -->
     <!--app-head-->
     <!--
-      Flash-prevention: applies the .dark class before first paint, so the
+      Flash-prevention: applies the .dark class and data-theme-pref before first paint, so the
       page never flashes the wrong theme. This intentionally duplicates the
       resolution rules in src/lib/theme.ts (getStoredTheme + resolveTheme):
       that module can't load early enough to run before paint, so the logic
@@ -27,13 +27,13 @@
     -->
     <script>
       (function () {
-        try {
-          var t = localStorage.getItem('theme');
-          if (t !== 'light' && t !== 'dark' && t !== 'system') t = 'system';
-          var dark = t === 'dark' || (t === 'system' &&
-            window.matchMedia('(prefers-color-scheme: dark)').matches);
-          if (dark) document.documentElement.classList.add('dark');
-        } catch (e) {}
+        var t = null;
+        try { t = localStorage.getItem('theme'); } catch (e) {}
+        if (t !== 'light' && t !== 'dark' && t !== 'system') t = 'system';
+        var dark = t === 'dark' || (t === 'system' && window.matchMedia &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.dataset.themePref = t;
+        if (dark) document.documentElement.classList.add('dark');
       })();
     </script>
   </head>

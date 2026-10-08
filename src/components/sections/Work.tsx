@@ -21,7 +21,7 @@ export function Work() {
           <h2 className="section-title">Selected Work</h2>
         </Reveal.Item>
 
-        <div className="mt-8 flex flex-col gap-6 md:mt-12">
+        <div className="mt-8 flex flex-col gap-10 md:mt-12 md:gap-12">
           {featured.map((project) => (
             <Reveal.Item key={project.id}>
               <ProjectCard project={project} layout="wide" />
@@ -29,7 +29,7 @@ export function Work() {
           ))}
         </div>
 
-        <div className="mt-6 grid gap-6 sm:grid-cols-2">
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 md:mt-12">
           {rest.map((project) => (
             <Reveal.Item key={project.id} className="flex">
               <ProjectCard project={project} className="flex-1" />

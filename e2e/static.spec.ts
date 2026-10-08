@@ -16,6 +16,17 @@ test('without JS the page carries the claim, every project and every role', asyn
   await context.close()
 })
 
+test('without JS every hero stat is a plain hash link to an existing target', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false })
+  const page = await context.newPage()
+  await page.goto('/')
+  for (const { href } of site.proof) {
+    await expect(page.locator(`#home a[href="${href}"]`)).toHaveCount(1)
+    await expect(page.locator(href)).toHaveCount(1)
+  }
+  await context.close()
+})
+
 for (const viewport of [
   { width: 390, height: 844 },
   { width: 1440, height: 900 },
@@ -58,7 +69,11 @@ test('fonts are self-hosted and load', async ({ page, browserName }) => {
   const stacks = await page.evaluate(() => [
     getComputedStyle(document.querySelector('h1')!).fontFamily,
     getComputedStyle(document.querySelector('#about p')!).fontFamily,
+    getComputedStyle(document.querySelector('#home ul li p')!).fontFamily, // hero stat value
+    getComputedStyle(document.querySelector('#about ul li')!).fontFamily, // skill tag
   ])
   expect(stacks[0]).toContain('Archivo Variable')
   expect(stacks[1]).toContain('Archivo Variable')
+  expect(stacks[2]).toContain('Archivo Variable')
+  expect(stacks[3]).toContain('JetBrains Mono')
 })

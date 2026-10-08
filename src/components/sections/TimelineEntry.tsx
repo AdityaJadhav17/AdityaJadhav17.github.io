@@ -30,11 +30,11 @@ export function TimelineEntry({ entry, index, total, progress, reduced }: Timeli
   const dotFill = index === 0 ? 1 : fill
 
   return (
-    <Reveal.Item as="li" className="relative flex gap-4 sm:gap-6">
+    <Reveal.Item as="li" id={`experience-${entry.id}`} className="relative flex gap-4 sm:gap-6">
       <div aria-hidden="true" className="flex w-4 flex-none justify-center">
         <span className="relative mt-1.5 size-2.5 flex-none rounded-full bg-border ring-4 ring-background">
           <m.span
-            className="absolute inset-0 rounded-full bg-accent"
+            className="absolute inset-0 rounded-full bg-accent-signal"
             style={{ scale: reduced ? 1 : dotFill }}
           />
         </span>
@@ -43,7 +43,7 @@ export function TimelineEntry({ entry, index, total, progress, reduced }: Timeli
       <div className="flex-1 pb-2">
         <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
           <h3 className="font-heading text-lg font-semibold text-foreground">{entry.role}</h3>
-          <span className="font-mono text-xs whitespace-nowrap text-muted-foreground">
+          <span className="text-xs whitespace-nowrap text-muted-foreground tabular-nums">
             {entry.start} – {entry.end}
           </span>
         </div>
@@ -51,7 +51,7 @@ export function TimelineEntry({ entry, index, total, progress, reduced }: Timeli
           {entry.organization}
           {entry.location ? ` · ${entry.location}` : ''}
         </p>
-        <ul className="mt-3 list-disc space-y-1.5 pl-5 text-[0.9375rem] text-foreground">
+        <ul className="mt-3 max-w-[70ch] list-disc space-y-1.5 pl-5 text-[0.9375rem] text-foreground">
           {entry.highlights.map((highlight) => (
             <li key={highlight}>{highlight}</li>
           ))}
