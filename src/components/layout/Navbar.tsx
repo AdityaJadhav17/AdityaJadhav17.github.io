@@ -55,7 +55,7 @@ const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(function NavLink(
     >
       {label}
       {/* Static underline that fades with the active state. LazyMotion's
-          domAnimation has no layout animations, so the old layoutId glide
+          domMin has no layout animations, so the old layoutId glide
           between items is gone; opacity is the whole effect now. */}
       <span
         aria-hidden="true"

@@ -1,4 +1,4 @@
-import { LazyMotion, MotionConfig, domAnimation } from 'motion/react'
+import { LazyMotion, MotionConfig, domMin } from 'motion/react'
 import { SkipLink } from '@/components/layout/SkipLink'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
@@ -22,10 +22,10 @@ export default function App() {
     // the scroll-driven timeline in Experience.tsx. Those are style
     // bindings, not animations, so that component keeps an explicit
     // useReducedMotion check of its own.
-    // LazyMotion with domAnimation drops layout and drag support from the
+    // LazyMotion with domMin keeps gestures, layout and drag out of the
     // bundle; `strict` throws if anything imports the full `motion` component.
     <MotionConfig reducedMotion="user">
-      <LazyMotion features={domAnimation} strict>
+      <LazyMotion features={domMin} strict>
         <SkipLink />
         <Navbar sectionIds={SECTION_IDS} />
         <main id="main">
