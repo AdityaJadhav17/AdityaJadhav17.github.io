@@ -48,6 +48,9 @@ const USAGE: [string, string[], number][] = [
   ['accent-foreground', ['accent-ink'], 4.5],
   ['destructive-foreground', ['destructive'], 4.5],
   ['accent-signal', SURFACES, 3],
+  // TierChart marks sit on card: bars are muted-foreground, the T4 highlight is accent-signal.
+  ['muted-foreground', ['card'], 3],
+  ['accent-signal', ['card'], 3],
   ['ring', SURFACES, 3],
   ['input', SURFACES, 3],
 ]
@@ -101,13 +104,12 @@ describe('accent discipline', () => {
 
   it('no palette hex outside theme.css', () => {
     const hex = /#[0-9a-fA-F]{3,8}\b/
-    // favicon.svg and 404.html are generated into public/ from the tokens (gitignored);
-    // talk-to-robot.svg is a committed data figure with its own colours, not site chrome.
+    // favicon.svg and 404.html are generated into public/ from the tokens (gitignored).
     const files = [
       ...src.filter((f) => /\.tsx?$/.test(f)),
       join(process.cwd(), 'index.html'),
       ...walk(join(process.cwd(), 'public')).filter(
-        (f) => /\.(svg|html)$/.test(f) && !/[\\/](favicon\.svg|404\.html|talk-to-robot\.svg)$/.test(f),
+        (f) => /\.(svg|html)$/.test(f) && !/[\\/](favicon\.svg|404\.html)$/.test(f),
       ),
     ]
     const offenders = files.filter((f) => hex.test(readFileSync(f, 'utf8'))).map(rel)

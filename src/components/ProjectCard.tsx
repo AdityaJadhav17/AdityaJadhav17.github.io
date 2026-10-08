@@ -1,6 +1,7 @@
 import { ChevronDown, ExternalLink, FileText } from 'lucide-react'
 import { FaGithub, FaYoutube } from 'react-icons/fa'
 import type { Project } from '@/content/projects'
+import { TierChart } from '@/components/TierChart'
 import { cn } from '@/lib/utils'
 
 type ProjectCardProps = {
@@ -47,6 +48,7 @@ const linkClass =
 
 export function ProjectCard({ project, className, layout = 'stacked' }: ProjectCardProps) {
   const isWide = layout === 'wide'
+  const ratio = isWide ? 'aspect-[16/10]' : 'aspect-[2/1]'
   const shownStack = project.stack.slice(0, MAX_TAGS)
   const hiddenCount = project.stack.length - shownStack.length
   const { outcome, metric } = project
@@ -97,7 +99,12 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
           isWide && 'md:flex md:w-2/5 md:items-center md:border-r md:border-b-0',
         )}
       >
-        {project.image ? (
+        {project.chart ? (
+          <TierChart
+            alt={project.chart.alt}
+            className={cn('w-full rounded-md bg-card ring-1 ring-border', ratio)}
+          />
+        ) : project.image ? (
           <img
             src={project.image.src}
             srcSet={project.image.srcSet}
@@ -108,11 +115,12 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
             loading="lazy"
             className={cn(
               // Every image is pre-cropped to its slot (16:10 wide, 2:1 in the
-              // grid), so object-cover only absorbs rounding. The dark filter
-              // keeps light screenshots and the chart from glaring on the
-              // dark ground.
-              'w-full rounded-md object-cover ring-1 ring-border dark:brightness-[.85] dark:contrast-[.95]',
-              isWide ? 'aspect-[16/10]' : 'aspect-[2/1]',
+              // grid), so object-cover only absorbs rounding. Light screenshots
+              // are dimmed in dark theme so they do not glare; dark ones keep
+              // their own ground. Never inverted.
+              'w-full rounded-md object-cover ring-1 ring-border',
+              project.image.tone === 'light' && 'dark:brightness-[.85]',
+              ratio,
             )}
           />
         ) : (

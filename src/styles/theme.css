@@ -278,6 +278,32 @@
     }
   }
 
+  /* TierChart (Talk-to-Robot). Presentation lives here, not in the component,
+     to keep the JS budget: fill, anchor and size inherit from .tier-chart and
+     the children override only what differs. Sizes are SVG user units, so they
+     scale with the poster. Bars and labels are muted-foreground (>= 6.9:1 on
+     card); .hot, the T4 bar, is accent-signal (>= 3.78:1 on card). The halo
+     in the card colour stops the dashed reference line striking through the
+     value labels. */
+  .tier-chart {
+    fill: var(--color-muted-foreground);
+    font: 9px var(--font-sans);
+    text-anchor: middle;
+  }
+  .tier-chart rect { rx: 2px; }
+  .tier-chart .hot { fill: var(--color-accent-signal); }
+  .tier-chart .ttl { fill: var(--color-foreground); font-size: 11px; font-weight: 600; text-anchor: start; }
+  .tier-chart .val { fill: var(--color-foreground); font-size: 10px; font-weight: 600; }
+  .tier-chart .id { font-size: 10px; font-weight: 600; }
+  .tier-chart .val, .tier-chart .ref-label {
+    paint-order: stroke;
+    stroke: var(--color-card);
+    stroke-width: 3px;
+  }
+  .tier-chart .ref-label { text-anchor: end; }
+  .tier-chart .ref { stroke: var(--color-muted-foreground); stroke-dasharray: 4 3; }
+  .tier-chart .axis { stroke: var(--color-input); stroke-width: 1.5px; }
+
   /* Decorative dot grid behind the Contact section. Declared here rather than
      inline because the dot colour has to resolve from a token, and theme.css
      is the only place colour is allowed to be resolved. Masked radially so it
