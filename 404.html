@@ -8,19 +8,19 @@
     <style>
       :root {
         color-scheme: light dark;
-        --color-background: #FAFAFA;
-        --color-foreground: #09090B;
-        --color-muted-foreground: #475569;
-        --color-accent: #B23A12;
-        --color-accent-foreground: #FFFFFF;
+        --color-background: #FAFAF9;
+        --color-foreground: #0C0A09;
+        --color-muted-foreground: #57534E;
+        --color-primary: #1C1917;
+        --color-primary-foreground: #FAFAF9;
       }
       @media (prefers-color-scheme: dark) {
         :root {
-          --color-background: #09090B;
-          --color-foreground: #FAFAFA;
-          --color-muted-foreground: #A1A1AA;
-          --color-accent: #FB8F67;
-          --color-accent-foreground: #09090B;
+          --color-background: #0C0A09;
+          --color-foreground: #FAFAF9;
+          --color-muted-foreground: #A8A29E;
+          --color-primary: #FAFAF9;
+          --color-primary-foreground: #1C1917;
         }
       }
       * {
@@ -64,8 +64,8 @@
       }
       a.home-link {
         display: inline-block;
-        background: var(--color-accent);
-        color: var(--color-accent-foreground);
+        background: var(--color-primary);
+        color: var(--color-primary-foreground);
         text-decoration: none;
         font-weight: 600;
         padding: 0.75rem 1.5rem;
