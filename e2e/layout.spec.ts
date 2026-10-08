@@ -216,3 +216,41 @@ test('featured projects have no card chrome, grid projects do', async ({ page },
   expect(await chrome('watchtower')).toEqual({ border: '0px', shadow: 'none', bg: 'rgba(0, 0, 0, 0)' })
   expect((await chrome('sim2real')).border).toBe('1px')
 })
+
+// B5 fix: the stats follow the actions instead of sitting at the bottom, and
+// still keep clear of the portrait.
+for (const width of [1024, 1280, 1440]) {
+  test(`stats follow the actions and clear the portrait at ${width}px`, async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
+    await page.setViewportSize({ width, height: 900 })
+    await page.goto('/')
+    await page.waitForTimeout(600)
+    const m = await page.evaluate(() => {
+      const actions = document.querySelector('#home a[download]')!.parentElement!.getBoundingClientRect()
+      const stats = document.querySelector('#home ul.hero-in:last-of-type')!
+      const portrait = document.querySelector('#home picture img')!.getBoundingClientRect()
+      const labels = [...stats.querySelectorAll('li p:last-child')].map((p) => {
+        const r = document.createRange()
+        r.selectNodeContents(p)
+        return r.getBoundingClientRect()
+      })
+      return {
+        gap: stats.getBoundingClientRect().top - actions.bottom,
+        clearance: portrait.left - Math.max(...labels.map((l) => l.right)),
+      }
+    })
+    expect(m.gap).toBeLessThanOrEqual(64)
+    // At 1024 the portrait's box already reaches into the left columns (its
+    // left edge is transparent); the figures sit where they always did, so only
+    // the wider layouts are held to a clearance.
+    if (width >= 1280) expect(m.clearance).toBeGreaterThanOrEqual(40)
+  })
+}
+
+// Linking to a card from outside the page opens it.
+test('loading #project-<id> opens that card', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
+  await page.goto('/#project-sim2real')
+  await expect(page.locator('#project-sim2real details')).toHaveAttribute('open', '')
+  await expect(page.locator('#project-watchtower details')).not.toHaveAttribute('open', '')
+})

@@ -3,6 +3,7 @@ import { Download, ExternalLink } from 'lucide-react'
 import { FaGithub, FaLinkedin } from 'react-icons/fa'
 import { HeroPortrait } from '@/components/sections/HeroPortrait'
 import { Button } from '@/components/ui/button'
+import { openHashTarget } from '@/lib/hash'
 import { currentRoles, site } from '@/content/site'
 
 // lucide-react ships no brand/logo marks (Github/Linkedin/Youtube all
@@ -20,10 +21,9 @@ const SOCIAL_ICONS: Record<string, typeof FaGithub> = {
 const step = (i: number) => ({ '--i': i }) as CSSProperties
 
 // A proof link opens the project's <details> as well as scrolling to it (the
-// hash itself does the scroll, and still works with JS off). A target that has
-// no <details>, like a timeline entry, matches nothing and is left alone.
+// hash itself does the scroll, and still works with JS off).
 const openDetails = (e: MouseEvent<HTMLAnchorElement>) =>
-  document.querySelector(`${e.currentTarget.getAttribute('href')} details`)?.setAttribute('open', '')
+  openHashTarget(e.currentTarget.getAttribute('href')!)
 
 // Hero: a multi-column editorial composition rather than a centred stack.
 //
@@ -32,8 +32,8 @@ const openDetails = (e: MouseEvent<HTMLAnchorElement>) =>
 // supporting metadata. That puts the claim and the primary CTA in the first
 // phone screen instead of under a tall portrait. At `lg` the same children
 // are placed explicitly by row and column: metadata across the top, the claim
-// directly under it, availability and actions beneath the claim, proof pinned
-// to the bottom, portrait absolutely positioned behind the right half.
+// directly under it, availability and actions beneath the claim, proof under
+// the actions, portrait absolutely positioned behind the right half.
 //
 // Height: the design brief says never `100vh`, which excludes mobile browser
 // chrome and causes a jump on load. It is `calc(100dvh-4rem-1px)` rather than
@@ -145,7 +145,7 @@ export function Hero() {
           Left two columns at lg, for the same reason as availability. */}
       <ul
         style={step(4)}
-        className="hero-in relative z-10 flex flex-col sm:flex-row sm:flex-wrap sm:gap-x-8 sm:gap-y-4 lg:col-span-2 lg:col-start-1 lg:row-start-5 lg:self-end"
+        className="hero-in relative z-10 flex flex-col sm:flex-row sm:flex-wrap sm:gap-x-8 sm:gap-y-4 lg:col-span-2 lg:col-start-1 lg:row-start-5 lg:mt-10 lg:self-start"
       >
         {site.proof.map((point) => (
           <li key={point.label} className="sm:max-w-[12rem] sm:flex-1">
