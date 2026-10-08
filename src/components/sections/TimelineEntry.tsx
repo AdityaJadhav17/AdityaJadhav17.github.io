@@ -30,7 +30,7 @@ export function TimelineEntry({ entry, index, total, progress, reduced }: Timeli
   const dotFill = index === 0 ? 1 : fill
 
   return (
-    <Reveal.Item as="li" className="relative flex gap-4 sm:gap-6">
+    <Reveal.Item as="li" id={`experience-${entry.id}`} className="relative flex gap-4 sm:gap-6">
       <div aria-hidden="true" className="flex w-4 flex-none justify-center">
         <span className="relative mt-1.5 size-2.5 flex-none rounded-full bg-border ring-4 ring-background">
           <m.span

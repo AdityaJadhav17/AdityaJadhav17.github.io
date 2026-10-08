@@ -17,6 +17,8 @@ export type Education = {
 export type ProofPoint = {
   value: string
   label: string
+  // In-page anchor for the card or timeline entry the figure comes from.
+  href: string
 }
 
 export type Site = {
@@ -82,9 +84,9 @@ export const site: Site = {
   // surfaced where a recruiter actually reads them. Every one is verifiable
   // from a linked repository or the experience entries below.
   proof: [
-    { value: '11', label: 'engineers led on WatchTower' },
-    { value: '0.9175', label: 'mAP, sim-to-real detection' },
-    { value: '150+', label: 'members in the AI club I founded' },
+    { value: '11', label: 'engineers led on WatchTower', href: '#project-watchtower' },
+    { value: '0.9175', label: 'mAP, sim-to-real detection', href: '#project-sim2real' },
+    { value: '150+', label: 'members in the AI club I founded', href: '#experience-ai-club' },
   ],
 
   location: 'San Diego, CA',

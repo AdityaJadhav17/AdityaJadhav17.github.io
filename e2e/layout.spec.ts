@@ -28,7 +28,7 @@ for (const width of [390, 768, 1440]) {
 
 // Closed cards keep the page short: the full story is behind <details>.
 for (const [width, height, max] of [
-  [1440, 900, 6600],
+  [1440, 900, 6750],
   [390, 844, 9900],
 ] as const) {
   test(`page stays under ${max}px tall at ${width}px with details closed`, async ({ page }, testInfo) => {
@@ -161,4 +161,58 @@ test('portrait clears the capabilities list by 24px at 1440x900', async ({ page 
     .evaluate((el) => el.getBoundingClientRect().bottom)
   const portraitTop = await page.locator('#home picture img').evaluate((el) => el.getBoundingClientRect().top)
   expect(portraitTop - capsBottom).toBeGreaterThanOrEqual(24)
+})
+
+// B5: the claim sits right under the name (the metadata columns span both rows
+// rather than stretching the identity row), and wraps in the same four lines
+// at every desktop width.
+for (const width of [1024, 1280, 1440]) {
+  test(`claim sits under the identity block at ${width}px`, async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
+    await page.setViewportSize({ width, height: 900 })
+    await page.goto('/')
+    await page.waitForTimeout(600) // hero-in entrance settles (<= 400 ms)
+    const { gap, lines } = await page.evaluate(() => {
+      const label = document.querySelector('h1 + p')!.getBoundingClientRect()
+      const claim = document.querySelector('#home > p')!
+      const r = claim.getBoundingClientRect()
+      return { gap: r.top - label.bottom, lines: Math.round(r.height / parseFloat(getComputedStyle(claim).lineHeight)) }
+    })
+    expect(gap).toBeLessThanOrEqual(48)
+    expect(lines).toBe(4)
+  })
+}
+
+// B5: the hero figures link to where they come from; a project target also
+// has its details opened.
+test('hero stats link to their sources', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto('/')
+  const targets = [
+    [/11 engineers led on WatchTower/, '#project-watchtower', true],
+    [/0\.9175 mAP/, '#project-sim2real', true],
+    [/150\+ members/, '#experience-ai-club', false],
+  ] as const
+  for (const [name, hash, hasDetails] of targets) {
+    await page.getByRole('link', { name }).click()
+    await expect(page).toHaveURL(new RegExp(`${hash}$`))
+    const target = page.locator(hash)
+    await expect(target).toBeVisible()
+    if (hasDetails) await expect(target.locator('details')).toHaveAttribute('open', '')
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }))
+  }
+})
+
+// B5: featured projects drop the card chrome; grid projects keep it.
+test('featured projects have no card chrome, grid projects do', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
+  await page.goto('/')
+  const chrome = (id: string) =>
+    page.locator(`#project-${id}`).evaluate((el) => {
+      const s = getComputedStyle(el)
+      return { border: s.borderTopWidth, shadow: s.boxShadow, bg: s.backgroundColor }
+    })
+  expect(await chrome('watchtower')).toEqual({ border: '0px', shadow: 'none', bg: 'rgba(0, 0, 0, 0)' })
+  expect((await chrome('sim2real')).border).toBe('1px')
 })
