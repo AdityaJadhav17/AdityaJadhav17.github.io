@@ -43,7 +43,7 @@ const tagClass =
 // Visible text stays 14px; the pseudo-element grows the hit area to 44px
 // without overlapping its neighbour (gap-4 = 16px, each side adds 8px).
 const linkClass =
-  "relative inline-flex items-center gap-1.5 font-sans text-sm font-medium text-accent transition-colors duration-200 after:absolute after:-inset-x-2 after:-inset-y-3 after:content-[''] hover:text-foreground"
+  "relative inline-flex items-center gap-1.5 font-sans text-sm font-medium text-foreground underline underline-offset-4 transition-colors duration-200 after:absolute after:-inset-x-2 after:-inset-y-3 after:content-[''] hover:decoration-2"
 
 export function ProjectCard({ project, className, layout = 'stacked' }: ProjectCardProps) {
   const isWide = layout === 'wide'
@@ -144,7 +144,7 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
 
         <p className="text-base text-card-foreground">
           {before}
-          {metric && <span className="font-mono font-medium text-accent">{metric}</span>}
+          {metric && <span className="font-mono font-medium text-accent-ink">{metric}</span>}
           {after}
         </p>
 

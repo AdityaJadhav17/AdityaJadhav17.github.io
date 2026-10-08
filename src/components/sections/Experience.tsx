@@ -66,7 +66,7 @@ export function Experience() {
           />
           <m.span
             aria-hidden="true"
-            className="absolute top-2 bottom-2 left-[7px] w-px origin-top bg-accent"
+            className="absolute top-2 bottom-2 left-[7px] w-px origin-top bg-accent-signal"
             style={{ scaleY: reduced ? 1 : progress }}
           />
 

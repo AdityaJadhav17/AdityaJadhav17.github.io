@@ -221,12 +221,12 @@ test.describe('theme toggle', () => {
 
     await expect(html).toHaveClass(/dark/)
     const darkBg = await page.locator('body').evaluate((el) => getComputedStyle(el).backgroundColor)
-    expect(darkBg).toBe('rgb(9, 9, 11)') // --color-background under .dark, #09090B
+    expect(darkBg).toBe('rgb(12, 10, 9)') // --color-background under .dark, #0C0A09
 
     await page.reload()
     await expect(html).toHaveClass(/dark/)
     const darkBgAfterReload = await page.locator('body').evaluate((el) => getComputedStyle(el).backgroundColor)
-    expect(darkBgAfterReload).toBe('rgb(9, 9, 11)')
+    expect(darkBgAfterReload).toBe('rgb(12, 10, 9)')
 
     await page.getByRole('button', { name: /switch to system theme/i }).click()
     await expect(html).not.toHaveClass(/dark/)

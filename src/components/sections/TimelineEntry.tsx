@@ -34,7 +34,7 @@ export function TimelineEntry({ entry, index, total, progress, reduced }: Timeli
       <div aria-hidden="true" className="flex w-4 flex-none justify-center">
         <span className="relative mt-1.5 size-2.5 flex-none rounded-full bg-border ring-4 ring-background">
           <m.span
-            className="absolute inset-0 rounded-full bg-accent"
+            className="absolute inset-0 rounded-full bg-accent-signal"
             style={{ scale: reduced ? 1 : dotFill }}
           />
         </span>

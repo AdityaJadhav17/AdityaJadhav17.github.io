@@ -140,7 +140,7 @@ export function Hero() {
       >
         {site.proof.map((point) => (
           <li key={point.label} className="flex items-baseline gap-4 sm:block sm:max-w-[12rem] sm:flex-1">
-            <p className="w-20 shrink-0 font-mono text-xl font-medium text-accent tabular-nums sm:w-auto">
+            <p className="w-20 shrink-0 font-mono text-xl font-medium text-accent-ink tabular-nums sm:w-auto">
               {point.value}
             </p>
             <p className="text-[0.8125rem] leading-snug text-muted-foreground sm:mt-1">{point.label}</p>

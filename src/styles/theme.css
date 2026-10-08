@@ -1,62 +1,53 @@
 /*
-  Contrast audit (revised in fix round 1): WCAG relative-luminance formula,
-  computed with a standalone script (not estimated). Ratios rounded to 2 decimals.
+  Contrast audit (pass 2b): WCAG relative-luminance formula, computed by
+  src/styles/palette.test.ts from the tokens below, which fails the build if a
+  declared pair drops under its minimum. Ratios rounded to 2 decimals.
+  Columns: on background / card / muted (or the named surface).
 
-  LIGHT theme
-  -------------------------------------------------------------------------------------------
-  foreground        #09090B on background #FAFAFA                 19.06:1   need 4.5:1   PASS
-  foreground        #09090B on card       #FFFFFF                 19.90:1   need 4.5:1   PASS
-  card-foreground   #09090B on card       #FFFFFF                 19.90:1   need 4.5:1   PASS
-  popover-foreground#09090B on popover    #FFFFFF                 19.90:1   need 4.5:1   PASS
-  muted-foreground  #475569 on background #FAFAFA                  7.26:1   need 4.5:1   PASS
-  muted-foreground  #475569 on card       #FFFFFF                  7.58:1   need 4.5:1   PASS
-  primary-foreground#FAFAFA on primary    #18181B                 16.97:1   need 4.5:1   PASS
-  secondary-fg      #18181B on secondary  #E8ECF0                 14.92:1   need 4.5:1   PASS
-  accent-foreground #FFFFFF on accent     #B23A12                  5.99:1   need 4.5:1   PASS
-  destructive-fg    #FFFFFF on destructive#DC2626                  4.83:1   need 4.5:1   PASS
-  ring              #B23A12 on background #FAFAFA                  5.74:1   need 3.0:1   PASS
-  border            #E4E4E7 on background #FAFAFA                  1.22:1   need 3.0:1   N/A **
-  input             #71717A on background #FAFAFA                  4.63:1   need 3.0:1   PASS
-  input             #71717A on card       #FFFFFF                  4.83:1   need 3.0:1   PASS
+  LIGHT theme                                    need
+  foreground         #0C0A09   18.92 / 19.76 / 18.11   4.5:1
+  muted-foreground   #57534E    7.30 /  7.63 /  6.99   4.5:1
+  accent-ink         #007373    5.43 /  5.68 /  5.20   4.5:1   (text: metrics only)
+  destructive        #DC2626    4.62 /  4.83 /  n/a    4.5:1   (on background, card)
+  card-foreground    #0C0A09   19.76 on card
+  primary-foreground #FAFAF9   16.74 on primary #1C1917
+  secondary-fg       #1C1917   16.03 on secondary #F5F5F4
+  accent-foreground  #FFFFFF    5.68 on accent-ink
+  destructive-fg     #FFFFFF    4.83 on destructive
+  accent-signal      #0F9293    3.62 /  3.78 /  3.47   3:1     (marks: timeline, ring)
+  ring = accent-signal           3.62 /  3.78 /  3.47   3:1
+  input              #78716C    4.59 /  4.80 /  4.40   3:1
 
   DARK theme (.dark)
-  -------------------------------------------------------------------------------------------
-  foreground        #FAFAFA on background #09090B                 19.06:1   need 4.5:1   PASS
-  foreground        #FAFAFA on card       #18181B                 16.97:1   need 4.5:1   PASS
-  card-foreground   #FAFAFA on card       #18181B                 16.97:1   need 4.5:1   PASS
-  popover-foreground#FAFAFA on popover    #18181B                 16.97:1   need 4.5:1   PASS
-  muted-foreground  #A1A1AA on background #09090B                  7.76:1   need 4.5:1   PASS
-  muted-foreground  #A1A1AA on card       #18181B                  6.91:1   need 4.5:1   PASS
-  primary-foreground#18181B on primary    #FAFAFA                 16.97:1   need 4.5:1   PASS
-  secondary-fg       #FAFAFA on secondary #27272A                 14.27:1   need 4.5:1   PASS
-  accent-foreground #09090B on accent     #FB8F67                  8.74:1   need 4.5:1   PASS
-  destructive-fg     #09090B on destructive#F87171                 7.19:1   need 4.5:1   PASS
-  ring              #FB8F67 on background #09090B                  8.74:1   need 3.0:1   PASS
-  border            #27272A on background #09090B                  1.34:1   need 3.0:1   N/A **
-  input             #71717A on background #09090B                  4.12:1   need 3.0:1   PASS
-  input             #71717A on card       #18181B                  3.67:1   need 3.0:1   PASS
+  foreground         #FAFAF9   18.92 / 16.74 / 14.52   4.5:1
+  muted-foreground   #A8A29E    7.83 /  6.93 /  6.01   4.5:1
+  accent-ink         #57CCCC   10.27 /  9.09 /  7.88   4.5:1
+  destructive        #F87171    7.14 /  6.32 /  n/a    4.5:1
+  card-foreground    #FAFAF9   16.74 on card
+  primary-foreground #1C1917   16.74 on primary #FAFAF9
+  secondary-fg       #FAFAF9   14.52 on secondary #292524
+  accent-foreground  #0C0A09   10.27 on accent-ink
+  destructive-fg     #0C0A09    7.14 on destructive
+  accent-signal = ring #57CCCC 10.27 /  9.09 /  7.88   3:1
+  input              #78716C    4.12 /  3.65 /  3.16   3:1
 
-  ** `--color-border` is decorative separation (card/section dividers): content and
-     components remain identifiable without it, so it falls outside WCAG 1.4.11's scope and
-     its sub-3:1 contrast against `background` is an accepted, owner-approved trade, not a
-     defect. This differs from `--color-input`, which draws the boundary that identifies a
-     form control / the outline `Button` variant and IS covered by 1.4.11; that token was
-     changed (see below) rather than left as-is.
+  Accent is petrol (OKLCH hue about 195 degrees), at least 20 degrees from
+  destructive (27 light / 22 dark), so a validation error never reads as a brand
+  accent. It does two jobs only: accent-ink colours metrics (hero stats, card
+  outcome metric); accent-signal colours non-text marks (focus ring, timeline
+  progress, chart highlight). Links and the active nav item are foreground plus
+  underline. In dark the two roles are the same value; in light signal is lighter
+  than ink because a mark only needs 3:1.
 
-  `--color-input` fix (fix round 1): was #E4E4E7 (light) / #3F3F46 (dark), both FAILing 1.4.11
-  at 1.22:1 / 1.91:1 against background. Introduced by assumption (mapped to
-  `--color-border`'s value) rather than by owner approval, so unlike `--color-border` this was
-  this task's call to correct. Set to #71717A (Tailwind zinc-500) in BOTH ramps: one value
-  clears 3:1 against both `background` and `card` in both themes (4.63 / 4.83 light, 4.12 /
-  3.67 dark, all above). Candidates considered and rejected: #8A8A93 (passes all four but with
-  a thinner margin, 3.28 lowest), #A1A1AA (fails light: 2.46 / 2.56), #52525B (fails dark:
-  2.57 / 2.29), #3F3F46 (fails dark: 1.91 / 1.70).
+  `--color-border` is decorative separation (card/section dividers): content and
+  components remain identifiable without it, so it falls outside WCAG 1.4.11's
+  scope and its sub-3:1 contrast against `background` is an accepted trade. This
+  differs from `--color-input`, which draws the boundary that identifies a form
+  control / the outline `Button` variant and IS covered by 1.4.11.
 
-  Accent note (ember, redesign pass 2): light #B23A12 measures 5.74:1 on background,
-  5.99:1 on card, 5.04:1 on muted. Dark #FB8F67 measures 8.74:1 on background, 7.78:1 on
-  card, 6.54:1 on muted. accent-foreground on accent is 5.99:1 (light, #FFFFFF) and
-  8.74:1 (dark, #09090B). The light ember on the dark background would be well under
-  4.5:1, so dark mode uses the lightened #FB8F67 instead.
+  Palette hex lives only in this file. public/favicon.svg, public/404.html and the
+  theme-color / mask-icon tags in dist/index.html are generated from it at build
+  (scripts/palette.mjs, scripts/prerender.mjs via scripts/tokens.mjs).
 */
 
 @import "tw-animate-css";
@@ -113,25 +104,26 @@
   --font-sans: "Archivo Variable", "Archivo Fallback", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", "JetBrains Mono Fallback", ui-monospace, SFMono-Regular, monospace;
 
-  --color-background: #FAFAFA;
-  --color-foreground: #09090B;
+  --color-background: #FAFAF9;
+  --color-foreground: #0C0A09;
   --color-card: #FFFFFF;
-  --color-card-foreground: #09090B;
+  --color-card-foreground: #0C0A09;
   --color-popover: #FFFFFF;
-  --color-popover-foreground: #09090B;
-  --color-primary: #18181B;
-  --color-primary-foreground: #FAFAFA;
-  --color-secondary: #E8ECF0;
-  --color-secondary-foreground: #18181B;
-  --color-muted: #E8ECF0;
-  --color-muted-foreground: #475569;
-  --color-accent: #B23A12;
+  --color-popover-foreground: #0C0A09;
+  --color-primary: #1C1917;
+  --color-primary-foreground: #FAFAF9;
+  --color-secondary: #F5F5F4;
+  --color-secondary-foreground: #1C1917;
+  --color-muted: #F5F5F4;
+  --color-muted-foreground: #57534E;
+  --color-accent-ink: #007373;
+  --color-accent-signal: #0F9293;
   --color-accent-foreground: #FFFFFF;
   --color-destructive: #DC2626;
   --color-destructive-foreground: #FFFFFF;
-  --color-border: #E4E4E7;
-  --color-input: #71717A;
-  --color-ring: #B23A12;
+  --color-border: #E7E5E4;
+  --color-input: #78716C;
+  --color-ring: #0F9293;
 
   /* Shadow Depths (MASTER.md): same values in both themes; the table has
      no separate dark ramp, so these live in the flat block, not `.dark`. */
@@ -174,25 +166,26 @@
 
 @layer base {
   .dark {
-    --color-background: #09090B;
-    --color-foreground: #FAFAFA;
-    --color-card: #18181B;
-    --color-card-foreground: #FAFAFA;
-    --color-popover: #18181B;
-    --color-popover-foreground: #FAFAFA;
-    --color-primary: #FAFAFA;
-    --color-primary-foreground: #18181B;
-    --color-secondary: #27272A;
-    --color-secondary-foreground: #FAFAFA;
-    --color-muted: #27272A;
-    --color-muted-foreground: #A1A1AA;
-    --color-accent: #FB8F67;
-    --color-accent-foreground: #09090B;
+    --color-background: #0C0A09;
+    --color-foreground: #FAFAF9;
+    --color-card: #1C1917;
+    --color-card-foreground: #FAFAF9;
+    --color-popover: #1C1917;
+    --color-popover-foreground: #FAFAF9;
+    --color-primary: #FAFAF9;
+    --color-primary-foreground: #1C1917;
+    --color-secondary: #292524;
+    --color-secondary-foreground: #FAFAF9;
+    --color-muted: #292524;
+    --color-muted-foreground: #A8A29E;
+    --color-accent-ink: #57CCCC;
+    --color-accent-signal: #57CCCC;
+    --color-accent-foreground: #0C0A09;
     --color-destructive: #F87171;
-    --color-destructive-foreground: #09090B;
-    --color-border: #27272A;
-    --color-input: #71717A;
-    --color-ring: #FB8F67;
+    --color-destructive-foreground: #0C0A09;
+    --color-border: #292524;
+    --color-input: #78716C;
+    --color-ring: #57CCCC;
   }
 
   html {

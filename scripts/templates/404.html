@@ -8,19 +8,19 @@
     <style>
       :root {
         color-scheme: light dark;
-        --color-background: #FAFAFA;
-        --color-foreground: #09090B;
-        --color-muted-foreground: #475569;
-        --color-accent: #B23A12;
-        --color-accent-foreground: #FFFFFF;
+        --color-background: {{light.background}};
+        --color-foreground: {{light.foreground}};
+        --color-muted-foreground: {{light.muted-foreground}};
+        --color-primary: {{light.primary}};
+        --color-primary-foreground: {{light.primary-foreground}};
       }
       @media (prefers-color-scheme: dark) {
         :root {
-          --color-background: #09090B;
-          --color-foreground: #FAFAFA;
-          --color-muted-foreground: #A1A1AA;
-          --color-accent: #FB8F67;
-          --color-accent-foreground: #09090B;
+          --color-background: {{dark.background}};
+          --color-foreground: {{dark.foreground}};
+          --color-muted-foreground: {{dark.muted-foreground}};
+          --color-primary: {{dark.primary}};
+          --color-primary-foreground: {{dark.primary-foreground}};
         }
       }
       * {
@@ -64,8 +64,8 @@
       }
       a.home-link {
         display: inline-block;
-        background: var(--color-accent);
-        color: var(--color-accent-foreground);
+        background: var(--color-primary);
+        color: var(--color-primary-foreground);
         text-decoration: none;
         font-weight: 600;
         padding: 0.75rem 1.5rem;

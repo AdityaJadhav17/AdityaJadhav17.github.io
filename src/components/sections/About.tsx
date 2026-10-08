@@ -119,7 +119,7 @@ export function About() {
                             href={cert.verify}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-accent underline underline-offset-2 hover:decoration-2"
+                            className="text-foreground underline underline-offset-2 hover:decoration-2"
                           >
                             Verify
                           </a>

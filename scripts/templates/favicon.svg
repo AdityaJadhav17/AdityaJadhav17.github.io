@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <rect width="64" height="64" rx="14" fill="#09090B" />
+  <rect width="64" height="64" rx="14" fill="{{dark.background}}" />
   <text
     x="32"
     y="34"
@@ -8,7 +8,7 @@
     font-family="Archivo, ui-sans-serif, system-ui, sans-serif"
     font-weight="700"
     font-size="28"
-    fill="#FAFAFA"
+    fill="{{dark.foreground}}"
   >AJ</text>
-  <rect x="20" y="44" width="24" height="4" rx="2" fill="#FB8F67" />
+  <rect x="20" y="44" width="24" height="4" rx="2" fill="{{dark.accent-signal}}" />
 </svg>
