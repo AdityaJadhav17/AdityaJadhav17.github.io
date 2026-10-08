@@ -104,7 +104,7 @@ export const projects: Project[] = [
     },
     image: {
       src: '/stockroom-920.webp',
-      srcSet: '/stockroom-480.webp 480w, /stockroom-640.webp 640w, /stockroom-920.webp 920w',
+      srcSet: '/stockroom-480.webp 480w, /stockroom-640.webp 640w, /stockroom-680.webp 680w, /stockroom-920.webp 920w',
       width: 920,
       height: 575,
       alt: "Stockroom's History page: a read-only log of purchase request events, each with its time, action, request, item, quantity, stock change and actor",
