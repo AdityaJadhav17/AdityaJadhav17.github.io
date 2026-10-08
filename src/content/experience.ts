@@ -3,10 +3,9 @@
 // it buried the current UC San Diego role under a summer internship that
 // started later but has already ended. Matches the resume ordering.
 //
-// The Lumulus Technologies entry is governed by a signed NDA: the company
-// name and job title are cleared, the technical substance is not. Only the
-// highlights explicitly permitted by the owner are used, in approximately
-// their given wording. Do not add detail beyond that list.
+// The Lumulus Technologies entry uses only the company name, the job title
+// and highlights the company has approved, in approximately their given
+// wording. Do not add detail beyond that list.
 //
 // The UC San Diego highlights are the owner's own wording, supplied verbatim
 // in September 2026, and describe the scope of an ongoing role in present
