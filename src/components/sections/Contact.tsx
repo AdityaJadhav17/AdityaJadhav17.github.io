@@ -149,7 +149,16 @@ export function Contact() {
               animating it. Same rule everywhere: no Reveal.Item wraps a
               single focusable element. */}
           <Reveal.Item>
-            <form noValidate onSubmit={handleSubmit} className="max-w-xl space-y-5">
+            {/* action/method are the no-JS and pre-hydration fallback: without
+                them the browser GETs the current URL. handleSubmit's
+                preventDefault still wins once hydrated. */}
+            <form
+              noValidate
+              action={FORMSPREE_ENDPOINT}
+              method="POST"
+              onSubmit={handleSubmit}
+              className="max-w-xl space-y-5"
+            >
               {/* Honeypot. `hidden` keeps it out of the layout and out of the
                   accessibility tree; tabIndex -1 keeps it out of the keyboard
                   order. No label, because nothing human should ever reach it. */}

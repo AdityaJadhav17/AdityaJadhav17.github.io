@@ -50,6 +50,26 @@ describe('Contact', () => {
     expect(honeypot.className).toContain('hidden')
   })
 
+  it('posts natively to Formspree when the JS handler has not attached', () => {
+    const { container } = render(<Contact />)
+    const form = container.querySelector('form') as HTMLFormElement
+
+    expect(form.getAttribute('action')).toBe('https://formspree.io/f/xblawgak')
+    expect(form.method).toBe('post')
+    for (const name of ['name', 'email', 'message', '_gotcha']) {
+      expect(form.querySelector(`[name="${name}"]`)).not.toBeNull()
+    }
+  })
+
+  it('still prevents the native submit once the handler is attached', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }))
+    const { container } = render(<Contact />)
+    const form = container.querySelector('form') as HTMLFormElement
+    const ev = new Event('submit', { bubbles: true, cancelable: true })
+    form.dispatchEvent(ev)
+    expect(ev.defaultPrevented).toBe(true)
+  })
+
   it('announces success in a live region', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }))
     render(<Contact />)
