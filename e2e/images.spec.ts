@@ -4,9 +4,11 @@ import { test, expect } from '@playwright/test'
 // chosen candidate (read from the -<width> suffix of currentSrc) may not be
 // more than 1.5x the device pixels it covers. Upscaling is allowed: when the
 // largest asset is smaller than the slot, there is nothing bigger to choose.
-// Personal Tracker and Stockroom ship a separate -dark- capture. Each theme
-// must request only its own: the other <img> is display:none and lazy, so the
-// browser never fetches it.
+// Personal Tracker, Stockroom, WatchTower and TravelAGNTCY each ship a light and
+// a dark capture. Each theme must request only its own: the other <img> is
+// display:none and lazy, so the browser never fetches it. The light-UI base
+// files are personal-tracker-/stockroom-<w> and *-light-<w>; the dark ones are
+// *-dark-<w> plus the original watchtower-/travel-agntcy-<w> dark-UI captures.
 const contexts = [
   { name: '412x823 @1.75', viewport: { width: 412, height: 823 }, deviceScaleFactor: 1.75, isMobile: true, hasTouch: true },
   { name: '1440x900 @1', viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 },
@@ -31,9 +33,11 @@ for (const { name, colorScheme, ...options } of cases) {
     })
     // A lazy image in the hidden theme variant never loads, so only wait on the shown ones.
     await page.waitForFunction(() => [...document.images].filter((i) => i.clientWidth > 0).every((i) => i.complete))
-    const own = (p: string) => (colorScheme === 'dark' ? /-dark-\d+\.webp$/ : /^\/(personal-tracker|stockroom)-\d+\.webp$/).test(p)
-    const other = (p: string) => (colorScheme === 'dark' ? /^\/(personal-tracker|stockroom)-\d+\.webp$/ : /-dark-\d+\.webp$/).test(p)
-    expect(requested.filter(own).length).toBeGreaterThanOrEqual(2) // one per project
+    const lightFile = /^\/(personal-tracker|stockroom)-\d+\.webp$|-light-\d+\.webp$/
+    const darkFile = /-dark-\d+\.webp$|^\/(watchtower|travel-agntcy)-\d+\.webp$/
+    const own = (p: string) => (colorScheme === 'dark' ? darkFile : lightFile).test(p)
+    const other = (p: string) => (colorScheme === 'dark' ? lightFile : darkFile).test(p)
+    expect(requested.filter(own).length).toBeGreaterThanOrEqual(4) // one per project
     expect(requested.filter(other)).toEqual([])
     const images = await page.evaluate(() =>
       [...document.images]
