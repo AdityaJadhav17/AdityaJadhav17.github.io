@@ -14,7 +14,7 @@ Live at [adityajadhav.dev](https://adityajadhav.dev).
   (Radix primitives) for the accessible building blocks: `Button`, `Input`, `Textarea`,
   `Sheet` (mobile nav), etc.
 - **lucide-react** for UI icons, **react-icons** for brand marks (GitHub/LinkedIn)
-- **Motion** (via `LazyMotion` + `m`, `domMin` features only, which keeps gesture, layout and drag code out of the bundle) for the scroll reveal; fonts self-hosted via **@fontsource-variable**
+- **Motion** (via `LazyMotion` + `m`, `domMin` features only, which keeps gesture, layout and drag code out of the bundle) for the scroll reveal; fonts self-hosted via **@fontsource-variable** (Archivo) and **@fontsource** (JetBrains Mono, stack tags only)
 - **Vitest** + **Testing Library** for tests
 
 ## Structure
@@ -22,7 +22,7 @@ Live at [adityajadhav.dev](https://adityajadhav.dev).
 ```
 src/
 ├── components/
-│   ├── layout/        # Navbar, Footer, ThemeToggle, SkipLink
+│   ├── layout/        # Navbar, MobileSheet, Footer, ThemeMenu, SkipLink
 │   ├── motion/        # Reveal
 │   ├── sections/      # Hero, Work, Experience, About, Contact
 │   ├── ui/            # shadcn/ui primitives
