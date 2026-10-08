@@ -23,6 +23,19 @@ describe('ProjectCard', () => {
     expect(screen.getByText(p.outcome)).toBeInTheDocument()
   })
 
+  it('renders a theme-matched pair when a dark capture exists, dimming neither', () => {
+    const p = byId('stockroom')
+    render(<ProjectCard project={p} layout="wide" />)
+    const light = screen.getByAltText(p.image!.alt)
+    const dark = screen.getByAltText(p.image!.dark!.alt)
+    expect(light).toHaveClass('dark:hidden')
+    expect(dark).toHaveClass('hidden', 'dark:block')
+    for (const img of [light, dark]) {
+      expect(img).toHaveAttribute('loading', 'lazy')
+      expect(img.className).not.toContain('brightness')
+    }
+  })
+
   it('shows at most five stack tags outside the details, plus a +N item', () => {
     const p = byId('travel-agntcy')
     const { container } = render(<ProjectCard project={p} />)
