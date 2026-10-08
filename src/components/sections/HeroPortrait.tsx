@@ -18,6 +18,15 @@ export function HeroPortrait() {
     // dark clothing behind dark type in the light theme. Offsetting right
     // keeps the two clear of each other while they still share the frame.
     //
+    // Height at lg is 62vh, capped two ways. 100dvh - 366px: the hero is at
+    // least 100dvh - 65px tall and the Capabilities list ends at most 273px
+    // below its top (it wraps to its tallest at 1024), so the portrait's top
+    // stays 24px+ below the list on short viewports (it covered the last line
+    // at 1024x768). 35rem (560px): on large screens a taller portrait gets
+    // wide enough to reach the stat labels (-38px clearance at 1920x1080).
+    // 12rem is a floor for absurdly short windows. Update PORTRAIT_SIZES with
+    // any change here.
+    //
     // 5% was measured, not guessed. The binding constraint is the proof row,
     // which reaches furthest right and overlaps the portrait vertically. At
     // 62vh the portrait is narrower than it was at 66vh, so the 7% used then
@@ -44,7 +53,7 @@ export function HeroPortrait() {
             loading="eager"
             decoding="async"
             fetchPriority="high"
-            className="relative h-[38vh] w-auto max-w-none object-contain object-bottom sm:h-[46vh] lg:h-[62vh]"
+            className="relative h-[38vh] w-auto max-w-none object-contain object-bottom sm:h-[46vh] lg:h-[min(62vh,35rem,max(12rem,calc(100dvh-366px)))]"
           />
         </picture>
       </div>

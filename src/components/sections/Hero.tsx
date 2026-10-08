@@ -52,7 +52,7 @@ export function Hero() {
       className="container-site relative grid min-h-[calc(100dvh-4rem-1px)] grid-cols-1 content-start gap-y-6 overflow-hidden pt-8 pb-16 lg:grid-cols-4 lg:content-stretch lg:gap-x-8 lg:grid-rows-[auto_auto_auto_auto_1fr] lg:gap-y-0 lg:py-12"
     >
       {/* Identity */}
-      <div style={step(0)} className="hero-in relative z-10 lg:col-start-1 lg:row-start-1">
+      <div style={step(0)} className="hero-in relative z-10 lg:col-span-2 lg:col-start-1 lg:row-start-1">
         <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground lg:text-4xl">
           {site.name}
         </h1>

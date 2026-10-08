@@ -150,18 +150,33 @@ test.describe('hero on a phone', () => {
   })
 })
 
-// B4: no dead band, and the portrait stays clear of the Capabilities list.
-test('portrait clears the capabilities list by 24px at 1440x900', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
-  await page.setViewportSize({ width: 1440, height: 900 })
-  await page.goto('/')
-  const capsBottom = await page
-    .locator('#home p', { hasText: /^Capabilities$/ })
-    .locator('xpath=..')
-    .evaluate((el) => el.getBoundingClientRect().bottom)
-  const portraitTop = await page.locator('#home picture img').evaluate((el) => el.getBoundingClientRect().top)
-  expect(portraitTop - capsBottom).toBeGreaterThanOrEqual(24)
-})
+// B4: no dead band, and the portrait stays clear of the Capabilities list at
+// every desktop size, including short viewports where the hero is only as tall
+// as the screen. The name stays on one line.
+for (const [width, height] of [
+  [1024, 768],
+  [1280, 800],
+  [1440, 900],
+  [1920, 1080],
+] as const) {
+  test(`portrait clears the capabilities list by 24px at ${width}x${height}`, async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
+    await page.setViewportSize({ width, height })
+    await page.goto('/')
+    const capsBottom = await page
+      .locator('#home p', { hasText: /^Capabilities$/ })
+      .locator('xpath=..')
+      .evaluate((el) => el.getBoundingClientRect().bottom)
+    const portraitTop = await page.locator('#home picture img').evaluate((el) => el.getBoundingClientRect().top)
+    console.log(`${width}x${height} capabilities clearance`, portraitTop - capsBottom)
+    expect(portraitTop - capsBottom).toBeGreaterThanOrEqual(24)
+    const h1 = await page.locator('h1').evaluate((el) => ({
+      h: el.getBoundingClientRect().height,
+      lh: parseFloat(getComputedStyle(el).lineHeight),
+    }))
+    expect(h1.h).toBeLessThan(h1.lh * 1.5)
+  })
+}
 
 // B5: the claim sits right under the name (the metadata columns span both rows
 // rather than stretching the identity row), and wraps in the same four lines
@@ -219,10 +234,15 @@ test('featured projects have no card chrome, grid projects do', async ({ page },
 
 // B5 fix: the stats follow the actions instead of sitting at the bottom, and
 // still keep clear of the portrait.
-for (const width of [1024, 1280, 1440]) {
-  test(`stats follow the actions and clear the portrait at ${width}px`, async ({ page }, testInfo) => {
+for (const [width, height] of [
+  [1024, 768],
+  [1280, 800],
+  [1440, 900],
+  [1920, 1080],
+] as const) {
+  test(`stats follow the actions and clear the portrait at ${width}x${height}`, async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
-    await page.setViewportSize({ width, height: 900 })
+    await page.setViewportSize({ width, height })
     await page.goto('/')
     await page.waitForTimeout(600)
     const m = await page.evaluate(() => {
@@ -239,6 +259,7 @@ for (const width of [1024, 1280, 1440]) {
         clearance: portrait.left - Math.max(...labels.map((l) => l.right)),
       }
     })
+    console.log(`${width}x${height} stats gap`, m.gap, 'label clearance', m.clearance)
     expect(m.gap).toBeLessThanOrEqual(64)
     // At 1024 the portrait's box already reaches into the left columns (its
     // left edge is transparent); the figures sit where they always did, so only
