@@ -232,6 +232,45 @@ test('featured projects have no card chrome, grid projects do', async ({ page },
   expect((await chrome('sim2real')).border).toBe('1px')
 })
 
+// From lg the dates sit in a left column, with the dot and rail between them
+// and the content: date edge to content edge stays within 24px, and each dot is
+// centred on the rail.
+test('experience dates sit beside their content at 1440px', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto('/')
+  const rows = await page.evaluate(() => {
+    const rail = document.querySelector('#experience span.origin-top')!.getBoundingClientRect()
+    return [...document.querySelectorAll('#experience ol > li')].map((li) => {
+      const date = document.createRange()
+      date.selectNodeContents(li.querySelector('span.tabular-nums')!)
+      const title = li.querySelector('h3, h4')!.getBoundingClientRect()
+      const dot = li.querySelector('span.rounded-full')!.getBoundingClientRect()
+      return {
+        id: li.id,
+        gap: title.left - date.getBoundingClientRect().right,
+        dateTop: date.getBoundingClientRect().top - title.top,
+        railOffset: dot.left + dot.width / 2 - (rail.left + rail.width / 2),
+      }
+    })
+  })
+  console.log('experience rows', JSON.stringify(rows))
+  expect(rows).toHaveLength(5)
+  for (const r of rows) {
+    expect(r.gap, r.id).toBeGreaterThan(0)
+    expect(r.gap, r.id).toBeLessThanOrEqual(24)
+    expect(Math.abs(r.railOffset), r.id).toBeLessThanOrEqual(1)
+  }
+  await expect(page.locator('#experience h3', { hasText: 'Leadership' })).toBeVisible()
+  expect(await page.locator('#experience ol > li').evaluateAll((els) => els.map((e) => e.id))).toEqual([
+    'experience-uc-san-diego-its',
+    'experience-lumulus',
+    'experience-nutrifitworld',
+    'experience-ai-club',
+    'experience-cybersecurity-club',
+  ])
+})
+
 // B5 fix: the stats follow the actions instead of sitting at the bottom, and
 // still keep clear of the portrait.
 for (const [width, height] of [
