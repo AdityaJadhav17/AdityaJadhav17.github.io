@@ -108,50 +108,26 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
             className={cn('w-full bg-card ring-1 ring-border', isWide ? 'rounded-lg' : 'rounded-md', ratio)}
           />
         ) : project.image ? (
-          <>
-            <img
-              src={project.image.src}
-              srcSet={project.image.srcSet}
-              sizes={isWide ? SIZES.wide : SIZES.stacked}
-              alt={project.image.alt}
-              width={project.image.width}
-              height={project.image.height}
-              loading="lazy"
-              decoding="async"
-              className={cn(
-                // Every image is pre-cropped to its slot (16:10 wide, 2:1 in the
-                // grid), so object-cover only absorbs rounding. Light screenshots
-                // are dimmed in dark theme so they do not glare; dark ones keep
-                // their own ground. Never inverted.
-                'w-full object-cover ring-1 ring-border',
-                isWide ? 'rounded-lg' : 'rounded-md',
-                project.image.dark
-                  ? 'dark:hidden'
-                  : project.image.tone === 'light' && 'dark:brightness-[.85]',
-                ratio,
-              )}
-            />
-            {/* The owner's dark capture. display:none on a lazy image means the
-                browser never fetches it, so each theme downloads only its own
-                file. Already a dark UI, so no dimming. */}
-            {project.image.dark && (
-              <img
-                src={project.image.dark.src}
-                srcSet={project.image.dark.srcSet}
-                sizes={isWide ? SIZES.wide : SIZES.stacked}
-                alt={project.image.dark.alt}
-                width={project.image.width}
-                height={project.image.height}
-                loading="lazy"
-                decoding="async"
-                className={cn(
-                  'hidden w-full object-cover ring-1 ring-border dark:block',
-                  isWide ? 'rounded-lg' : 'rounded-md',
-                  ratio,
-                )}
-              />
+          <img
+            src={project.image.src}
+            srcSet={project.image.srcSet}
+            sizes={isWide ? SIZES.wide : SIZES.stacked}
+            alt={project.image.alt}
+            width={project.image.width}
+            height={project.image.height}
+            loading="lazy"
+            decoding="async"
+            className={cn(
+              // Every image is pre-cropped to its slot (16:10 wide, 2:1 in the
+              // grid), so object-cover only absorbs rounding. Each project shows
+              // the same screen in both themes; light screenshots are dimmed in
+              // dark theme so they do not glare. Never inverted.
+              'w-full object-cover ring-1 ring-border',
+              isWide ? 'rounded-lg' : 'rounded-md',
+              project.image.tone === 'light' && 'dark:brightness-[.85]',
+              ratio,
             )}
-          </>
+          />
         ) : (
           <div
             aria-hidden="true"
