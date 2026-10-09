@@ -27,5 +27,9 @@ writeFileSync(
     .replace('<!--app-head-->', () => preload + ssr.buildHead())
     .replace('<!--app-html-->', () => app),
 )
+// The 404 page is static and JS-free, so it gets the same hashed font by file name.
+const notFound = resolve('dist/404.html')
+writeFileSync(notFound, readFileSync(notFound, 'utf8').replace('{{archivo}}', archivo))
+
 rmSync('dist-ssr', { recursive: true, force: true })
-console.log('prerender: dist/index.html written')
+console.log('prerender: dist/index.html, 404.html written')
