@@ -15,7 +15,6 @@ test.describe('copy email', () => {
     const button = page.getByRole('button', { name: 'Copy email' })
     const live = page.locator('#contact [aria-live="polite"]')
     await button.scrollIntoViewIfNeeded()
-    expect((await button.boundingBox())!.height).toBeGreaterThanOrEqual(44)
     await button.click()
     await expect(live).toHaveText('Copied')
     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(EMAIL)
@@ -34,4 +33,19 @@ test.describe('copy email', () => {
     await expect(page.locator('#contact [aria-live="polite"]')).toHaveText('Email selected')
     await context.close()
   })
+})
+
+// "Copy email" is the same Button size as the Email/GitHub/LinkedIn buttons
+// below it: equal heights at a mouse width and on a touch phone.
+test('copy email is as tall as the contact buttons', async ({ page }, testInfo) => {
+  test.skip(!['chromium', 'iphone'].includes(testInfo.project.name))
+  if (testInfo.project.name === 'chromium') await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto('/')
+  const heights = await page.evaluate(() =>
+    [...document.querySelectorAll('#contact .flex-wrap button, #contact .flex-wrap a')]
+      .filter((el) => !el.closest('form') && el.textContent)
+      .map((el) => [el.textContent!.trim(), el.getBoundingClientRect().height]),
+  )
+  expect(heights.map(([name]) => name)).toEqual(['Copy email', 'Email', 'GitHub', 'LinkedIn'])
+  expect(new Set(heights.map(([, h]) => h)).size, JSON.stringify(heights)).toBe(1)
 })

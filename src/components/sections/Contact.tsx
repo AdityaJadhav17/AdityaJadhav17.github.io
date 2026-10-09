@@ -296,7 +296,7 @@ export function Contact() {
                 <span ref={addressRef} className="font-mono text-sm break-all">
                   {site.email}
                 </span>
-                <Button type="button" variant="outline" size="lg" className="min-h-11" onClick={copyEmail}>
+                <Button type="button" variant="outline" size="lg" onClick={copyEmail}>
                   {announcement === 'Copied' ? (
                     <Check aria-hidden="true" className="size-4" />
                   ) : (
