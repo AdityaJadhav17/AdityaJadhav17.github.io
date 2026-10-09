@@ -125,6 +125,19 @@ describe('Contact', () => {
       await user.click(screen.getByRole('button', { name: 'Copy email' }))
       expect(writeText).toHaveBeenCalledWith(site.email)
       expect(live).toHaveTextContent('Copied')
+      // The accessible name stays put; only the live region speaks.
+      expect(screen.getByRole('button', { name: 'Copy email' })).toBeInTheDocument()
+
+      // A second click inside the window re-announces: the region is emptied first.
+      const texts: string[] = []
+      new MutationObserver(() => texts.push(live.textContent ?? '')).observe(live, {
+        childList: true,
+        characterData: true,
+        subtree: true,
+      })
+      await user.click(screen.getByRole('button', { name: 'Copy email' }))
+      await waitFor(() => expect(texts).toContain(''))
+      expect(live).toHaveTextContent('Copied')
 
       await act(async () => {
         vi.advanceTimersByTime(2000)
@@ -136,9 +149,10 @@ describe('Contact', () => {
     it('selects the address when the clipboard is unavailable', async () => {
       const user = userEvent.setup()
       Object.defineProperty(navigator, 'clipboard', { value: undefined, configurable: true })
-      render(<Contact />)
+      const { container } = render(<Contact />)
       await user.click(screen.getByRole('button', { name: 'Copy email' }))
       expect(window.getSelection()?.toString()).toBe(site.email)
+      expect(container.querySelector('[aria-live="polite"]')).toHaveTextContent('Email selected')
     })
 
     it('keeps the mailto link', () => {

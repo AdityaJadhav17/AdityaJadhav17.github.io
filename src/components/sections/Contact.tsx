@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
+import { flushSync } from 'react-dom'
 import { Check, Copy, ExternalLink, Loader2, Mail } from 'lucide-react'
 import { FaGithub, FaLinkedin } from 'react-icons/fa'
 import { Button } from '@/components/ui/button'
@@ -63,29 +64,38 @@ export function Contact() {
   const messageRef = useRef<HTMLTextAreaElement>(null)
   const fieldRefs = { name: nameRef, email: emailRef, message: messageRef }
 
+  // Native validation stays on for the no-JS path (the `required` attributes).
+  // Once hydrated, turn it off so handleSubmit's own messages and focus
+  // management run. Set on the element, not in JSX, so the server HTML keeps it.
   const formRef = useRef<HTMLFormElement>(null)
   useEffect(() => {
     formRef.current!.noValidate = true
   }, [])
 
-  // "Copy email": announce once per click, clear after 2 s. Without the
-  // clipboard API (or when it refuses), select the address so Ctrl/Cmd+C works.
+  // "Copy email": the button's name never changes; the live region speaks.
+  // Without the clipboard API (or when it refuses), select the address so
+  // Ctrl/Cmd+C works and say so.
   const addressRef = useRef<HTMLSpanElement>(null)
-  const copiedTimer = useRef<number>(undefined)
-  const [copied, setCopied] = useState(false)
+  const announceTimer = useRef<number>(undefined)
+  const [announcement, setAnnouncement] = useState('')
+
+  function announce(text: string) {
+    window.clearTimeout(announceTimer.current)
+    // Empty first, so a repeat click changes the region and is read again.
+    flushSync(() => setAnnouncement(''))
+    setAnnouncement(text)
+    announceTimer.current = window.setTimeout(() => setAnnouncement(''), 2000)
+  }
 
   async function copyEmail() {
-    window.clearTimeout(copiedTimer.current)
-    setCopied(false)
     try {
       await navigator.clipboard.writeText(site.email)
     } catch {
-      const selection = window.getSelection()
-      selection?.selectAllChildren(addressRef.current!)
+      window.getSelection()?.selectAllChildren(addressRef.current!)
+      announce('Email selected')
       return
     }
-    setCopied(true)
-    copiedTimer.current = window.setTimeout(() => setCopied(false), 2000)
+    announce('Copied')
   }
 
   // Spam honeypot. Deliberately a ref rather than form state: keeping it out
@@ -286,16 +296,16 @@ export function Contact() {
                 <span ref={addressRef} className="font-mono text-sm break-all">
                   {site.email}
                 </span>
-                <Button type="button" variant="outline" size="lg" onClick={copyEmail}>
-                  {copied ? (
+                <Button type="button" variant="outline" size="lg" className="min-h-11" onClick={copyEmail}>
+                  {announcement === 'Copied' ? (
                     <Check aria-hidden="true" className="size-4" />
                   ) : (
                     <Copy aria-hidden="true" className="size-4" />
                   )}
-                  {copied ? 'Copied' : 'Copy email'}
+                  Copy email
                 </Button>
                 <span aria-live="polite" className="sr-only">
-                  {copied ? 'Copied' : ''}
+                  {announcement}
                 </span>
               </div>
 
