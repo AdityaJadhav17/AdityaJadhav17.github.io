@@ -61,7 +61,6 @@ for (const { name, ...options } of contexts) {
 // widths from a new capture and deleting its line.
 const SOURCE_LIMITED: Record<string, string> = {
   'watchtower-light-m': 'awaiting larger original', // phone crop is 780 px native
-  stockroom: 'awaiting ≥1280 px owner capture', // 1200 px master, 920 px crop
   'stockroom-m': 'awaiting ≥1280 px owner capture',
   'personal-tracker': 'awaiting ≥1280 px owner capture', // 1200 px master, 840 px crop
   sim2real: 'awaiting larger original', // 560 px
