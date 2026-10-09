@@ -31,5 +31,19 @@ writeFileSync(
 const notFound = resolve('dist/404.html')
 writeFileSync(notFound, readFileSync(notFound, 'utf8').replace('{{archivo}}', archivo))
 
+// The origin comes from package.json, same as the canonical URL in head.ts.
+const { homepage } = JSON.parse(readFileSync('package.json', 'utf8'))
+// lastmod is the build date, so it cannot go stale in a committed file.
+writeFileSync(
+  resolve('dist/sitemap.xml'),
+  `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${homepage}/</loc>
+    <lastmod>${new Date().toISOString().slice(0, 10)}</lastmod>
+  </url>
+</urlset>
+`,
+)
 rmSync('dist-ssr', { recursive: true, force: true })
-console.log('prerender: dist/index.html, 404.html written')
+console.log('prerender: dist/index.html, 404.html, sitemap.xml written')

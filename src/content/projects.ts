@@ -55,7 +55,7 @@ export const projects: Project[] = [
         '/watchtower-light-m-480.webp 480w, /watchtower-light-m-640.webp 640w, /watchtower-light-m-780.webp 780w',
       width: 960,
       height: 600,
-      alt: "WatchTower's Production health page: bars for availability, errors, latency, signal and feedback, a status key, and a radar chart of the same five dimensions",
+      alt: "WatchTower's Production health page, with a bar for each of availability, errors, latency, signal and feedback",
       tone: 'light',
     },
     links: {

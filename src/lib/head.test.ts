@@ -12,6 +12,15 @@ test('head is generated from content and never mentions an ended role', () => {
   expect(head).not.toMatch(/\u2014/)
 })
 
+test('image alt text and alumniOf are present', () => {
+  const head = buildHead()
+  expect(head).toMatch(/<meta property="og:image:alt" content="[^"]*I build AI systems and find where they break\.[^"]*"/)
+  expect(head).toMatch(/<meta name="twitter:image:alt" content="[^"]*adityajadhav\.dev[^"]*"/)
+  const ld = JSON.parse(head.match(/application\/ld\+json">(.*?)<\/script>/)![1])
+  expect(ld.alumniOf).toEqual({ '@type': 'CollegeOrUniversity', name: 'UC San Diego' })
+  expect(ld.affiliation).toEqual(ld.alumniOf)
+})
+
 test('JSON-LD cannot be broken out of its script tag', () => {
   const tag = jsonLdScript({ x: '</script><img>' })
   expect(tag.match(/<\/script>/g)).toHaveLength(1)
