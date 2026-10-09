@@ -1,4 +1,4 @@
-import { useRef, useState, type ChangeEvent, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import { Check, Copy, ExternalLink, Loader2, Mail } from 'lucide-react'
 import { FaGithub, FaLinkedin } from 'react-icons/fa'
 import { Button } from '@/components/ui/button'
@@ -62,6 +62,11 @@ export function Contact() {
   const emailRef = useRef<HTMLInputElement>(null)
   const messageRef = useRef<HTMLTextAreaElement>(null)
   const fieldRefs = { name: nameRef, email: emailRef, message: messageRef }
+
+  const formRef = useRef<HTMLFormElement>(null)
+  useEffect(() => {
+    formRef.current!.noValidate = true
+  }, [])
 
   // "Copy email": announce once per click, clear after 2 s. Without the
   // clipboard API (or when it refuses), select the address so Ctrl/Cmd+C works.
@@ -173,7 +178,7 @@ export function Contact() {
                 them the browser GETs the current URL. handleSubmit's
                 preventDefault still wins once hydrated. */}
             <form
-              noValidate
+              ref={formRef}
               action={FORMSPREE_ENDPOINT}
               method="POST"
               onSubmit={handleSubmit}
@@ -198,6 +203,7 @@ export function Contact() {
                   id="contact-name"
                   name="name"
                   ref={nameRef}
+                  required
                   value={values.name}
                   onChange={handleChange}
                   autoComplete="name"
@@ -218,6 +224,7 @@ export function Contact() {
                   name="email"
                   type="email"
                   ref={emailRef}
+                  required
                   value={values.email}
                   onChange={handleChange}
                   autoComplete="email"
@@ -237,6 +244,7 @@ export function Contact() {
                   id="contact-message"
                   name="message"
                   ref={messageRef}
+                  required
                   value={values.message}
                   onChange={handleChange}
                   rows={5}

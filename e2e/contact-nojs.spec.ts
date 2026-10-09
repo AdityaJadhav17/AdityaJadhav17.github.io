@@ -45,3 +45,24 @@ test('contact form posts to Formspree without JavaScript', async ({ browser }, t
 
   await context.close()
 })
+
+// Without JS the only validation is the browser's. required fields must stop an
+// empty submit before any request leaves for Formspree.
+test('an empty form is blocked natively and sends nothing without JavaScript', async ({ browser }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium', 'native validation runs once, on Chromium')
+
+  const context = await browser.newContext({ javaScriptEnabled: false, reducedMotion: 'reduce' })
+  const page = await context.newPage()
+  let requests = 0
+  await page.route('https://formspree.io/**', async (route) => {
+    requests++
+    await route.fulfill({ status: 200, contentType: 'text/html', body: '<p>ok</p>' })
+  })
+
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Send message' }).click()
+  await page.waitForTimeout(500)
+
+  expect(requests).toBe(0)
+  await context.close()
+})

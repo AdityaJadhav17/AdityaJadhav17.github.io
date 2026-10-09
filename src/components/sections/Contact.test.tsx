@@ -62,6 +62,16 @@ describe('Contact', () => {
     }
   })
 
+  it('requires the three fields natively and turns native validation off once hydrated', () => {
+    const { container } = render(<Contact />)
+    const form = container.querySelector('form') as HTMLFormElement
+    for (const name of ['name', 'email', 'message']) {
+      expect(form.querySelector(`[name="${name}"]`)).toBeRequired()
+    }
+    expect(form.querySelector('[name="email"]')).toHaveAttribute('type', 'email')
+    expect(form.noValidate).toBe(true)
+  })
+
   it('still prevents the native submit once the handler is attached', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }))
     const { container } = render(<Contact />)
