@@ -124,7 +124,10 @@ describe('Contact', () => {
 
       await user.click(screen.getByRole('button', { name: 'Copy email' }))
       expect(writeText).toHaveBeenCalledWith(site.email)
-      expect(live).toHaveTextContent('Copied')
+      // The announcement lands after the clipboard promise resolves and React
+      // re-renders, so wait for it rather than asserting synchronously (a slow
+      // CI runner lost that race).
+      await waitFor(() => expect(live).toHaveTextContent('Copied'))
       // The accessible name stays put; only the live region speaks.
       expect(screen.getByRole('button', { name: 'Copy email' })).toBeInTheDocument()
 
@@ -137,7 +140,7 @@ describe('Contact', () => {
       })
       await user.click(screen.getByRole('button', { name: 'Copy email' }))
       await waitFor(() => expect(texts).toContain(''))
-      expect(live).toHaveTextContent('Copied')
+      await waitFor(() => expect(live).toHaveTextContent('Copied'))
 
       await act(async () => {
         vi.advanceTimersByTime(2000)
