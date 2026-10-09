@@ -114,7 +114,7 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
         ) : project.image ? (
           <picture className="block">
             {project.image.mobileSrcSet && (
-              <source media="(max-width: 767px)" srcSet={project.image.mobileSrcSet} sizes={SIZES.wide} />
+              <source media="(width < 48rem)" srcSet={project.image.mobileSrcSet} sizes={SIZES.wide} />
             )}
             <img
               src={project.image.src}

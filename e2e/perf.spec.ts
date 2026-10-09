@@ -4,9 +4,10 @@ import { test, expect } from '@playwright/test'
 // machine the longest task is 80-215 ms run to run, and it is mostly parse,
 // layout and paint rather than hydration, so this is a coarse regression
 // ceiling, not the 50 ms Lighthouse target. Tighten it if the page gets lighter.
-// 2026-10-08: five sequential PERF=1 runs gave a longest task of 172, 108, 167,
-// 157 and 163 ms; ceiling = ceil(max 172 x 1.1).
-const CEILING_MS = 190
+// 215 ms is the worst run ever recorded on this machine; the 5-run sample of
+// 2026-10-08 was 172, 108, 167, 157 and 163 ms. Ceiling = ceil(215 x 1.1).
+// The spec only runs with PERF=1.
+const CEILING_MS = 240
 
 test.use({ viewport: { width: 412, height: 823 } })
 

@@ -55,7 +55,7 @@ export const projects: Project[] = [
         '/watchtower-light-m-480.webp 480w, /watchtower-light-m-640.webp 640w, /watchtower-light-m-780.webp 780w',
       width: 960,
       height: 600,
-      alt: "WatchTower's Production health page, with a bar for each of availability, errors, latency, signal and feedback",
+      alt: "WatchTower's Production health page, with a percentage score for each of availability, errors, latency, signal and feedback",
       tone: 'light',
     },
     links: {
@@ -118,7 +118,7 @@ export const projects: Project[] = [
         '/stockroom-m-480.webp 480w, /stockroom-m-640.webp 640w, /stockroom-m-760.webp 760w',
       width: 920,
       height: 575,
-      alt: "Stockroom's History page: a read-only log of purchase request events, each with its time, action, request, item, quantity, stock change and actor",
+      alt: "Stockroom's History page: a read-only log of purchase request events, each with its time, action, request, item, quantity and stock change",
       tone: 'light',
     },
     featured: true,

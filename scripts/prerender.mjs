@@ -2,6 +2,7 @@
 // into dist/index.html so crawlers, unfurlers and no-JS visitors get the
 // whole page, then removes the temporary SSR bundle.
 import { readFileSync, readdirSync, writeFileSync, rmSync } from 'node:fs'
+import { execSync } from 'node:child_process'
 import { pathToFileURL } from 'node:url'
 import { resolve } from 'node:path'
 import { fill, readTokens } from './tokens.mjs'
@@ -33,14 +34,20 @@ writeFileSync(notFound, readFileSync(notFound, 'utf8').replace('{{archivo}}', ar
 
 // The origin comes from package.json, same as the canonical URL in head.ts.
 const { homepage } = JSON.parse(readFileSync('package.json', 'utf8'))
-// lastmod is the build date, so it cannot go stale in a committed file.
+// lastmod is the last commit date (the content's real age); the build date if git is unavailable.
+let lastmod = new Date().toISOString().slice(0, 10)
+try {
+  lastmod = execSync('git log -1 --format=%cs', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim() || lastmod
+} catch {
+  // no git here: keep the build date
+}
 writeFileSync(
   resolve('dist/sitemap.xml'),
   `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>${homepage}/</loc>
-    <lastmod>${new Date().toISOString().slice(0, 10)}</lastmod>
+    <lastmod>${lastmod}</lastmod>
   </url>
 </urlset>
 `,
