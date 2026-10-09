@@ -88,9 +88,6 @@ test('every control has a 44px touch target', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'iphone', 'iPhone only')
   await page.goto('/')
   await expectCoarsePointer(page)
-  // Past the hero so the header brand link is shown (aria-hidden before that).
-  await page.evaluate(() => window.scrollTo({ top: 400, behavior: 'instant' }))
-  await expect(page.locator('header a[href="#home"]')).not.toHaveAttribute('aria-hidden', 'true')
   const controls = page.locator('button, a[href], summary')
   const check = async () => {
     const count = await controls.count()
@@ -345,5 +342,23 @@ for (const hash of ['work', 'main']) {
     test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
     await page.goto(`/#${hash}`)
     await expect(page.locator('#work details[open]')).toHaveCount(0)
+  })
+}
+
+// The name sits at the left of the header at every width and never overlaps
+// the theme or menu buttons.
+for (const width of [320, 390, 768, 1440]) {
+  test(`header name clears the buttons at ${width}px`, async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
+    await page.setViewportSize({ width, height: 800 })
+    await page.goto('/')
+    const name = page.locator('header a[href="#home"]')
+    await expect(name).toBeVisible()
+    const nameBox = (await name.boundingBox())!
+    const buttons = await page.locator('header button:visible').evaluateAll((els) =>
+      els.map((el) => el.getBoundingClientRect().left),
+    )
+    expect(buttons.length).toBeGreaterThan(0)
+    expect(nameBox.x + nameBox.width).toBeLessThanOrEqual(Math.min(...buttons) - 4)
   })
 }
