@@ -362,3 +362,81 @@ for (const width of [320, 390, 768, 1440]) {
     expect(nameBox.x + nameBox.width).toBeLessThanOrEqual(Math.min(...buttons) - 4)
   })
 }
+
+// The hero's h1 is the name; the header repeats it only after the h1 has
+// scrolled up under the header. The brand keeps its box the whole time.
+for (const [width, height] of [
+  [390, 844],
+  [1440, 900],
+] as const) {
+  test(`header name appears only after the hero name scrolls away at ${width}px`, async ({ page }, testInfo) => {
+    await page.setViewportSize({ width, height })
+    await page.goto('/')
+    const brand = page.locator('header a[href="#home"]')
+    const hidden = async () => {
+      await expect(brand).toHaveCSS('opacity', '0')
+      await expect(brand).toHaveAttribute('aria-hidden', 'true')
+      await expect(brand).toHaveAttribute('tabindex', '-1')
+    }
+    await hidden()
+    const boxTop = (await brand.boundingBox())!
+
+    // The visible name appears once in the first viewport.
+    const visibleNames = await page.evaluate(() =>
+      [...document.querySelectorAll('a, h1')].filter((el) => {
+        const r = el.getBoundingClientRect()
+        return (
+          el.textContent?.trim() === 'Aditya Jadhav' &&
+          r.bottom > 0 &&
+          r.top < innerHeight &&
+          getComputedStyle(el).opacity !== '0'
+        )
+      }).length,
+    )
+    expect(visibleNames).toBe(1)
+
+    // Tab never lands on it (keyboard focus order is Chromium-reliable only).
+    if (testInfo.project.name === 'chromium') {
+      for (let i = 0; i < 4; i++) {
+        await page.keyboard.press('Tab')
+        expect(await page.evaluate(() => document.activeElement?.getAttribute('href'))).not.toBe('#home')
+      }
+      await page.evaluate(() => (document.activeElement as HTMLElement).blur())
+    }
+
+    // Scroll until the h1's bottom is above the header's bottom.
+    await page.evaluate(() => {
+      const h1 = document.querySelector('#home h1')!
+      const header = document.querySelector('header')!
+      scrollTo({
+        top: scrollY + h1.getBoundingClientRect().bottom - header.getBoundingClientRect().bottom + 4,
+        behavior: 'instant',
+      })
+    })
+    await expect(brand).toHaveCSS('opacity', '1')
+    await expect(brand).not.toHaveAttribute('aria-hidden', 'true')
+    await expect(brand).not.toHaveAttribute('tabindex', '-1')
+    await brand.focus()
+    await expect(brand).toBeFocused()
+    expect(await brand.boundingBox()).toEqual(boxTop)
+
+    await page.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }))
+    await hidden()
+  })
+}
+
+test('header name fades in without a transition under reduced motion', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto('/')
+  const duration = await page
+    .locator('header a[href="#home"]')
+    .evaluate((el) => parseFloat(getComputedStyle(el).transitionDuration))
+  expect(duration).toBeLessThan(0.001) // theme.css clamps reduced-motion to ~0
+})
+
+test('header name shows on a reload mid-page', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
+  await page.goto('/#about')
+  await expect(page.locator('header a[href="#home"]')).toHaveCSS('opacity', '1')
+})
