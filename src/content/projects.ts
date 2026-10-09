@@ -24,6 +24,9 @@ export type Project = {
     height: number
     alt: string
     srcSet?: string
+    // A 4:3 crop of the same capture for phones (below md), where the 16:10 one
+    // would shrink its text too far. Only the featured projects have one.
+    mobileSrcSet?: string
     tone: 'light' | 'dark'
   }
   // The only chart is the Talk-to-Robot tier chart, drawn from tokens by TierChart instead of an <img>.
@@ -48,6 +51,8 @@ export const projects: Project[] = [
       src: '/watchtower-light-960.webp',
       srcSet:
         '/watchtower-light-480.webp 480w, /watchtower-light-640.webp 640w, /watchtower-light-680.webp 680w, /watchtower-light-960.webp 960w',
+      mobileSrcSet:
+        '/watchtower-light-m-480.webp 480w, /watchtower-light-m-640.webp 640w, /watchtower-light-m-780.webp 780w',
       width: 960,
       height: 600,
       alt: "WatchTower's Production health page: bars for availability, errors, latency, signal and feedback, a status key, and a radar chart of the same five dimensions",
@@ -81,6 +86,8 @@ export const projects: Project[] = [
       src: '/travel-agntcy-light-960.webp',
       srcSet:
         '/travel-agntcy-light-480.webp 480w, /travel-agntcy-light-640.webp 640w, /travel-agntcy-light-680.webp 680w, /travel-agntcy-light-960.webp 960w',
+      mobileSrcSet:
+        '/travel-agntcy-light-m-480.webp 480w, /travel-agntcy-light-m-640.webp 640w, /travel-agntcy-light-m-860.webp 860w, /travel-agntcy-light-m-1080.webp 1080w',
       width: 960,
       height: 600,
       alt: 'TravelAGNTCY agent graph: a Travel Agent supervisor linked to a NATS transport, which links to a Flight Agent, a Hotel Agent and an Activity Agent',
@@ -107,6 +114,8 @@ export const projects: Project[] = [
     image: {
       src: '/stockroom-920.webp',
       srcSet: '/stockroom-480.webp 480w, /stockroom-640.webp 640w, /stockroom-680.webp 680w, /stockroom-920.webp 920w',
+      mobileSrcSet:
+        '/stockroom-m-480.webp 480w, /stockroom-m-640.webp 640w, /stockroom-m-760.webp 760w',
       width: 920,
       height: 575,
       alt: "Stockroom's History page: a read-only log of purchase request events, each with its time, action, request, item, quantity, stock change and actor",

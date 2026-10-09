@@ -26,10 +26,11 @@ for (const width of [390, 768, 1440]) {
   })
 }
 
-// Closed cards keep the page short: the full story is behind <details>.
+// Closed cards keep the page short: the full story is behind <details>. The
+// 390 cap allows for the featured cards' phone chrome and 4:3 posters.
 for (const [width, height, max] of [
   [1440, 900, 6750],
-  [390, 844, 9900],
+  [390, 844, 10200],
 ] as const) {
   test(`page stays under ${max}px tall at ${width}px with details closed`, async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
@@ -228,7 +229,10 @@ test('featured projects have no card chrome, grid projects do', async ({ page },
       const s = getComputedStyle(el)
       return { border: s.borderTopWidth, shadow: s.boxShadow, bg: s.backgroundColor }
     })
-  expect(await chrome('watchtower')).toEqual({ border: '0px', shadow: 'none', bg: 'rgba(0, 0, 0, 0)' })
+  // shadow-none computes to a stack of fully transparent shadows, not 'none'.
+  const wt = await chrome('watchtower')
+  expect(wt.shadow.replaceAll('rgba(0, 0, 0, 0) 0px 0px 0px 0px', '').replace(/[, ]/g, '') || 'none').toBe('none')
+  expect({ border: wt.border, bg: wt.bg }).toEqual({ border: '0px', bg: 'rgba(0, 0, 0, 0)' })
   expect((await chrome('sim2real')).border).toBe('1px')
 })
 
@@ -269,6 +273,26 @@ test('experience dates sit beside their content at 1440px', async ({ page }, tes
     'experience-ai-club',
     'experience-cybersecurity-club',
   ])
+})
+
+// On a phone all seven project cards share one treatment; featured cards keep
+// their bare layout only from md up.
+test.describe('work cards on a phone', () => {
+  test.use({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true })
+
+  test('every card has the same border and background', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
+    await page.goto('/')
+    const styles = await page.locator('#work article').evaluateAll((els) =>
+      els.map((el) => {
+        const s = getComputedStyle(el)
+        return [s.borderTopWidth, s.borderTopColor, s.backgroundColor, s.borderRadius].join(' | ')
+      }),
+    )
+    expect(styles).toHaveLength(7)
+    expect(new Set(styles).size, styles.join(', ')).toBe(1)
+    expect(styles[0]).not.toMatch(/^0px/)
+  })
 })
 
 // B5 fix: the stats follow the actions instead of sitting at the bottom, and
