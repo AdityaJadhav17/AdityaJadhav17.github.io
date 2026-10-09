@@ -1,7 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Contact } from './Contact'
+import { site } from '@/content/site'
 
 describe('Contact', () => {
   beforeEach(() => vi.restoreAllMocks())
@@ -95,6 +96,44 @@ describe('Contact', () => {
     await fillAndSubmit()
     await waitFor(() => {
       expect(screen.getByRole('alert')).toBeInTheDocument()
+    })
+  })
+
+  describe('copy email', () => {
+    afterEach(() => vi.useRealTimers())
+
+    it('copies the address, announces it once and clears after 2 s', async () => {
+      vi.useFakeTimers({ shouldAdvanceTime: true })
+      // setup() installs its own clipboard stub, so stub ours after it.
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
+      const writeText = vi.fn().mockResolvedValue(undefined)
+      Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true })
+      const { container } = render(<Contact />)
+      const live = container.querySelector('[aria-live="polite"]') as HTMLElement
+      expect(live).toHaveTextContent('')
+
+      await user.click(screen.getByRole('button', { name: 'Copy email' }))
+      expect(writeText).toHaveBeenCalledWith(site.email)
+      expect(live).toHaveTextContent('Copied')
+
+      await act(async () => {
+        vi.advanceTimersByTime(2000)
+      })
+      expect(live).toHaveTextContent('')
+      expect(screen.getByRole('button', { name: 'Copy email' })).toBeInTheDocument()
+    })
+
+    it('selects the address when the clipboard is unavailable', async () => {
+      const user = userEvent.setup()
+      Object.defineProperty(navigator, 'clipboard', { value: undefined, configurable: true })
+      render(<Contact />)
+      await user.click(screen.getByRole('button', { name: 'Copy email' }))
+      expect(window.getSelection()?.toString()).toBe(site.email)
+    })
+
+    it('keeps the mailto link', () => {
+      render(<Contact />)
+      expect(screen.getByRole('link', { name: 'Email' })).toHaveAttribute('href', `mailto:${site.email}`)
     })
   })
 })

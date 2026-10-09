@@ -1,5 +1,5 @@
 import { useRef, useState, type ChangeEvent, type FormEvent } from 'react'
-import { ExternalLink, Loader2, Mail } from 'lucide-react'
+import { Check, Copy, ExternalLink, Loader2, Mail } from 'lucide-react'
 import { FaGithub, FaLinkedin } from 'react-icons/fa'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -62,6 +62,26 @@ export function Contact() {
   const emailRef = useRef<HTMLInputElement>(null)
   const messageRef = useRef<HTMLTextAreaElement>(null)
   const fieldRefs = { name: nameRef, email: emailRef, message: messageRef }
+
+  // "Copy email": announce once per click, clear after 2 s. Without the
+  // clipboard API (or when it refuses), select the address so Ctrl/Cmd+C works.
+  const addressRef = useRef<HTMLSpanElement>(null)
+  const copiedTimer = useRef<number>(undefined)
+  const [copied, setCopied] = useState(false)
+
+  async function copyEmail() {
+    window.clearTimeout(copiedTimer.current)
+    setCopied(false)
+    try {
+      await navigator.clipboard.writeText(site.email)
+    } catch {
+      const selection = window.getSelection()
+      selection?.selectAllChildren(addressRef.current!)
+      return
+    }
+    setCopied(true)
+    copiedTimer.current = window.setTimeout(() => setCopied(false), 2000)
+  }
 
   // Spam honeypot. Deliberately a ref rather than form state: keeping it out
   // of FormValues means validate(), FIELD_ORDER and the focus management stay
@@ -254,6 +274,23 @@ export function Contact() {
 
           <Reveal.Item>
             <div className="flex flex-row flex-wrap gap-3 md:flex-col md:items-start">
+              <div className="flex basis-full flex-wrap items-center gap-x-3 gap-y-2">
+                <span ref={addressRef} className="font-mono text-sm break-all">
+                  {site.email}
+                </span>
+                <Button type="button" variant="outline" size="lg" onClick={copyEmail}>
+                  {copied ? (
+                    <Check aria-hidden="true" className="size-4" />
+                  ) : (
+                    <Copy aria-hidden="true" className="size-4" />
+                  )}
+                  {copied ? 'Copied' : 'Copy email'}
+                </Button>
+                <span aria-live="polite" className="sr-only">
+                  {copied ? 'Copied' : ''}
+                </span>
+              </div>
+
               <Button asChild variant="outline" size="lg">
                 <a href={`mailto:${site.email}`}>
                   <Mail aria-hidden="true" className="size-4" />
