@@ -23,17 +23,14 @@ describe('ProjectCard', () => {
     expect(screen.getByText(p.outcome)).toBeInTheDocument()
   })
 
-  it('renders a theme-matched pair when a dark capture exists, dimming neither', () => {
+  it('renders one image per project, dimmed in dark theme when its screenshot is light', () => {
     const p = byId('stockroom')
     render(<ProjectCard project={p} layout="wide" />)
-    const light = screen.getByAltText(p.image!.alt)
-    const dark = screen.getByAltText(p.image!.dark!.alt)
-    expect(light).toHaveClass('dark:hidden')
-    expect(dark).toHaveClass('hidden', 'dark:block')
-    for (const img of [light, dark]) {
-      expect(img).toHaveAttribute('loading', 'lazy')
-      expect(img.className).not.toContain('brightness')
-    }
+    expect(screen.getAllByRole('img')).toHaveLength(1)
+    const img = screen.getByAltText(p.image!.alt)
+    expect(img).toHaveAttribute('loading', 'lazy')
+    expect(img).toHaveClass('dark:brightness-[.85]')
+    expect(img.className).not.toContain('dark:hidden')
   })
 
   it('shows at most five stack tags outside the details, plus a +N item', () => {

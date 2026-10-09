@@ -29,9 +29,23 @@ export function TimelineEntry({ entry, index, total, progress, reduced }: Timeli
   // to resolve a zero-width range.
   const dotFill = index === 0 ? 1 : fill
 
+  // Leadership roles are one step lighter (smaller title, one heading level
+  // down under the "Leadership" subheading).
+  const minor = entry.group === 'leadership'
+  const Title = minor ? 'h4' : 'h3'
+
+  // One grid per row, flat children, so the date can sit under the title below
+  // lg and in its own left column from lg up without being written twice.
+  // lg columns: date (8rem, right-aligned) | dot (12px) | content, with the
+  // rail drawn by Experience at the dot column's centre. Date edge to content
+  // edge is 5 + 12 + 5 = 22px.
   return (
-    <Reveal.Item as="li" id={`experience-${entry.id}`} className="relative flex gap-4 sm:gap-6">
-      <div aria-hidden="true" className="flex w-4 flex-none justify-center">
+    <Reveal.Item
+      as="li"
+      id={`experience-${entry.id}`}
+      className="relative grid grid-cols-[1rem_1fr] gap-x-4 sm:gap-x-6 lg:grid-cols-[8rem_0.75rem_1fr] lg:gap-x-[5px]"
+    >
+      <div aria-hidden="true" className="col-start-1 row-start-1 flex justify-center lg:col-start-2">
         <span className="relative mt-1.5 size-2.5 flex-none rounded-full bg-border ring-4 ring-background">
           <m.span
             className="absolute inset-0 rounded-full bg-accent-signal"
@@ -40,23 +54,23 @@ export function TimelineEntry({ entry, index, total, progress, reduced }: Timeli
         </span>
       </div>
 
-      <div className="flex-1 pb-2">
-        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-          <h3 className="font-heading text-lg font-semibold text-foreground">{entry.role}</h3>
-          <span className="text-xs whitespace-nowrap text-muted-foreground tabular-nums">
-            {entry.start} – {entry.end}
-          </span>
-        </div>
-        <p className="text-sm text-muted-foreground">
-          {entry.organization}
-          {entry.location ? ` · ${entry.location}` : ''}
-        </p>
-        <ul className="mt-3 max-w-[70ch] list-disc space-y-1.5 pl-5 text-[0.9375rem] text-foreground">
-          {entry.highlights.map((highlight) => (
-            <li key={highlight}>{highlight}</li>
-          ))}
-        </ul>
-      </div>
+      <Title
+        className={`col-start-2 row-start-1 font-heading font-semibold text-foreground lg:col-start-3 lg:self-baseline ${minor ? 'text-base' : 'text-lg'}`}
+      >
+        {entry.role}
+      </Title>
+      <span className="col-start-2 row-start-2 text-xs whitespace-nowrap text-muted-foreground tabular-nums lg:col-start-1 lg:row-start-1 lg:justify-self-end lg:self-baseline">
+        {entry.start} – {entry.end}
+      </span>
+      <p className="col-start-2 row-start-3 text-sm text-muted-foreground lg:col-start-3 lg:row-start-2">
+        {entry.organization}
+        {entry.location ? ` · ${entry.location}` : ''}
+      </p>
+      <ul className="col-start-2 row-start-4 mt-3 max-w-[70ch] list-disc space-y-1.5 pb-2 pl-5 text-[0.9375rem] text-foreground lg:col-start-3 lg:row-start-3">
+        {entry.highlights.map((highlight) => (
+          <li key={highlight}>{highlight}</li>
+        ))}
+      </ul>
     </Reveal.Item>
   )
 }

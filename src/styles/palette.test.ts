@@ -48,8 +48,9 @@ const USAGE: [string, string[], number][] = [
   ['accent-foreground', ['accent-ink'], 4.5],
   ['destructive-foreground', ['destructive'], 4.5],
   ['accent-signal', SURFACES, 3],
-  // TierChart marks sit on card: bars are muted-foreground, the T4 highlight is accent-signal.
-  ['muted-foreground', ['card'], 3],
+  // TierChart: value labels are foreground on card; the T4 highlight is accent-signal on card.
+  // The quiet bars carry no information alone (every bar has a label), so they have no minimum.
+  ['foreground', ['card'], 4.5],
   ['accent-signal', ['card'], 3],
   ['ring', SURFACES, 3],
   ['input', SURFACES, 3],
@@ -70,6 +71,12 @@ describe('palette contrast', () => {
         }
       }
       if (process.env.PALETTE_TABLE) console.log(`${theme}\n${rows.join('\n')}`)
+    })
+
+    it(`${theme}: the highlighted chart bar is heavier than the quiet ones`, () => {
+      const t = tokens[theme]
+      expect(t['chart-quiet'], `${theme} chart-quiet`).toBeDefined()
+      expect(contrast(t['accent-signal'], t.card)).toBeGreaterThan(contrast(t['chart-quiet'], t.card))
     })
 
     it(`${theme}: ring equals accent-signal`, () => {

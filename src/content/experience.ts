@@ -16,6 +16,9 @@
 export type Experience = {
   // Anchor suffix: the entry renders as #experience-<id> (hero stats link to it).
   id: string
+  // 'leadership' (the two Irvine Valley College clubs) renders below the paid
+  // roles under its own subheading; order within and across groups is unchanged.
+  group: 'work' | 'leadership'
   organization: string
   role: string
   start: string
@@ -29,6 +32,7 @@ export const experience: Experience[] = [
     organization: 'UC San Diego (ITS)',
     role: 'IT Security Programmer',
     id: 'uc-san-diego-its',
+    group: 'work',
     start: 'Dec 2025',
     end: 'Present',
     highlights: [
@@ -42,6 +46,7 @@ export const experience: Experience[] = [
     organization: 'Lumulus Technologies',
     role: 'Software Engineering Intern',
     id: 'lumulus',
+    group: 'work',
     start: 'Jun 2026',
     end: 'Sep 2026',
     highlights: [
@@ -54,6 +59,7 @@ export const experience: Experience[] = [
     organization: 'NutrifitWorld',
     role: 'Web Development Intern',
     id: 'nutrifitworld',
+    group: 'work',
     start: 'Jun 2025',
     end: 'Oct 2025',
     highlights: [
@@ -65,6 +71,7 @@ export const experience: Experience[] = [
     organization: 'Irvine Valley College',
     role: 'Founder & President, AI Club',
     id: 'ai-club',
+    group: 'leadership',
     start: 'Aug 2024',
     end: 'Jun 2025',
     highlights: [
@@ -77,6 +84,7 @@ export const experience: Experience[] = [
     organization: 'Irvine Valley College',
     role: 'Board Member, Cybersecurity Club',
     id: 'cybersecurity-club',
+    group: 'leadership',
     start: 'Aug 2023',
     end: 'Jun 2025',
     highlights: [

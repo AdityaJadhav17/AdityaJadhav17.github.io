@@ -1,5 +1,6 @@
-import { useRef, useState, type ChangeEvent, type FormEvent } from 'react'
-import { ExternalLink, Loader2, Mail } from 'lucide-react'
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
+import { flushSync } from 'react-dom'
+import { Check, Copy, ExternalLink, Loader2, Mail } from 'lucide-react'
 import { FaGithub, FaLinkedin } from 'react-icons/fa'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -62,6 +63,40 @@ export function Contact() {
   const emailRef = useRef<HTMLInputElement>(null)
   const messageRef = useRef<HTMLTextAreaElement>(null)
   const fieldRefs = { name: nameRef, email: emailRef, message: messageRef }
+
+  // Native validation stays on for the no-JS path (the `required` attributes).
+  // Once hydrated, turn it off so handleSubmit's own messages and focus
+  // management run. Set on the element, not in JSX, so the server HTML keeps it.
+  const formRef = useRef<HTMLFormElement>(null)
+  useEffect(() => {
+    formRef.current!.noValidate = true
+  }, [])
+
+  // "Copy email": the button's name never changes; the live region speaks.
+  // Without the clipboard API (or when it refuses), select the address so
+  // Ctrl/Cmd+C works and say so.
+  const addressRef = useRef<HTMLSpanElement>(null)
+  const announceTimer = useRef<number>(undefined)
+  const [announcement, setAnnouncement] = useState('')
+
+  function announce(text: string) {
+    window.clearTimeout(announceTimer.current)
+    // Empty first, so a repeat click changes the region and is read again.
+    flushSync(() => setAnnouncement(''))
+    setAnnouncement(text)
+    announceTimer.current = window.setTimeout(() => setAnnouncement(''), 2000)
+  }
+
+  async function copyEmail() {
+    try {
+      await navigator.clipboard.writeText(site.email)
+    } catch {
+      window.getSelection()?.selectAllChildren(addressRef.current!)
+      announce('Email selected')
+      return
+    }
+    announce('Copied')
+  }
 
   // Spam honeypot. Deliberately a ref rather than form state: keeping it out
   // of FormValues means validate(), FIELD_ORDER and the focus management stay
@@ -149,7 +184,16 @@ export function Contact() {
               animating it. Same rule everywhere: no Reveal.Item wraps a
               single focusable element. */}
           <Reveal.Item>
-            <form noValidate onSubmit={handleSubmit} className="max-w-xl space-y-5">
+            {/* action/method are the no-JS and pre-hydration fallback: without
+                them the browser GETs the current URL. handleSubmit's
+                preventDefault still wins once hydrated. */}
+            <form
+              ref={formRef}
+              action={FORMSPREE_ENDPOINT}
+              method="POST"
+              onSubmit={handleSubmit}
+              className="max-w-xl space-y-5"
+            >
               {/* Honeypot. `hidden` keeps it out of the layout and out of the
                   accessibility tree; tabIndex -1 keeps it out of the keyboard
                   order. No label, because nothing human should ever reach it. */}
@@ -169,6 +213,7 @@ export function Contact() {
                   id="contact-name"
                   name="name"
                   ref={nameRef}
+                  required
                   value={values.name}
                   onChange={handleChange}
                   autoComplete="name"
@@ -189,6 +234,7 @@ export function Contact() {
                   name="email"
                   type="email"
                   ref={emailRef}
+                  required
                   value={values.email}
                   onChange={handleChange}
                   autoComplete="email"
@@ -208,6 +254,7 @@ export function Contact() {
                   id="contact-message"
                   name="message"
                   ref={messageRef}
+                  required
                   value={values.message}
                   onChange={handleChange}
                   rows={5}
@@ -245,6 +292,23 @@ export function Contact() {
 
           <Reveal.Item>
             <div className="flex flex-row flex-wrap gap-3 md:flex-col md:items-start">
+              <div className="flex basis-full flex-wrap items-center gap-x-3 gap-y-2">
+                <span ref={addressRef} className="font-mono text-sm break-all">
+                  {site.email}
+                </span>
+                <Button type="button" variant="outline" size="lg" className="min-h-11" onClick={copyEmail}>
+                  {announcement === 'Copied' ? (
+                    <Check aria-hidden="true" className="size-4" />
+                  ) : (
+                    <Copy aria-hidden="true" className="size-4" />
+                  )}
+                  Copy email
+                </Button>
+                <span aria-live="polite" className="sr-only">
+                  {announcement}
+                </span>
+              </div>
+
               <Button asChild variant="outline" size="lg">
                 <a href={`mailto:${site.email}`}>
                   <Mail aria-hidden="true" className="size-4" />

@@ -8,10 +8,11 @@ type ProjectCardProps = {
   project: Project
   className?: string
   // 'stacked' is the grid card: poster above the text, inside a bordered card.
-  // 'wide' is the featured treatment: no card chrome at all, the poster at 45%
-  // of the container width with the text beside it from md up (stacked below).
-  // The hierarchy between featured and grid reads from layout, not from a
-  // heavier border or shadow.
+  // 'wide' is the featured treatment from md up: no card chrome at all, the
+  // poster at 45% of the container width with the text beside it. Below md it
+  // is the same carded, stacked card as every grid card, so a phone sees one
+  // treatment. The hierarchy between featured and grid reads from layout, not
+  // from a heavier border or shadow.
   layout?: 'stacked' | 'wide'
 }
 
@@ -26,15 +27,16 @@ const MAX_TAGS = 5
 // `sizes` for the poster, written from measured renders (CSS px at viewport
 // widths 360/390/412/640/768/1024/1280/1440/1920). The container pads 20px
 // (<768), 32px (768+), 48px (1024+) and stops at 1200px.
-// Wide (no wrapper padding; 45% of the container from 768, full width below):
-// 320/350/372 at 360/390/412, 600 at 640, 727 at 767, 317 at 768, 418 at 1024,
+// Wide (no wrapper padding; 45% of the container from 768; below that the
+// carded stack, whose poster is the container minus 2px border and 24px padding):
+// 294/324/346 at 360/390/412, 574 at 640, 701 at 767, 317 at 768, 418 at 1024,
 // 497 from 1200 up.
 // Stacked (two columns from 640; the poster adds 12px padding a side):
 // 294/324/346 at 360/390/412, 262 at 640, 314 at 768, 426 at 1024, 514 from
 // 1280 up.
 const SIZES = {
   wide:
-    '(min-width: 1200px) 497px, (min-width: 1024px) calc(45vw - 43px), (min-width: 768px) calc(45vw - 29px), calc(100vw - 40px)',
+    '(min-width: 1200px) 497px, (min-width: 1024px) calc(45vw - 43px), (min-width: 768px) calc(45vw - 29px), calc(100vw - 66px)',
   stacked:
     '(min-width: 1200px) 514px, (min-width: 1024px) calc(50vw - 86px), (min-width: 768px) calc(50vw - 70px), (min-width: 640px) calc(50vw - 58px), calc(100vw - 66px)',
 }
@@ -47,7 +49,8 @@ const linkClass =
 
 export function ProjectCard({ project, className, layout = 'stacked' }: ProjectCardProps) {
   const isWide = layout === 'wide'
-  const ratio = isWide ? 'aspect-[16/10]' : 'aspect-[2/1]'
+  // Featured posters are 4:3 on phones (a taller crop keeps the text legible), 16:10 from md.
+  const ratio = isWide ? 'aspect-[4/3] md:aspect-[16/10]' : 'aspect-[2/1]'
   const shownStack = project.stack.slice(0, MAX_TAGS)
   const hiddenCount = project.stack.length - shownStack.length
   const { outcome, metric } = project
@@ -85,11 +88,12 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
         // are, so a strong affordance here would promise something the card
         // does not do.
         'flex flex-col',
-        // Featured: bare layout, no border, ground or shadow. Side by side
-        // only from md up; below that the column is too narrow, so it stacks.
+        // Featured: carded like the grid below md, then bare layout (no border,
+        // ground or shadow) and side by side from md up.
+        'overflow-hidden rounded-xl border border-border bg-card text-card-foreground shadow-md',
         isWide
-          ? 'gap-5 md:flex-row md:items-center md:gap-10'
-          : 'overflow-hidden rounded-xl border border-border bg-card text-card-foreground shadow-md transition-[box-shadow,border-color] duration-200 hover:border-muted-foreground/40 hover:shadow-lg',
+          ? 'md:flex-row md:items-center md:gap-10 md:overflow-visible md:rounded-none md:border-0 md:bg-transparent md:shadow-none'
+          : 'transition-[box-shadow,border-color] duration-200 hover:border-muted-foreground/40 hover:shadow-lg',
         className,
       )}
     >
@@ -97,18 +101,21 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
         className={cn(
           // Grid cards: the padding and muted ground frame the screenshot as
           // an artefact instead of a white slab running edge to edge.
-          // Featured: the image stands alone at half width.
-          'shrink-0',
-          isWide ? 'md:w-[45%]' : 'border-b border-border bg-muted p-3',
+          // Featured: from md the image stands alone at 45% width.
+          'shrink-0 border-b border-border bg-muted p-3',
+          isWide && 'md:w-[45%] md:border-0 md:bg-transparent md:p-0',
         )}
       >
         {project.chart ? (
           <TierChart
             alt={project.chart.alt}
-            className={cn('w-full bg-card ring-1 ring-border', isWide ? 'rounded-lg' : 'rounded-md', ratio)}
+            className={cn('w-full bg-card ring-1 ring-border', isWide ? 'rounded-md md:rounded-lg' : 'rounded-md', ratio)}
           />
         ) : project.image ? (
-          <>
+          <picture className="block">
+            {project.image.mobileSrcSet && (
+              <source media="(width < 48rem)" srcSet={project.image.mobileSrcSet} sizes={SIZES.wide} />
+            )}
             <img
               src={project.image.src}
               srcSet={project.image.srcSet}
@@ -119,45 +126,23 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
               loading="lazy"
               decoding="async"
               className={cn(
-                // Every image is pre-cropped to its slot (16:10 wide, 2:1 in the
-                // grid), so object-cover only absorbs rounding. Light screenshots
-                // are dimmed in dark theme so they do not glare; dark ones keep
-                // their own ground. Never inverted.
+                // Every image is pre-cropped to its slot (16:10 wide, 4:3 on
+                // phones, 2:1 in the grid), so object-cover only absorbs rounding. Each project shows
+                // the same screen in both themes; light screenshots are dimmed in
+                // dark theme so they do not glare. Never inverted.
                 'w-full object-cover ring-1 ring-border',
-                isWide ? 'rounded-lg' : 'rounded-md',
-                project.image.dark
-                  ? 'dark:hidden'
-                  : project.image.tone === 'light' && 'dark:brightness-[.85]',
+                isWide ? 'rounded-md md:rounded-lg' : 'rounded-md',
+                project.image.tone === 'light' && 'dark:brightness-[.85]',
                 ratio,
               )}
             />
-            {/* The owner's dark capture. display:none on a lazy image means the
-                browser never fetches it, so each theme downloads only its own
-                file. Already a dark UI, so no dimming. */}
-            {project.image.dark && (
-              <img
-                src={project.image.dark.src}
-                srcSet={project.image.dark.srcSet}
-                sizes={isWide ? SIZES.wide : SIZES.stacked}
-                alt={project.image.dark.alt}
-                width={project.image.width}
-                height={project.image.height}
-                loading="lazy"
-                decoding="async"
-                className={cn(
-                  'hidden w-full object-cover ring-1 ring-border dark:block',
-                  isWide ? 'rounded-lg' : 'rounded-md',
-                  ratio,
-                )}
-              />
-            )}
-          </>
+          </picture>
         ) : (
           <div
             aria-hidden="true"
             className={cn(
               'flex w-full flex-col justify-center gap-2 bg-muted p-6',
-              isWide ? 'aspect-[16/10] rounded-lg' : 'aspect-video',
+              isWide ? 'aspect-[4/3] rounded-md md:aspect-[16/10] md:rounded-lg' : 'aspect-video',
             )}
           >
             <p className="font-heading text-2xl leading-tight font-semibold tracking-tight text-foreground uppercase md:text-3xl">
@@ -171,7 +156,7 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
         )}
       </div>
 
-      <div className={cn('flex flex-1 flex-col gap-4', !isWide && 'p-6')}>
+      <div className={cn('flex flex-1 flex-col gap-4 p-6', isWide && 'md:p-0')}>
         <div className="space-y-1">
           <h3 className={cn('font-heading text-xl font-semibold text-card-foreground', isWide && 'md:text-2xl')}>
             {project.title}

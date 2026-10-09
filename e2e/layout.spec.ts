@@ -26,10 +26,11 @@ for (const width of [390, 768, 1440]) {
   })
 }
 
-// Closed cards keep the page short: the full story is behind <details>.
+// Closed cards keep the page short: the full story is behind <details>. The
+// 390 cap allows for the featured cards' phone chrome and 4:3 posters.
 for (const [width, height, max] of [
   [1440, 900, 6750],
-  [390, 844, 9900],
+  [390, 844, 10200],
 ] as const) {
   test(`page stays under ${max}px tall at ${width}px with details closed`, async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
@@ -87,9 +88,6 @@ test('every control has a 44px touch target', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'iphone', 'iPhone only')
   await page.goto('/')
   await expectCoarsePointer(page)
-  // Past the hero so the header brand link is shown (aria-hidden before that).
-  await page.evaluate(() => window.scrollTo({ top: 400, behavior: 'instant' }))
-  await expect(page.locator('header a[href="#home"]')).not.toHaveAttribute('aria-hidden', 'true')
   const controls = page.locator('button, a[href], summary')
   const check = async () => {
     const count = await controls.count()
@@ -228,8 +226,70 @@ test('featured projects have no card chrome, grid projects do', async ({ page },
       const s = getComputedStyle(el)
       return { border: s.borderTopWidth, shadow: s.boxShadow, bg: s.backgroundColor }
     })
-  expect(await chrome('watchtower')).toEqual({ border: '0px', shadow: 'none', bg: 'rgba(0, 0, 0, 0)' })
+  // shadow-none computes to a stack of fully transparent shadows, not 'none'.
+  const wt = await chrome('watchtower')
+  expect(wt.shadow.replaceAll('rgba(0, 0, 0, 0) 0px 0px 0px 0px', '').replace(/[, ]/g, '') || 'none').toBe('none')
+  expect({ border: wt.border, bg: wt.bg }).toEqual({ border: '0px', bg: 'rgba(0, 0, 0, 0)' })
   expect((await chrome('sim2real')).border).toBe('1px')
+})
+
+// From lg the dates sit in a left column, with the dot and rail between them
+// and the content: date edge to content edge stays within 24px, and each dot is
+// centred on the rail.
+test('experience dates sit beside their content at 1440px', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto('/')
+  const rows = await page.evaluate(() => {
+    const rail = document.querySelector('#experience span.origin-top')!.getBoundingClientRect()
+    return [...document.querySelectorAll('#experience ol > li')].map((li) => {
+      const date = document.createRange()
+      date.selectNodeContents(li.querySelector('span.tabular-nums')!)
+      const title = li.querySelector('h3, h4')!.getBoundingClientRect()
+      const dot = li.querySelector('span.rounded-full')!.getBoundingClientRect()
+      return {
+        id: li.id,
+        gap: title.left - date.getBoundingClientRect().right,
+        dateTop: date.getBoundingClientRect().top - title.top,
+        railOffset: dot.left + dot.width / 2 - (rail.left + rail.width / 2),
+      }
+    })
+  })
+  console.log('experience rows', JSON.stringify(rows))
+  expect(rows).toHaveLength(5)
+  for (const r of rows) {
+    expect(r.gap, r.id).toBeGreaterThan(0)
+    expect(r.gap, r.id).toBeLessThanOrEqual(24)
+    expect(Math.abs(r.railOffset), r.id).toBeLessThanOrEqual(1)
+  }
+  await expect(page.locator('#experience h3', { hasText: 'Leadership' })).toBeVisible()
+  expect(await page.locator('#experience ol > li').evaluateAll((els) => els.map((e) => e.id))).toEqual([
+    'experience-uc-san-diego-its',
+    'experience-lumulus',
+    'experience-nutrifitworld',
+    'experience-ai-club',
+    'experience-cybersecurity-club',
+  ])
+})
+
+// On a phone all seven project cards share one treatment; featured cards keep
+// their bare layout only from md up.
+test.describe('work cards on a phone', () => {
+  test.use({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true })
+
+  test('every card has the same border and background', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
+    await page.goto('/')
+    const styles = await page.locator('#work article').evaluateAll((els) =>
+      els.map((el) => {
+        const s = getComputedStyle(el)
+        return [s.borderTopWidth, s.borderTopColor, s.backgroundColor, s.borderRadius].join(' | ')
+      }),
+    )
+    expect(styles).toHaveLength(7)
+    expect(new Set(styles).size, styles.join(', ')).toBe(1)
+    expect(styles[0]).not.toMatch(/^0px/)
+  })
 })
 
 // B5 fix: the stats follow the actions instead of sitting at the bottom, and
@@ -282,5 +342,23 @@ for (const hash of ['work', 'main']) {
     test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
     await page.goto(`/#${hash}`)
     await expect(page.locator('#work details[open]')).toHaveCount(0)
+  })
+}
+
+// The name sits at the left of the header at every width and never overlaps
+// the theme or menu buttons.
+for (const width of [320, 390, 768, 1440]) {
+  test(`header name clears the buttons at ${width}px`, async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
+    await page.setViewportSize({ width, height: 800 })
+    await page.goto('/')
+    const name = page.locator('header a[href="#home"]')
+    await expect(name).toBeVisible()
+    const nameBox = (await name.boundingBox())!
+    const buttons = await page.locator('header button:visible').evaluateAll((els) =>
+      els.map((el) => el.getBoundingClientRect().left),
+    )
+    expect(buttons.length).toBeGreaterThan(0)
+    expect(nameBox.x + nameBox.width).toBeLessThanOrEqual(Math.min(...buttons) - 4)
   })
 }

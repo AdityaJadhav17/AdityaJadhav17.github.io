@@ -86,7 +86,7 @@ Open `http://localhost:5173`.
   moved to the first invalid field, semantic heading hierarchy.
 - **Contact form**: client-side validation, submits to Formspree, preserves input on a failed
   submit.
-- **Crawlers**: `public/robots.txt` and `public/sitemap.xml` point at adityajadhav.dev.
+- **Crawlers**: `public/robots.txt` points at adityajadhav.dev; `dist/sitemap.xml` is written at build by `scripts/prerender.mjs` with the build date as `<lastmod>`.
 
 ## End-to-end tests
 

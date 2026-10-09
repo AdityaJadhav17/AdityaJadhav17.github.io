@@ -124,6 +124,7 @@
   --color-border: #E7E5E4;
   --color-input: #78716C;
   --color-ring: #0F9293;
+  --color-chart-quiet: #D6D3D1;
 
   /* Shadow Depths (MASTER.md): same values in both themes; the table has
      no separate dark ramp, so these live in the flat block, not `.dark`. */
@@ -186,6 +187,7 @@
     --color-border: #292524;
     --color-input: #78716C;
     --color-ring: #57CCCC;
+    --color-chart-quiet: #44403C;
   }
 
   html {
@@ -281,16 +283,19 @@
   /* TierChart (Talk-to-Robot). Presentation lives here, not in the component,
      to keep the JS budget: fill, anchor and size inherit from .tier-chart and
      the children override only what differs. Sizes are SVG user units, so they
-     scale with the poster. Bars and labels are muted-foreground (>= 6.9:1 on
-     card); .hot, the T4 bar, is accent-signal (>= 3.78:1 on card). The halo
-     in the card colour stops the dashed reference line striking through the
-     value labels. */
+     scale with the poster. Bars are chart-quiet (stone-300 light, stone-700
+     dark): the neutral bars recede, and .hot, the T4 bar, is accent-signal, the
+     heaviest mark on the card in both themes (palette.test.ts compares them).
+     The bars carry no information alone: every bar has a value label in
+     foreground (>= 4.5:1 on card), so WCAG 1.4.11 is met by the labels, not the
+     fills. Axis text stays muted-foreground. The halo in the card colour stops
+     the dashed reference line striking through the value labels. */
   .tier-chart {
     fill: var(--color-muted-foreground);
     font: 9px var(--font-sans);
     text-anchor: middle;
   }
-  .tier-chart rect { rx: 2px; }
+  .tier-chart rect { rx: 2px; fill: var(--color-chart-quiet); }
   .tier-chart .hot { fill: var(--color-accent-signal); }
   .tier-chart .ttl { fill: var(--color-foreground); font-size: 11px; font-weight: 600; text-anchor: start; }
   .tier-chart .val { fill: var(--color-foreground); font-size: 10px; font-weight: 600; }
