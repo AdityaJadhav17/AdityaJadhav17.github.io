@@ -4,85 +4,183 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Page not found | Aditya Jadhav</title>
+    <meta name="robots" content="noindex" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <style>
+      /* prerender.mjs fills in the hashed font file name. No JS, no import. */
+      @font-face {
+        font-family: "Archivo Variable";
+        font-style: normal;
+        font-display: swap;
+        font-weight: 100 900;
+        src: url("/assets/archivo-latin-wght-normal-E0tuGl4L.woff2") format("woff2-variations");
+      }
       :root {
         color-scheme: light dark;
         --color-background: #FAFAF9;
         --color-foreground: #0C0A09;
         --color-muted-foreground: #57534E;
+        --color-border: #E7E5E4;
         --color-primary: #1C1917;
         --color-primary-foreground: #FAFAF9;
+        --color-ring: #0F9293;
       }
       @media (prefers-color-scheme: dark) {
         :root {
           --color-background: #0C0A09;
           --color-foreground: #FAFAF9;
           --color-muted-foreground: #A8A29E;
+          --color-border: #292524;
           --color-primary: #FAFAF9;
           --color-primary-foreground: #1C1917;
+          --color-ring: #57CCCC;
         }
       }
       * {
         box-sizing: border-box;
       }
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-      }
       body {
         display: flex;
-        align-items: center;
-        justify-content: center;
+        flex-direction: column;
+        min-height: 100vh;
+        min-height: 100dvh;
+        margin: 0;
         background-color: var(--color-background);
         color: var(--color-foreground);
-        font-family: ui-sans-serif, system-ui, sans-serif;
+        font-family: "Archivo Variable", ui-sans-serif, system-ui, sans-serif;
         line-height: 1.6;
-        padding: 1.5rem;
-        text-align: center;
+      }
+      .wrap {
+        width: 100%;
+        max-width: 75rem;
+        margin-inline: auto;
+        padding-inline: 1.25rem;
+      }
+      @media (min-width: 48rem) {
+        .wrap {
+          padding-inline: 2rem;
+        }
+      }
+      @media (min-width: 64rem) {
+        .wrap {
+          padding-inline: 3rem;
+        }
+      }
+      header {
+        border-bottom: 1px solid var(--color-border);
+      }
+      header .wrap {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        column-gap: 1rem;
+        min-height: 4rem;
+      }
+      a {
+        color: var(--color-muted-foreground);
+        text-decoration: none;
+      }
+      a:focus-visible {
+        outline: 2px solid var(--color-ring);
+        outline-offset: 2px;
+        border-radius: 0.25rem;
+      }
+      .brand,
+      nav a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 2.75rem;
+      }
+      .brand {
+        color: var(--color-foreground);
+        font-size: 1rem;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      nav ul {
+        display: flex;
+        gap: 1.25rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      nav a {
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+      @media (hover: hover) {
+        nav a:hover {
+          color: var(--color-foreground);
+        }
       }
       main {
-        max-width: 28rem;
+        flex: 1;
+        padding-block: 4rem;
       }
-      .code {
-        font-family: ui-sans-serif, system-ui, sans-serif;
-        font-weight: 700;
-        font-size: clamp(3rem, 12vw, 5rem);
-        margin: 0 0 0.5rem;
-        letter-spacing: -0.02em;
+      @media (min-width: 48rem) {
+        main {
+          padding-block: 6rem;
+        }
       }
-      h1 {
-        font-family: ui-sans-serif, system-ui, sans-serif;
-        font-weight: 600;
-        font-size: 1.25rem;
+      .label {
         margin: 0 0 0.75rem;
-      }
-      p {
+        font-size: 0.8125rem;
+        font-weight: 600;
         color: var(--color-muted-foreground);
-        margin: 0 0 1.75rem;
+      }
+      /* Same type as .section-title on the site. */
+      h1 {
+        margin: 0;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+        line-height: 0.95;
+        font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+        text-wrap: balance;
+      }
+      p.lede {
+        max-width: 32rem;
+        margin: 1rem 0 2rem;
+        color: var(--color-muted-foreground);
       }
       a.home-link {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        min-height: 2.75rem;
+        padding: 0 1.5rem;
+        border-radius: 0.5rem;
         background: var(--color-primary);
         color: var(--color-primary-foreground);
-        text-decoration: none;
         font-weight: 600;
-        padding: 0.75rem 1.5rem;
-        border-radius: 0.5rem;
-        transition: opacity 200ms ease;
       }
-      a.home-link:hover {
-        opacity: 0.9;
+      @media (hover: hover) {
+        a.home-link:hover {
+          opacity: 0.9;
+        }
       }
     </style>
   </head>
   <body>
+    <header>
+      <div class="wrap">
+        <a class="brand" href="/">Aditya Jadhav</a>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="/#work">Work</a></li>
+            <li><a href="/Aditya_Jadhav_Resume.pdf">R&eacute;sum&eacute;</a></li>
+            <li><a href="/#contact">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
     <main>
-      <p class="code" aria-hidden="true">404</p>
-      <h1>This page doesn&rsquo;t exist</h1>
-      <p>The page you&rsquo;re looking for was moved or never existed.</p>
-      <a class="home-link" href="/">Back to home</a>
+      <div class="wrap">
+        <p class="label">404</p>
+        <h1>Page not found</h1>
+        <p class="lede">That address does not lead anywhere on this site. The link may be old, or mistyped.</p>
+        <a class="home-link" href="/">Back to home</a>
+      </div>
     </main>
   </body>
 </html>
