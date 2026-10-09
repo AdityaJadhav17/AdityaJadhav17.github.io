@@ -48,13 +48,13 @@ export const projects: Project[] = [
     stack: ['JavaScript', 'Node.js', 'Supabase', 'Clerk', 'Jest', 'Playwright', 'Render'],
     result: 'Deployable observability platform with live backend and SDK test app.',
     image: {
-      src: '/watchtower-light-960.webp',
+      src: '/watchtower-light-1100.webp',
       srcSet:
-        '/watchtower-light-480.webp 480w, /watchtower-light-640.webp 640w, /watchtower-light-680.webp 680w, /watchtower-light-960.webp 960w',
+        '/watchtower-light-480.webp 480w, /watchtower-light-640.webp 640w, /watchtower-light-680.webp 680w, /watchtower-light-960.webp 960w, /watchtower-light-1100.webp 1100w',
       mobileSrcSet:
         '/watchtower-light-m-480.webp 480w, /watchtower-light-m-640.webp 640w, /watchtower-light-m-780.webp 780w',
-      width: 960,
-      height: 600,
+      width: 1100,
+      height: 688,
       alt: "WatchTower's Production health page, with a percentage score for each of availability, errors, latency, signal and feedback",
       tone: 'light',
     },
@@ -83,13 +83,13 @@ export const projects: Project[] = [
       demo: 'https://youtu.be/T0EkJ9J_IQU',
     },
     image: {
-      src: '/travel-agntcy-light-960.webp',
+      src: '/travel-agntcy-light-1100.webp',
       srcSet:
-        '/travel-agntcy-light-480.webp 480w, /travel-agntcy-light-640.webp 640w, /travel-agntcy-light-680.webp 680w, /travel-agntcy-light-960.webp 960w',
+        '/travel-agntcy-light-480.webp 480w, /travel-agntcy-light-640.webp 640w, /travel-agntcy-light-680.webp 680w, /travel-agntcy-light-960.webp 960w, /travel-agntcy-light-1100.webp 1100w',
       mobileSrcSet:
         '/travel-agntcy-light-m-480.webp 480w, /travel-agntcy-light-m-640.webp 640w, /travel-agntcy-light-m-860.webp 860w, /travel-agntcy-light-m-1080.webp 1080w',
-      width: 960,
-      height: 600,
+      width: 1100,
+      height: 688,
       alt: 'TravelAGNTCY agent graph: a Travel Agent supervisor linked to a NATS transport, which links to a Flight Agent, a Hotel Agent and an Activity Agent',
       tone: 'light',
     },

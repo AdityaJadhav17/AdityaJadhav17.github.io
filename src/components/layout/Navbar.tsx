@@ -7,6 +7,7 @@ import {
   type ComponentType,
   type ComponentProps,
   type MouseEvent,
+  type RefObject,
 } from 'react'
 import { Menu } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -68,8 +69,38 @@ const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(function NavLink(
   )
 })
 
+// The hero already shows the name as its h1, so the header repeats it only
+// once the h1 has scrolled up under the sticky header. Server render and the
+// first client render are both `false` (the page loads at the top); the
+// observer's initial callback corrects a reload mid-page, and it fires again
+// on anchor jumps. rootMargin trims the root by the header's height so
+// "intersecting" means "h1 still visible below the header". Without an
+// observer or an h1 the brand stays shown, so a home link is never lost.
+function useHeroNameGone(header: RefObject<HTMLElement | null>) {
+  const [gone, setGone] = useState(false)
+
+  useEffect(() => {
+    const h1 = document.querySelector('#home h1')
+    if (!h1 || !header.current || typeof IntersectionObserver === 'undefined') {
+      setGone(true)
+      return
+    }
+    const headerBottom = header.current.getBoundingClientRect().bottom
+    const observer = new IntersectionObserver(
+      ([entry]) => setGone(!entry.isIntersecting && entry.boundingClientRect.bottom <= headerBottom),
+      { rootMargin: `-${Math.ceil(headerBottom)}px 0px 0px 0px` },
+    )
+    observer.observe(h1)
+    return () => observer.disconnect()
+  }, [header])
+
+  return gone
+}
+
 export function Navbar({ sectionIds }: NavbarProps) {
   const active = useActiveSection(sectionIds)
+  const headerRef = useRef<HTMLElement>(null)
+  const showBrand = useHeroNameGone(headerRef)
   const [open, setOpen] = useState(false)
   // The Radix Dialog behind the menu loads on first touch of the button. If
   // the tap lands before the chunk does, `open` is already true and the sheet
@@ -160,11 +191,17 @@ export function Navbar({ sectionIds }: NavbarProps) {
   }, [open])
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background">
+    <header ref={headerRef} className="sticky top-0 z-40 border-b border-border bg-background">
       <div className="container-site flex h-16 items-center justify-between">
         <a
           href="#home"
-          className="font-heading text-base font-semibold whitespace-nowrap text-foreground pointer-coarse:py-2.5"
+          aria-hidden={showBrand ? undefined : true}
+          tabIndex={showBrand ? undefined : -1}
+          className={cn(
+            // Always mounted so the header keeps its box (no layout shift).
+            'font-heading text-base font-semibold whitespace-nowrap text-foreground transition-opacity duration-150 ease-out motion-reduce:transition-none pointer-coarse:py-2.5',
+            !showBrand && 'pointer-events-none opacity-0',
+          )}
         >
           Aditya Jadhav
         </a>
