@@ -54,19 +54,34 @@ for (const { name, ...options } of contexts) {
   })
 }
 
-// Reports, never fails: images served below shown width x DPR (blurry on that
-// screen because no larger file exists). Run with `--grep shortfall` to read it.
+// Fails when an image is served below 0.9 x shown width x DPR (blurry on that
+// screen). Images whose master is too small to ever reach it are listed here by
+// file stem so CI stays green; the shortfall is still printed. A NEW undersized
+// image is not on the list and fails. Closing an item means adding larger
+// widths from a new capture and deleting its line.
+const SOURCE_LIMITED: Record<string, string> = {
+  'watchtower-light-m': 'awaiting larger original', // phone crop is 780 px native
+  stockroom: 'awaiting ≥1280 px owner capture', // 1200 px master, 920 px crop
+  'stockroom-m': 'awaiting ≥1280 px owner capture',
+  'personal-tracker': 'awaiting ≥1280 px owner capture', // 1200 px master, 840 px crop
+  sim2real: 'awaiting larger original', // 560 px
+  'bird-classifier': 'awaiting larger original', // 400 px
+}
+const stem = (src: string) => src.replace(/-\d+\.\w+$/, '')
+
 for (const [name, options] of [
   ['390x844 @3', { viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true }],
   ['1440x900 @2', { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2 }],
 ] as const) {
-  test(`shortfall report at ${name}`, async ({ browser, browserName }, testInfo) => {
-    test.skip(browserName !== 'chromium', 'Chromium only')
-    const short = (await load(browser, options, 'light'))
-      .filter((r) => r.chosen < r.shown * r.dpr - 1)
-      .map((r) => ({ ...r, wanted: Math.round(r.shown * r.dpr) }))
-    console.log(`shortfall at ${name}`)
-    console.table(short)
-    await testInfo.attach(`shortfall-${name}`, { body: JSON.stringify(short, null, 2), contentType: 'application/json' })
-  })
+  for (const colorScheme of ['light', 'dark'] as const) {
+    test(`images reach 0.9 x shown width x DPR at ${name}, ${colorScheme}`, async ({ browser, browserName }) => {
+      test.skip(browserName !== 'chromium', 'Chromium only')
+      const short = (await load(browser, options, colorScheme))
+        .filter((r) => r.chosen < 0.9 * r.shown * r.dpr)
+        .map((r) => ({ ...r, wanted: Math.round(0.9 * r.shown * r.dpr), reason: SOURCE_LIMITED[stem(r.src)] }))
+      console.log(`shortfall at ${name}, ${colorScheme}`)
+      console.table(short.filter((r) => r.reason))
+      expect(short.filter((r) => !r.reason)).toEqual([])
+    })
+  }
 }
