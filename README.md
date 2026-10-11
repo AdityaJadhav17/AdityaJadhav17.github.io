@@ -62,7 +62,6 @@ Open `http://localhost:5173`.
 | `npm run lint`        | ESLint                                                            |
 | `npm run check:bundle`| Fail if gzipped JS in `dist/assets` is over 130 KB (runs in CI)   |
 | `npm run check:links` | Check every `https://` URL in `src/content` (local only)          |
-| `npm run deploy`      | Build and publish `dist/` via `gh-pages`                          |
 
 ## How it works
 
@@ -104,5 +103,6 @@ accessibility checks. See `playwright.config.ts` for how the build is served.
 - `.github/workflows/ci.yml` runs on pull requests to `main`: typecheck, lint, unit tests,
   Playwright, build, and the JS bundle budget. It gates the merge.
 - `.github/workflows/deploy.yml` runs on push to `main`: install, typecheck, lint, test, build,
-  then publish `dist/` to GitHub Pages.
+  then publish `dist/` to GitHub Pages. This is the only deployment path: there is no manual
+  publish script.
 - `public/CNAME` binds the site to adityajadhav.dev.
