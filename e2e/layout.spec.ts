@@ -388,6 +388,11 @@ for (const [width, height] of [
       for (const [name, box] of Object.entries(bottoms)) {
         expect(box.y + box.height, name).toBeLessThanOrEqual(height)
       }
+      // Every figure is one line, so the three labels line up in one column.
+      const wrapped = await page.locator('#home ul.hero-in:last-of-type li a > p:first-child').evaluateAll((els) =>
+        els.filter((el) => el.getBoundingClientRect().height > parseFloat(getComputedStyle(el).lineHeight) + 1).map((el) => el.textContent),
+      )
+      expect(wrapped).toEqual([])
       if (width === 390) {
         const lines = await claim.evaluate((el) => Math.round(el.getBoundingClientRect().height / parseFloat(getComputedStyle(el).lineHeight)))
         expect(lines).toBeLessThanOrEqual(3)

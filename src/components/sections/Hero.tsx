@@ -125,7 +125,7 @@ export function Hero() {
               onClick={openDetails}
               className="group flex min-h-11 items-center gap-4 sm:block sm:min-h-0"
             >
-              <p className="w-20 shrink-0 text-xl font-semibold text-accent-ink tabular-nums underline-offset-4 group-hover:underline group-focus-visible:underline sm:w-auto">
+              <p className="w-32 shrink-0 whitespace-nowrap text-xl font-semibold text-accent-ink tabular-nums underline-offset-4 group-hover:underline group-focus-visible:underline sm:w-auto">
                 {point.value}
               </p>
               <p className="text-[0.8125rem] leading-snug text-muted-foreground sm:mt-1">{point.label}</p>
