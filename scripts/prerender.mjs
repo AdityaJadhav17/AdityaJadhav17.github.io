@@ -5,13 +5,15 @@ import { readFileSync, readdirSync, writeFileSync, rmSync } from 'node:fs'
 import { execSync } from 'node:child_process'
 import { pathToFileURL } from 'node:url'
 import { resolve } from 'node:path'
+import { addCsp } from './csp.mjs'
 import { fill, readTokens } from './tokens.mjs'
 
 const ssr = await import(pathToFileURL(resolve('dist-ssr/entry-server.js')).href)
 const file = resolve('dist/index.html')
 const html = readFileSync(file, 'utf8')
-if (!html.includes('<!--app-head-->') || !html.includes('<!--app-html-->')) {
-  throw new Error('prerender: placeholders missing from dist/index.html')
+for (const marker of ['<!--app-head-->', '<!--app-html-->']) {
+  const n = html.split(marker).length - 1
+  if (n !== 1) throw new Error(`prerender: expected exactly 1 ${marker} in dist/index.html, found ${n}`)
 }
 // Preload only the above-the-fold display face (Archivo latin). The hash in the
 // file name changes with the fontsource version, so look it up rather than pin it.
@@ -22,11 +24,15 @@ const preload = `<link rel="preload" as="font" type="font/woff2" href="/assets/$
 const app = ssr.render()
 if (!app) throw new Error('prerender: render() returned an empty string')
 // Function replacers: a string replacement would interpret $&, $' and $` in the content.
+// app-html goes first so a literal placeholder inside the rendered content can never be
+// matched by the app-head replace. The CSP goes in last, so the hash covers the final file.
 writeFileSync(
   file,
-  fill(html, readTokens())
-    .replace('<!--app-head-->', () => preload + ssr.buildHead())
-    .replace('<!--app-html-->', () => app),
+  addCsp(
+    fill(html, readTokens())
+      .replace('<!--app-html-->', () => app)
+      .replace('<!--app-head-->', () => preload + ssr.buildHead()),
+  ),
 )
 // The 404 page is static and JS-free, so it gets the same hashed font by file name.
 const notFound = resolve('dist/404.html')
@@ -34,6 +40,10 @@ writeFileSync(notFound, readFileSync(notFound, 'utf8').replace('{{archivo}}', ar
 
 // The origin comes from package.json, same as the canonical URL in head.ts.
 const { homepage } = JSON.parse(readFileSync('package.json', 'utf8'))
+if (typeof homepage !== 'string') throw new Error('prerender: package.json homepage is missing')
+const siteUrl = new URL(homepage)
+if (siteUrl.protocol !== 'https:') throw new Error(`prerender: homepage must be https, got ${homepage}`)
+const xmlEscape = (v) => v.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;')
 // lastmod is the last commit date (the content's real age); the build date if git is unavailable.
 let lastmod = new Date().toISOString().slice(0, 10)
 try {
@@ -46,7 +56,7 @@ writeFileSync(
   `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>${homepage}/</loc>
+    <loc>${xmlEscape(siteUrl.origin)}/</loc>
     <lastmod>${lastmod}</lastmod>
   </url>
 </urlset>

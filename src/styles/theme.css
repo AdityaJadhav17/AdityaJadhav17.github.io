@@ -51,12 +51,9 @@
 */
 
 @import "tw-animate-css";
-/* `shadcn` is listed in devDependencies (it isn't shipped at
-   runtime, so it doesn't belong in dependencies), but this import makes it
-   a genuine BUILD-time dependency: `vite build` resolves this path from
-   node_modules while compiling CSS. CI must run a plain `npm ci` (all
-   deps, not `--omit=dev`) or this import fails and the build breaks. */
-@import "shadcn/tailwind.css";
+/* shadcn's tailwind.css, vendored (see the header of that file) so the shadcn
+   CLI and its dependency tree are not installed just for this import. */
+@import "./shadcn-tailwind.css";
 
 /*
   Metric-matched fallbacks, so the swap to the web font does not shift layout.
