@@ -7,7 +7,7 @@ const OG_ALT =
   'Dark card with an AJ monogram and the line "I build AI systems and find where they break." Below it: Aditya Jadhav, adityajadhav.dev, and "Graduating June 2027, open to new-grad roles".'
 const TITLE = `${site.name} | Software Engineer`
 
-const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;')
 
 export function jsonLdScript(data: unknown): string {
   return `<script type="application/ld+json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>`

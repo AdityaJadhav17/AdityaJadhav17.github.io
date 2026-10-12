@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 import { buildHead, jsonLdScript } from './head'
 import { currentRoles } from '@/content/site'
 
@@ -25,4 +25,15 @@ test('JSON-LD cannot be broken out of its script tag', () => {
   const tag = jsonLdScript({ x: '</script><img>' })
   expect(tag.match(/<\/script>/g)).toHaveLength(1)
   expect(tag).toContain('\\u003c/script>')
+})
+
+test('attribute values escape quotes and angle brackets', async () => {
+  vi.resetModules()
+  vi.doMock('@/content/site', async (orig) => {
+    const m = await orig<typeof import('@/content/site')>()
+    return { ...m, site: { ...m.site, description: `a "b" <c> 'd' & e` } }
+  })
+  const { buildHead } = await import('./head')
+  expect(buildHead()).toContain('content="a &quot;b&quot; &lt;c&gt; &#39;d&#39; &amp; e"')
+  vi.doUnmock('@/content/site')
 })
