@@ -87,7 +87,7 @@ export const site: Site = {
   proof: [
     { value: '11', label: 'engineers led on WatchTower', href: '#project-watchtower' },
     { value: '15 to 20 min', label: 'task cut to under 5 min at Lumulus', href: '#experience-lumulus' },
-    { value: '0.9175', label: 'detection score (mAP) on a Kaggle sim-to-real challenge', href: '#project-sim2real' },
+    { value: '0.9175', label: 'mAP, Kaggle sim-to-real detection', href: '#project-sim2real' },
   ],
 
   location: 'San Diego, CA',
