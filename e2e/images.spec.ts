@@ -1,4 +1,5 @@
-import { test, expect, type Browser } from '@playwright/test'
+import { test, expect } from './fixtures'
+import type { Browser } from '@playwright/test'
 
 // Every image must be fetched at a size close to what it is drawn at. The
 // chosen candidate (read from the -<width> suffix of currentSrc) may not be

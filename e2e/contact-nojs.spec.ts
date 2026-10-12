@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 // Submitting before hydration (or with JS off) used to fall back to a GET on
 // the current URL, reloading the page with the fields in the query string and

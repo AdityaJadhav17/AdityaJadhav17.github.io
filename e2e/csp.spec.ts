@@ -1,4 +1,5 @@
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect } from './fixtures'
+import type { Page } from '@playwright/test'
 
 // The built pages carry a Content-Security-Policy <meta>. A blocked resource or
 // inline script would show up as a securitypolicyviolation event, so these

@@ -1,4 +1,5 @@
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect } from './fixtures'
+import type { Page } from '@playwright/test'
 
 // One container: header, hero text, every section title and the footer all
 // start at the same x at every width.
@@ -29,7 +30,7 @@ for (const width of [390, 768, 1440]) {
 // Closed cards keep the page short: the full story is behind <details>. The
 // 390 cap allows for the featured cards' phone chrome and 4:3 posters.
 for (const [width, height, max] of [
-  [1440, 900, 6750],
+  [1440, 900, 6720],
   [390, 844, 10200],
 ] as const) {
   test(`page stays under ${max}px tall at ${width}px with details closed`, async ({ page }, testInfo) => {
