@@ -34,6 +34,7 @@ export type Site = {
   social: SocialLink[]
   resumePath: string
   education: Education
+  analytics: { cloudflareToken: string }
 }
 
 // Derived, never hand-copied: the stale-role bug (Lumulus still reading as
@@ -101,4 +102,9 @@ export const site: Site = {
     institution: 'UC San Diego',
     status: 'Expected June 2027',
   },
+
+  // Public beacon token from the Cloudflare Web Analytics dashboard. It is
+  // not a secret (it ships in the page). Empty disables analytics: the build
+  // adds no script and leaves the CSP untouched.
+  analytics: { cloudflareToken: '' },
 }

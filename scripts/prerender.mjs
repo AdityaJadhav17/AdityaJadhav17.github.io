@@ -5,7 +5,7 @@ import { readFileSync, readdirSync, writeFileSync, rmSync } from 'node:fs'
 import { execSync } from 'node:child_process'
 import { pathToFileURL } from 'node:url'
 import { resolve } from 'node:path'
-import { addCsp } from './csp.mjs'
+import { addBeacon, addCsp } from './csp.mjs'
 import { fill, readTokens } from './tokens.mjs'
 
 const ssr = await import(pathToFileURL(resolve('dist-ssr/entry-server.js')).href)
@@ -26,14 +26,12 @@ if (!app) throw new Error('prerender: render() returned an empty string')
 // Function replacers: a string replacement would interpret $&, $' and $` in the content.
 // app-html goes first so a literal placeholder inside the rendered content can never be
 // matched by the app-head replace. The CSP goes in last, so the hash covers the final file.
-writeFileSync(
-  file,
-  addCsp(
-    fill(html, readTokens())
-      .replace('<!--app-html-->', () => app)
-      .replace('<!--app-head-->', () => preload + ssr.buildHead()),
-  ),
-)
+// Analytics stay off until site.analytics.cloudflareToken is set: no beacon, CSP unchanged.
+const token = ssr.site.analytics.cloudflareToken
+const page = fill(html, readTokens())
+  .replace('<!--app-html-->', () => app)
+  .replace('<!--app-head-->', () => preload + ssr.buildHead())
+writeFileSync(file, addCsp(token ? addBeacon(page, token) : page, { analytics: Boolean(token) }))
 // The 404 page is static and JS-free, so it gets the same hashed font by file name.
 const notFound = resolve('dist/404.html')
 writeFileSync(notFound, readFileSync(notFound, 'utf8').replace('{{archivo}}', archivo))

@@ -14,14 +14,18 @@ export const scriptHash = (text) => {
   return `'sha256-${createHash('sha256').update(parsed, 'utf8').digest('base64')}'`
 }
 
-export const buildCsp = (hash) =>
+const CF_SCRIPT = 'https://static.cloudflareinsights.com'
+const CF_CONNECT = 'https://cloudflareinsights.com'
+
+/** `analytics` widens script-src and connect-src for the Cloudflare beacon; off by default. */
+export const buildCsp = (hash, analytics = false) =>
   [
     `default-src 'self'`,
-    `script-src 'self' ${hash}`,
+    `script-src 'self' ${hash}${analytics ? ` ${CF_SCRIPT}` : ''}`,
     `style-src 'self' 'unsafe-inline'`,
     `img-src 'self' data:`,
     `font-src 'self'`,
-    `connect-src 'self' https://formspree.io`,
+    `connect-src 'self' https://formspree.io${analytics ? ` ${CF_CONNECT}` : ''}`,
     `form-action https://formspree.io`,
     `base-uri 'self'`,
     `object-src 'none'`,
@@ -38,13 +42,27 @@ export function inlineScripts(html) {
   return found
 }
 
+/** Cloudflare Web Analytics beacon, added before </body>. Throws on a malformed token. */
+export function addBeacon(html, token) {
+  if (!/^[a-f0-9]{32}$/.test(token)) throw new Error('analytics: cloudflareToken must be 32 lowercase hex characters')
+  const tag = `<script defer src="${CF_SCRIPT}/beacon.min.js" data-cf-beacon='{"token":"${token}"}'></script>`
+  let hits = 0
+  const out = html.replace('</body>', () => {
+    hits++
+    return `${tag}
+  </body>`
+  })
+  if (hits !== 1) throw new Error('analytics: </body> not found in dist/index.html')
+  return out
+}
+
 /** Inserts the policy as a <meta> right after <meta charset>; throws unless there is exactly one inline script. */
-export function addCsp(html) {
+export function addCsp(html, { analytics = false } = {}) {
   const scripts = inlineScripts(html)
   if (scripts.length !== 1) {
     throw new Error(`csp: expected exactly 1 inline script, found ${scripts.length}`)
   }
-  const meta = `<meta http-equiv="Content-Security-Policy" content="${buildCsp(scriptHash(scripts[0]))}" />`
+  const meta = `<meta http-equiv="Content-Security-Policy" content="${buildCsp(scriptHash(scripts[0]), analytics)}" />`
   let hits = 0
   const out = html.replace(/<meta charset=[^>]*>/i, (charset) => {
     hits++
