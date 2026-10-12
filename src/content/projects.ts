@@ -6,6 +6,8 @@
 export type Project = {
   id: string
   title: string
+  // Plain-English one-liner shown directly under the title.
+  summary: string
   // One line shown on the collapsed card. `metric` is a substring of it, set in mono.
   outcome: string
   metric?: string
@@ -38,6 +40,7 @@ export const projects: Project[] = [
   {
     id: 'talk-to-robot',
     title: 'Talk-to-Robot',
+    summary: "Tested where a language model goes wrong when it turns spoken robot commands into target positions, separately from the robot's own controller.",
     outcome: 'End-to-end success falls from 98% to 50% while policy success holds at 93 to 100%',
     metric: '98% to 50%',
     problem:
@@ -67,6 +70,7 @@ export const projects: Project[] = [
   {
     id: 'watchtower',
     title: 'WatchTower',
+    summary: 'A lightweight tool that shows web teams the errors, slowdowns and user activity on their live site.',
     outcome: 'Led 11 engineers to a deployed SDK, ingest API and live dashboard',
     metric: '11 engineers',
     problem:
@@ -97,6 +101,7 @@ export const projects: Project[] = [
   {
     id: 'travel-agntcy',
     title: 'TravelAGNTCY',
+    summary: 'A travel planner where separate AI agents for flights, hotels and activities work together on one plan.',
     outcome: "Won Cisco's AGNTCY track at SANDHacks 2026, with ~40% lower inter-service latency",
     metric: '~40%',
     problem:
@@ -127,6 +132,7 @@ export const projects: Project[] = [
   {
     id: 'stockroom',
     title: 'Stockroom',
+    summary: 'A shared inventory and purchasing app that records who approved what, and when.',
     outcome: '156 integration tests and 11 end-to-end cases gate a seven-job CI pipeline',
     metric: '156',
     problem:
@@ -154,6 +160,7 @@ export const projects: Project[] = [
   {
     id: 'sim2real',
     title: 'Synthetic-to-Real Object Detection',
+    summary: 'An object detector trained only on synthetic images, built to work on real photos.',
     outcome: 'Final mAP 0.9175, with 22% better real-world generalization',
     metric: '0.9175',
     problem:
@@ -184,6 +191,7 @@ export const projects: Project[] = [
   {
     id: 'personal-tracker',
     title: 'Personal Tracker',
+    summary: 'One app for deadlines, courses, notes and goals that runs entirely in the browser, with no account or server.',
     outcome: 'In daily use since September 2026, with no runtime dependencies beyond React',
     problem:
       'Tracking deadlines, courses, notes and goals usually means either four separate apps or one that wants an account and a server.',

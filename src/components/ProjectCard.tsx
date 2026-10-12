@@ -161,6 +161,7 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
           <h3 className={cn('font-heading text-xl font-semibold text-card-foreground', isWide && 'md:text-2xl')}>
             {project.title}
           </h3>
+          <p className="text-sm text-muted-foreground">{project.summary}</p>
           {project.context && <p className="label">{project.context}</p>}
         </div>
 

@@ -2,7 +2,8 @@ import { describe, it, expect } from 'vitest'
 import { projects } from './projects'
 
 describe('projects', () => {
-  it('leads with Talk-to-Robot', () => {
+  it('gives every project a summary and leads with Talk-to-Robot', () => {
+    for (const p of projects) expect(p.summary, p.id).toBeTruthy()
     expect(projects.filter((p) => p.featured).map((p) => p.id)).toEqual([
       'talk-to-robot',
       'watchtower',
