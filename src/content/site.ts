@@ -34,6 +34,7 @@ export type Site = {
   social: SocialLink[]
   resumePath: string
   education: Education
+  analytics: { cloudflareToken: string }
 }
 
 // Derived, never hand-copied: the stale-role bug (Lumulus still reading as
@@ -54,12 +55,12 @@ export const site: Site = {
 
   // The framing that sits under the name, the way a studio states its
   // discipline. Narrower than the roles list, broader than any single project.
-  discipline: 'AI Systems & Security',
+  discipline: 'Software engineer, AI systems and security',
 
   // What he actually works on, each traceable to a project or a role in this
   // file's siblings. Not aspirational, and not a skills dump: the skills list
   // in About already serves that purpose. Multi-agent traces to TravelAGNTCY,
-  // computer vision to Synthetic-to-Real and the bird classifier, evaluation
+  // computer vision to Synthetic-to-Real, evaluation
   // to Talk-to-Robot, observability to WatchTower, and the last two to the
   // UC San Diego role. Do not add a seventh. Penetration testing and NIST SP
   // 800-171 were confirmed by the owner on 2026-10-06 as publishable provided
@@ -85,8 +86,8 @@ export const site: Site = {
   // from a linked repository or the experience entries below.
   proof: [
     { value: '11', label: 'engineers led on WatchTower', href: '#project-watchtower' },
-    { value: '0.9175', label: 'mAP, sim-to-real detection', href: '#project-sim2real' },
-    { value: '150+', label: 'members in the AI club I founded', href: '#experience-ai-club' },
+    { value: '15 to 20 min', label: 'task cut to under 5 min at Lumulus', href: '#experience-lumulus' },
+    { value: '0.9175', label: 'mAP, Kaggle sim-to-real detection', href: '#project-sim2real' },
   ],
 
   location: 'San Diego, CA',
@@ -101,4 +102,9 @@ export const site: Site = {
     institution: 'UC San Diego',
     status: 'Expected June 2027',
   },
+
+  // Public beacon token from the Cloudflare Web Analytics dashboard. It is
+  // not a secret (it ships in the page). Empty disables analytics: the build
+  // adds no script and leaves the CSP untouched.
+  analytics: { cloudflareToken: '36afcab86d3e48469ade27b70918544a' },
 }

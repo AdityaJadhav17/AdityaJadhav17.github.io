@@ -1,4 +1,5 @@
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect } from './fixtures'
+import type { Page } from '@playwright/test'
 
 // One container: header, hero text, every section title and the footer all
 // start at the same x at every width.
@@ -29,7 +30,7 @@ for (const width of [390, 768, 1440]) {
 // Closed cards keep the page short: the full story is behind <details>. The
 // 390 cap allows for the featured cards' phone chrome and 4:3 posters.
 for (const [width, height, max] of [
-  [1440, 900, 6750],
+  [1440, 900, 6720],
   [390, 844, 10200],
 ] as const) {
   test(`page stays under ${max}px tall at ${width}px with details closed`, async ({ page }, testInfo) => {
@@ -204,8 +205,8 @@ test('hero stats link to their sources', async ({ page }, testInfo) => {
   await page.goto('/')
   const targets = [
     [/11 engineers led on WatchTower/, '#project-watchtower', true],
-    [/0\.9175 mAP/, '#project-sim2real', true],
-    [/150\+ members/, '#experience-ai-club', false],
+    [/15 to 20 min task cut/, '#experience-lumulus', false],
+    [/0\.9175 mAP, Kaggle sim-to-real detection/, '#project-sim2real', true],
   ] as const
   for (const [name, hash, hasDetails] of targets) {
     await page.getByRole('link', { name }).click()
@@ -272,7 +273,7 @@ test('experience dates sit beside their content at 1440px', async ({ page }, tes
   ])
 })
 
-// On a phone all seven project cards share one treatment; featured cards keep
+// On a phone all six project cards share one treatment; featured cards keep
 // their bare layout only from md up.
 test.describe('work cards on a phone', () => {
   test.use({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true })
@@ -286,7 +287,7 @@ test.describe('work cards on a phone', () => {
         return [s.borderTopWidth, s.borderTopColor, s.backgroundColor, s.borderRadius].join(' | ')
       }),
     )
-    expect(styles).toHaveLength(7)
+    expect(styles).toHaveLength(6)
     expect(new Set(styles).size, styles.join(', ')).toBe(1)
     expect(styles[0]).not.toMatch(/^0px/)
   })

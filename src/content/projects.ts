@@ -1,12 +1,13 @@
 // Project card content. Do not add claims beyond what the owner has
-// verified. `result` and `image` are optional: bird-classifier has no
-// measured result. `links.paper` is a PDF served from public/, currently
+// verified. `result` and `image` are optional. `links.paper` is a PDF served from public/, currently
 // only on talk-to-robot; it opens in a new tab rather than downloading,
 // so a reader can skim it without committing a file to their machine.
 
 export type Project = {
   id: string
   title: string
+  // Plain-English one-liner shown directly under the title.
+  summary: string
   // One line shown on the collapsed card. `metric` is a substring of it, set in mono.
   outcome: string
   metric?: string
@@ -37,8 +38,39 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    id: 'talk-to-robot',
+    title: 'Talk-to-Robot',
+    summary: "Tested where a language model goes wrong when it turns spoken robot commands into target positions, separately from the robot's own controller.",
+    outcome: 'End-to-end success falls from 98% to 50% while policy success holds at 93 to 100%',
+    metric: '98% to 50%',
+    problem:
+      'Natural-language robot commands fail when spatial grounding is mixed with control, making it hard to see where LLM understanding breaks.',
+    contribution:
+      'Team project (CSE 190) with a decoupled LLM grounder and SAC+HER controller in MuJoCo FetchPush-v4. Benchmarked a regex baseline against zero-shot, few-shot and chain-of-thought prompting across five instruction tiers, from literal coordinates to functional intent, then retrained the controller to test which grounding failures were recoverable.',
+    stack: ['Python', 'Gemini', 'MuJoCo', 'Gymnasium', 'Stable-Baselines3 (SAC + HER)'],
+    // Figures are Table 1 of the CSE 190 paper, the baseline evaluation,
+    // few-shot variant. Note T3: the paper scores that tier at an 8cm
+    // tolerance rather than the 5cm used for T0-T2, because "next to" has no
+    // single correct distance, and it says plainly that under 5cm "every
+    // single T3 case fails". The near-zero T3 figure that appears in the
+    // post-retraining table is that stricter-threshold artefact, which the
+    // paper itself calls misleading. Do not quote it as the headline result.
+    result:
+      'End-to-end success falls from 98% on literal coordinates to 50% on functional intent, while policy success held between 93 and 100%, which places the failures in grounding rather than control. Each tier fails differently rather than degrading smoothly: relative offsets land goals off the table, where a plain regex beat the LLM 85% to 77%; reference objects are off by a consistent 6 cm bias that controller retraining can absorb; and functional intent is not a coordinate problem at all, since annotators disagreed with each other about as much as the model did.',
+    chart: {
+      alt: 'Bar chart of end-to-end success by instruction tier: 98.3% on literal coordinates, 93.3% on named regions, 76.7% on relative offsets, 73.3% on reference objects, and 50% on functional intent',
+    },
+    links: {
+      github: 'https://github.com/YangLin14/Talk-to-Robot',
+      paper: '/llm-spatial-grounding-paper.pdf',
+    },
+    featured: true,
+    context: 'UC San Diego team project (CSE 190)',
+  },
+  {
     id: 'watchtower',
     title: 'WatchTower',
+    summary: 'A lightweight tool that shows web teams the errors, slowdowns and user activity on their live site.',
     outcome: 'Led 11 engineers to a deployed SDK, ingest API and live dashboard',
     metric: '11 engineers',
     problem:
@@ -64,11 +96,12 @@ export const projects: Project[] = [
     },
     featured: true,
     // Owner, 2026-10-06: he led 11 engineers. "11-person team" contradicted that, so the team size is not stated.
-    context: 'UCSD CSE 110',
+    context: 'UC San Diego course project (CSE 110)',
   },
   {
     id: 'travel-agntcy',
     title: 'TravelAGNTCY',
+    summary: 'A travel planner where separate AI agents for flights, hotels and activities work together on one plan.',
     outcome: "Won Cisco's AGNTCY track at SANDHacks 2026, with ~40% lower inter-service latency",
     metric: '~40%',
     problem:
@@ -99,6 +132,7 @@ export const projects: Project[] = [
   {
     id: 'stockroom',
     title: 'Stockroom',
+    summary: 'A shared inventory and purchasing app that records who approved what, and when.',
     outcome: '156 integration tests and 11 end-to-end cases gate a seven-job CI pipeline',
     metric: '156',
     problem:
@@ -124,37 +158,9 @@ export const projects: Project[] = [
     featured: true,
   },
   {
-    id: 'talk-to-robot',
-    title: 'Talk-to-Robot',
-    outcome: 'End-to-end success falls from 98% to 50% while policy success holds at 93 to 100%',
-    metric: '98% to 50%',
-    problem:
-      'Natural-language robot commands fail when spatial grounding is mixed with control, making it hard to see where LLM understanding breaks.',
-    contribution:
-      'Team project (CSE 190) with a decoupled LLM grounder and SAC+HER controller in MuJoCo FetchPush-v4. Benchmarked a regex baseline against zero-shot, few-shot and chain-of-thought prompting across five instruction tiers, from literal coordinates to functional intent, then retrained the controller to test which grounding failures were recoverable.',
-    stack: ['Python', 'Gemini', 'MuJoCo', 'Gymnasium', 'Stable-Baselines3 (SAC + HER)'],
-    // Figures are Table 1 of the CSE 190 paper, the baseline evaluation,
-    // few-shot variant. Note T3: the paper scores that tier at an 8cm
-    // tolerance rather than the 5cm used for T0-T2, because "next to" has no
-    // single correct distance, and it says plainly that under 5cm "every
-    // single T3 case fails". The near-zero T3 figure that appears in the
-    // post-retraining table is that stricter-threshold artefact, which the
-    // paper itself calls misleading. Do not quote it as the headline result.
-    result:
-      'End-to-end success falls from 98% on literal coordinates to 50% on functional intent, while policy success held between 93 and 100%, which places the failures in grounding rather than control. Each tier fails differently rather than degrading smoothly: relative offsets land goals off the table, where a plain regex beat the LLM 85% to 77%; reference objects are off by a consistent 6 cm bias that controller retraining can absorb; and functional intent is not a coordinate problem at all, since annotators disagreed with each other about as much as the model did.',
-    chart: {
-      alt: 'Bar chart of end-to-end success by instruction tier: 98.3% on literal coordinates, 93.3% on named regions, 76.7% on relative offsets, 73.3% on reference objects, and 50% on functional intent',
-    },
-    links: {
-      github: 'https://github.com/YangLin14/Talk-to-Robot',
-      paper: '/llm-spatial-grounding-paper.pdf',
-    },
-    featured: false,
-    context: 'UCSD CSE 190, team project',
-  },
-  {
     id: 'sim2real',
     title: 'Synthetic-to-Real Object Detection',
+    summary: 'An object detector trained only on synthetic images, built to work on real photos.',
     outcome: 'Final mAP 0.9175, with 22% better real-world generalization',
     metric: '0.9175',
     problem:
@@ -185,6 +191,7 @@ export const projects: Project[] = [
   {
     id: 'personal-tracker',
     title: 'Personal Tracker',
+    summary: 'One app for deadlines, courses, notes and goals that runs entirely in the browser, with no account or server.',
     outcome: 'In daily use since September 2026, with no runtime dependencies beyond React',
     problem:
       'Tracking deadlines, courses, notes and goals usually means either four separate apps or one that wants an account and a server.',
@@ -203,33 +210,6 @@ export const projects: Project[] = [
       height: 420,
       alt: "Personal Tracker's Home view: today's date, one overdue item first, then the coming days with course tags",
       tone: 'light',
-    },
-    featured: false,
-  },
-  {
-    id: 'bird-classifier',
-    title: 'Bird Classifier in a Forest',
-    outcome: '96.7% validation accuracy from a fine-tuned ResNet18',
-    metric: '96.7%',
-    problem:
-      'Identifying bird species from cluttered forest imagery is hard for models trained on clean, centred subjects.',
-    contribution:
-      'A CNN image classifier built in PyTorch, with data preprocessing, augmentation, training, and evaluation.',
-    stack: ['Python', 'PyTorch', 'OpenCV'],
-    // The owner confirmed these figures on 2026-09-01. They existed on his
-    // resume but had never been carried onto the site, so the card read as
-    // though the project had no measured outcome.
-    result:
-      '96.7% validation accuracy from a fine-tuned ResNet18, with preprocessing and class balancing over a 1,200+ image dataset improving generalization by 18%.',
-    image: {
-      src: '/bird-classifier-400.webp',
-      width: 400,
-      height: 200,
-      alt: 'A common kingfisher perched on a branch against a blurred green background, one of the test images used to evaluate the classifier',
-      tone: 'light',
-    },
-    links: {
-      github: 'https://github.com/AdityaJadhav17/bird-classifier-forest',
     },
     featured: false,
   },

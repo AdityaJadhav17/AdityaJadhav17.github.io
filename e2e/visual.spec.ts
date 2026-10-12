@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 // Playwright snapshots are per-OS (font rasterisation differs on Linux CI), so
 // baselines are not committed: the first local run generates them (gitignored)

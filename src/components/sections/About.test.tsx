@@ -8,7 +8,7 @@ const GROUPS: Record<string, string[]> = {
   'AI and ML': ['PyTorch', 'TensorFlow', 'NumPy', 'OpenCV', 'YOLOv8', 'LangGraph'],
   'Web, backend and desktop': ['React', 'Node.js', 'FastAPI', 'ASP.NET Core', 'Supabase', 'Qt'],
   Security: ['Nmap', 'OWASP'],
-  'Tools and cloud': ['Git', 'Linux', 'Docker', 'AWS', 'IBM Cloud', 'Playwright'],
+  'Tools and cloud': ['Git', 'Linux', 'Docker', 'AWS', 'Playwright'],
 }
 
 describe('About skills', () => {

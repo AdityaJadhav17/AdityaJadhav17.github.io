@@ -1,4 +1,5 @@
-import { test, expect, type Browser } from '@playwright/test'
+import { test, expect } from './fixtures'
+import type { Browser } from '@playwright/test'
 
 // Every image must be fetched at a size close to what it is drawn at. The
 // chosen candidate (read from the -<width> suffix of currentSrc) may not be
@@ -64,7 +65,6 @@ const SOURCE_LIMITED: Record<string, string> = {
   'stockroom-m': 'awaiting ≥1280 px owner capture',
   'personal-tracker': 'awaiting ≥1280 px owner capture', // 1200 px master, 840 px crop
   sim2real: 'awaiting larger original', // 560 px
-  'bird-classifier': 'awaiting larger original', // 400 px
 }
 const stem = (src: string) => src.replace(/-\d+\.\w+$/, '')
 

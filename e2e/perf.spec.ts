@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 // Main-thread blocking on a phone-class CPU (4x throttle). Measured on the dev
 // machine the longest task is 80-215 ms run to run, and it is mostly parse,

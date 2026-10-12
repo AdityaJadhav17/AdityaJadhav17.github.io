@@ -20,7 +20,7 @@ type ProjectCardProps = {
 // one outcome line (the metric in accent ink), five stack tags, links; the Problem
 // -> What I built -> Stack -> Result story sits in a <details> below.
 // `result` is optional and the card reads as complete without it;
-// `project.image` is optional (watchtower, talk-to-robot) and falls back to
+// `project.image` is optional (talk-to-robot draws a chart instead) and falls back to
 // a typographic treatment built entirely from design tokens, with no
 // AI-generated art.
 const MAX_TAGS = 5
@@ -161,6 +161,7 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
           <h3 className={cn('font-heading text-xl font-semibold text-card-foreground', isWide && 'md:text-2xl')}>
             {project.title}
           </h3>
+          <p className="text-sm text-muted-foreground">{project.summary}</p>
           {project.context && <p className="label">{project.context}</p>}
         </div>
 

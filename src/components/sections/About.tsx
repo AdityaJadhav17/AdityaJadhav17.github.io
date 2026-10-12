@@ -23,7 +23,7 @@ const SKILL_GROUPS: { group: string; items: string[] }[] = [
   { group: 'Security', items: ['Nmap', 'OWASP'] },
   {
     group: 'Tools and cloud',
-    items: ['Git', 'Linux', 'Docker', 'AWS', 'IBM Cloud', 'Playwright'],
+    items: ['Git', 'Linux', 'Docker', 'AWS', 'Playwright'],
   },
 ]
 
