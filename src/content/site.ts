@@ -54,7 +54,7 @@ export const site: Site = {
 
   // The framing that sits under the name, the way a studio states its
   // discipline. Narrower than the roles list, broader than any single project.
-  discipline: 'AI Systems & Security',
+  discipline: 'Software engineer, AI systems and security',
 
   // What he actually works on, each traceable to a project or a role in this
   // file's siblings. Not aspirational, and not a skills dump: the skills list
