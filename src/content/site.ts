@@ -59,7 +59,7 @@ export const site: Site = {
   // What he actually works on, each traceable to a project or a role in this
   // file's siblings. Not aspirational, and not a skills dump: the skills list
   // in About already serves that purpose. Multi-agent traces to TravelAGNTCY,
-  // computer vision to Synthetic-to-Real and the bird classifier, evaluation
+  // computer vision to Synthetic-to-Real, evaluation
   // to Talk-to-Robot, observability to WatchTower, and the last two to the
   // UC San Diego role. Do not add a seventh. Penetration testing and NIST SP
   // 800-171 were confirmed by the owner on 2026-10-06 as publishable provided

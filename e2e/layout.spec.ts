@@ -272,7 +272,7 @@ test('experience dates sit beside their content at 1440px', async ({ page }, tes
   ])
 })
 
-// On a phone all seven project cards share one treatment; featured cards keep
+// On a phone all six project cards share one treatment; featured cards keep
 // their bare layout only from md up.
 test.describe('work cards on a phone', () => {
   test.use({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true })
@@ -286,7 +286,7 @@ test.describe('work cards on a phone', () => {
         return [s.borderTopWidth, s.borderTopColor, s.backgroundColor, s.borderRadius].join(' | ')
       }),
     )
-    expect(styles).toHaveLength(7)
+    expect(styles).toHaveLength(6)
     expect(new Set(styles).size, styles.join(', ')).toBe(1)
     expect(styles[0]).not.toMatch(/^0px/)
   })

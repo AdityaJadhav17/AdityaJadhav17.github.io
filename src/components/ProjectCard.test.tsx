@@ -45,7 +45,7 @@ describe('ProjectCard', () => {
   })
 
   it('shows no +N item when the stack fits', () => {
-    render(<ProjectCard project={byId('bird-classifier')} />)
+    render(<ProjectCard project={byId('sim2real')} />)
     expect(screen.queryByText(/^\+\d/)).toBeNull()
   })
 

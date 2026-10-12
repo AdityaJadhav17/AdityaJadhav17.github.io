@@ -2,7 +2,7 @@ import { projects } from '@/content/projects'
 import { ProjectCard } from '@/components/ProjectCard'
 import { Reveal } from '@/components/motion/Reveal'
 
-// Featured projects (the three `featured: true` projects, in array order) render full width,
+// Featured projects (the four `featured: true` projects, in array order) render full width,
 // one per row; the rest render in a two-column grid. Same collapsed ProjectCard
 // throughout (outcome line, tags, links; the full story is behind a <details>),
 // so only the container width differs and the page stays short.

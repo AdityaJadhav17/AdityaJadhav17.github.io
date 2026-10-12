@@ -20,7 +20,7 @@ type ProjectCardProps = {
 // one outcome line (the metric in accent ink), five stack tags, links; the Problem
 // -> What I built -> Stack -> Result story sits in a <details> below.
 // `result` is optional and the card reads as complete without it;
-// `project.image` is optional (watchtower, talk-to-robot) and falls back to
+// `project.image` is optional (talk-to-robot draws a chart instead) and falls back to
 // a typographic treatment built entirely from design tokens, with no
 // AI-generated art.
 const MAX_TAGS = 5
