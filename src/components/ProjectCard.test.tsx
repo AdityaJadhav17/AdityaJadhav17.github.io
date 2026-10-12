@@ -23,6 +23,13 @@ describe('ProjectCard', () => {
     expect(screen.getByText(p.summary)).toBeInTheDocument()
   })
 
+  it('gives the code link a unique accessible name', () => {
+    const p = byId('watchtower')
+    render(<ProjectCard project={p} />)
+    // \s* because dom-accessibility-api trims the sr-only span's leading space
+    expect(screen.getByRole('link', { name: new RegExp(`^Code *for ${p.title}$`) })).toBeInTheDocument()
+  })
+
   it('renders an outcome without a metric as plain text', () => {
     const p = byId('personal-tracker')
     render(<ProjectCard project={p} />)

@@ -190,7 +190,7 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
             {codeLink && (
               <a href={codeLink} target="_blank" rel="noopener noreferrer" className={linkClass}>
                 <FaGithub aria-hidden="true" className="size-4" />
-                Code
+                Code<span className="sr-only"> for {project.title}</span>
               </a>
             )}
             {secondaryLink && (
@@ -212,7 +212,7 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
                       'icon-nudge transition-transform duration-200 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5',
                   )}
                 />
-                {secondaryLabel}
+                {secondaryLabel}<span className="sr-only"> for {project.title}</span>
               </a>
             )}
 
@@ -227,7 +227,7 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
                   aria-hidden="true"
                   className="icon-nudge size-4 transition-transform duration-200 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5"
                 />
-                Paper
+                Paper<span className="sr-only"> for {project.title}</span>
               </a>
             )}
           </div>
