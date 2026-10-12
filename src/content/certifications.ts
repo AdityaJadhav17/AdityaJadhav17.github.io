@@ -1,4 +1,5 @@
-// Certifications. Unchanged from the previous site content.
+// Certifications. Owner decision: only the AWS credential is listed; the
+// IBM SkillsBuild badges were dropped. Do not re-add them.
 
 export type Certification = {
   id: string
@@ -18,32 +19,5 @@ export const certifications: Certification[] = [
     year: '2026',
     badge: '/badges/aws-ai-practitioner.webp',
     verify: 'https://www.credly.com/badges/e761ec4f-7806-4d0f-b497-303cc5533086/public_url',
-  },
-  {
-    id: 'code-generation-ibm',
-    title: 'Code Generation and Optimization Using IBM Granite',
-    issuer: 'IBM SkillsBuild',
-    year: '2025',
-    badge: '/badges/code-generation-ibm.webp',
-    pdf: '/code-generation-ibm.pdf',
-    verify: 'https://www.credly.com/badges/b414adea-8ca1-45f2-adbe-7feb64c95470/public_url',
-  },
-  {
-    id: 'cybersecurity-fundamentals',
-    title: 'Cybersecurity Fundamentals',
-    issuer: 'IBM SkillsBuild',
-    year: '2025',
-    badge: '/badges/cybersecurity-fundamentals.webp',
-    pdf: '/cybersecurity-fundamentals.pdf',
-    verify: 'https://www.credly.com/badges/507ef381-fd3b-4fd3-ad51-73a4b833382b/public_url',
-  },
-  {
-    id: 'data-classification-ibm',
-    title: 'Data Classification and Summarization Using IBM Granite',
-    issuer: 'IBM SkillsBuild',
-    year: '2025',
-    badge: '/badges/data-classification-ibm.webp',
-    pdf: '/data-classification-ibm.pdf',
-    verify: 'https://www.credly.com/badges/c4c60ccc-efec-4752-8cbf-dee061d4f490/public_url',
   },
 ]
