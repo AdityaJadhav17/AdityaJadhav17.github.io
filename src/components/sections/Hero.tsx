@@ -28,9 +28,11 @@ const openDetails = (e: MouseEvent<HTMLAnchorElement>) =>
 // Hero: a multi-column editorial composition rather than a centred stack.
 //
 // One CSS grid drives both layouts. The DOM order below is the mobile
-// reading order: identity, claim, availability, actions, portrait, then the
-// supporting metadata. That puts the claim and the primary CTA in the first
-// phone screen instead of under a tall portrait. At `lg` the same children
+// reading order: identity, claim, availability, actions, proof, portrait, then
+// the supporting metadata. That puts the claim, the primary CTA and all three
+// figures in the first phone screen instead of under a tall portrait. The
+// claim is only capped to 14ch at `lg`; below that it fills the width so it
+// sets in three lines on a 390px phone. At `lg` the same children
 // are placed explicitly by row and column: metadata across the top, the claim
 // directly under it, availability and actions beneath the claim, proof under
 // the actions, portrait absolutely positioned behind the right half.
@@ -67,7 +69,7 @@ export function Hero() {
           as one composition rather than a photo with a caption. */}
       <p
         style={step(1)}
-        className="hero-in relative z-10 max-w-[14ch] font-heading text-[clamp(2rem,5vw,4rem)] lg:text-[clamp(3.5rem,5.2vw,5rem)] leading-[0.95] font-bold tracking-tight text-balance text-foreground uppercase lg:col-span-2 lg:col-start-1 lg:row-start-2 lg:mt-8 lg:max-w-[14ch]"
+        className="hero-in relative z-10 font-heading text-[clamp(2rem,5vw,4rem)] lg:text-[clamp(3.5rem,5.2vw,5rem)] leading-[0.95] font-bold tracking-tight text-balance text-foreground uppercase lg:col-span-2 lg:col-start-1 lg:row-start-2 lg:mt-8 lg:max-w-[14ch]"
       >
         {site.positioning}
       </p>
@@ -108,6 +110,30 @@ export function Hero() {
         })}
       </div>
 
+      {/* Proof. A recruiter who reads nothing else should still leave with a
+          number. Phone: one row per figure, so no label wraps past two lines, and it
+          sits right under the actions so all three show in the first screen.
+          Left two columns at lg, for the same reason as availability. */}
+      <ul
+        style={step(4)}
+        className="hero-in relative z-10 flex flex-col sm:flex-row sm:flex-wrap sm:gap-x-8 sm:gap-y-4 lg:col-span-2 lg:col-start-1 lg:row-start-5 lg:mt-10 lg:self-start"
+      >
+        {site.proof.map((point) => (
+          <li key={point.label} className="sm:max-w-[12rem] sm:flex-1">
+            <a
+              href={point.href}
+              onClick={openDetails}
+              className="group flex min-h-11 items-center gap-4 sm:block sm:min-h-0"
+            >
+              <p className="w-32 shrink-0 whitespace-nowrap text-xl font-semibold text-accent-ink tabular-nums underline-offset-4 group-hover:underline group-focus-visible:underline sm:w-auto">
+                {point.value}
+              </p>
+              <p className="text-[0.8125rem] leading-snug text-muted-foreground sm:mt-1">{point.label}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+
       {/* Portrait. Absolute at lg only, so at mobile widths it sits in flow
           here in the reading order instead of overlapping the text stack. */}
       <HeroPortrait />
@@ -139,29 +165,6 @@ export function Hero() {
           ))}
         </ul>
       </div>
-
-      {/* Proof. A recruiter who reads nothing else should still leave with a
-          number. Phone: one row per figure, so no label wraps past two lines.
-          Left two columns at lg, for the same reason as availability. */}
-      <ul
-        style={step(4)}
-        className="hero-in relative z-10 flex flex-col sm:flex-row sm:flex-wrap sm:gap-x-8 sm:gap-y-4 lg:col-span-2 lg:col-start-1 lg:row-start-5 lg:mt-10 lg:self-start"
-      >
-        {site.proof.map((point) => (
-          <li key={point.label} className="sm:max-w-[12rem] sm:flex-1">
-            <a
-              href={point.href}
-              onClick={openDetails}
-              className="group flex min-h-11 items-center gap-4 sm:block sm:min-h-0"
-            >
-              <p className="w-20 shrink-0 text-xl font-semibold text-accent-ink tabular-nums underline-offset-4 group-hover:underline group-focus-visible:underline sm:w-auto">
-                {point.value}
-              </p>
-              <p className="text-[0.8125rem] leading-snug text-muted-foreground sm:mt-1">{point.label}</p>
-            </a>
-          </li>
-        ))}
-      </ul>
     </section>
   )
 }
