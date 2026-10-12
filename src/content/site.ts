@@ -106,5 +106,5 @@ export const site: Site = {
   // Public beacon token from the Cloudflare Web Analytics dashboard. It is
   // not a secret (it ships in the page). Empty disables analytics: the build
   // adds no script and leaves the CSP untouched.
-  analytics: { cloudflareToken: '' },
+  analytics: { cloudflareToken: '36afcab86d3e48469ade27b70918544a' },
 }

@@ -8,6 +8,6 @@ test('currentRoles is exactly the experience entries that end in Present', () =>
   expect(currentRoles.join(' ')).not.toMatch(/Lumulus/)
 })
 
-test('analytics stay off until a token is set', () => {
-  expect(site.analytics.cloudflareToken).toBe('')
+test('the Cloudflare token is a 32-char hex beacon token', () => {
+  expect(site.analytics.cloudflareToken).toMatch(/^[0-9a-f]{32}$/)
 })
