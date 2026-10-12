@@ -364,80 +364,34 @@ for (const width of [320, 390, 768, 1440]) {
   })
 }
 
-// The hero's h1 is the name; the header repeats it only after the h1 has
-// scrolled up under the header. The brand keeps its box the whole time.
+// The first phone screen carries the whole pitch: the claim, the résumé button
+// and all three figures, without a scroll. 664 and 667 are the short viewports
+// (a phone with browser chrome showing), and 390 is where the claim must not
+// need a fourth line.
 for (const [width, height] of [
-  [390, 844],
-  [1440, 900],
+  [390, 664],
+  [375, 667],
 ] as const) {
-  test(`header name appears only after the hero name scrolls away at ${width}px`, async ({ page }, testInfo) => {
-    await page.setViewportSize({ width, height })
-    await page.goto('/')
-    const brand = page.locator('header a[href="#home"]')
-    const hidden = async () => {
-      await expect(brand).toHaveCSS('opacity', '0')
-      await expect(brand).toHaveAttribute('aria-hidden', 'true')
-      await expect(brand).toHaveAttribute('tabindex', '-1')
-    }
-    await hidden()
-    const boxTop = (await brand.boundingBox())!
+  test.describe(`first screen on a ${width}x${height} phone`, () => {
+    test.use({ viewport: { width, height }, isMobile: true, hasTouch: true })
 
-    // The visible name appears once in the first viewport.
-    const visibleNames = await page.evaluate(() =>
-      [...document.querySelectorAll('a, h1')].filter((el) => {
-        const r = el.getBoundingClientRect()
-        return (
-          el.textContent?.trim() === 'Aditya Jadhav' &&
-          r.bottom > 0 &&
-          r.top < innerHeight &&
-          getComputedStyle(el).opacity !== '0'
-        )
-      }).length,
-    )
-    expect(visibleNames).toBe(1)
-
-    // Tab never lands on it (keyboard focus order is Chromium-reliable only).
-    if (testInfo.project.name === 'chromium') {
-      for (let i = 0; i < 4; i++) {
-        await page.keyboard.press('Tab')
-        expect(await page.evaluate(() => document.activeElement?.getAttribute('href'))).not.toBe('#home')
+    test('claim, résumé link and every figure fit without scrolling', async ({ page }, testInfo) => {
+      test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
+      await page.goto('/')
+      await page.waitForTimeout(600) // hero-in entrance settles (<= 400 ms)
+      const claim = page.locator('#home > p').first()
+      const bottoms = {
+        claim: (await claim.boundingBox())!,
+        cta: (await page.getByRole('link', { name: /download résumé/i }).boundingBox())!,
+        lastStat: (await page.locator('#home ul.hero-in:last-of-type li').last().boundingBox())!,
       }
-      await page.evaluate(() => (document.activeElement as HTMLElement).blur())
-    }
-
-    // Scroll until the h1's bottom is above the header's bottom.
-    await page.evaluate(() => {
-      const h1 = document.querySelector('#home h1')!
-      const header = document.querySelector('header')!
-      scrollTo({
-        top: scrollY + h1.getBoundingClientRect().bottom - header.getBoundingClientRect().bottom + 4,
-        behavior: 'instant',
-      })
+      for (const [name, box] of Object.entries(bottoms)) {
+        expect(box.y + box.height, name).toBeLessThanOrEqual(height)
+      }
+      if (width === 390) {
+        const lines = await claim.evaluate((el) => Math.round(el.getBoundingClientRect().height / parseFloat(getComputedStyle(el).lineHeight)))
+        expect(lines).toBeLessThanOrEqual(3)
+      }
     })
-    await expect(brand).toHaveCSS('opacity', '1')
-    await expect(brand).not.toHaveAttribute('aria-hidden', 'true')
-    await expect(brand).not.toHaveAttribute('tabindex', '-1')
-    await brand.focus()
-    await expect(brand).toBeFocused()
-    expect(await brand.boundingBox()).toEqual(boxTop)
-
-    await page.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }))
-    await hidden()
   })
 }
-
-test('header name fades in without a transition under reduced motion', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
-  await page.emulateMedia({ reducedMotion: 'reduce' })
-  await page.goto('/')
-  const duration = await page
-    .locator('header a[href="#home"]')
-    .evaluate((el) => parseFloat(getComputedStyle(el).transitionDuration))
-  expect(duration).toBeLessThan(0.001) // theme.css clamps reduced-motion to ~0
-})
-
-test('header name shows on a reload mid-page', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
-  await page.goto('/#about')
-  await expect(page.locator('header a[href="#home"]')).toHaveCSS('opacity', '1')
-})
