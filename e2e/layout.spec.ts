@@ -204,8 +204,8 @@ test('hero stats link to their sources', async ({ page }, testInfo) => {
   await page.goto('/')
   const targets = [
     [/11 engineers led on WatchTower/, '#project-watchtower', true],
-    [/0\.9175 mAP/, '#project-sim2real', true],
-    [/150\+ members/, '#experience-ai-club', false],
+    [/15 to 20 min task cut/, '#experience-lumulus', false],
+    [/0\.9175 detection score/, '#project-sim2real', true],
   ] as const
   for (const [name, hash, hasDetails] of targets) {
     await page.getByRole('link', { name }).click()
