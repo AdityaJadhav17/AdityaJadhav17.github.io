@@ -49,6 +49,8 @@ jobs:
         with:
           name: site
           path: dist
+          # v4 skips hidden files by default, which would drop dist/.well-known/.
+          include-hidden-files: true
           if-no-files-found: error
           retention-days: 1
 

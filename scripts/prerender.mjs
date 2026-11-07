@@ -1,7 +1,7 @@
 // Runs after both Vite builds. Puts the rendered app and the generated head
 // into dist/index.html so crawlers, unfurlers and no-JS visitors get the
 // whole page, then removes the temporary SSR bundle.
-import { readFileSync, readdirSync, writeFileSync, rmSync } from 'node:fs'
+import { readFileSync, readdirSync, writeFileSync, rmSync, mkdirSync } from 'node:fs'
 import { execSync } from 'node:child_process'
 import { pathToFileURL } from 'node:url'
 import { resolve } from 'node:path'
@@ -60,5 +60,35 @@ writeFileSync(
 </urlset>
 `,
 )
+// Expires is a year from the build, so a deploy at least yearly keeps it valid.
+const { site, projects } = ssr
+mkdirSync(resolve('dist/.well-known'), { recursive: true })
+writeFileSync(
+  resolve('dist/.well-known/security.txt'),
+  `Contact: mailto:${site.email}
+Expires: ${new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()}
+Preferred-Languages: en
+Canonical: ${siteUrl.origin}/.well-known/security.txt
+`,
+)
+const llms = `# ${site.name}
+
+> ${site.description}
+
+${site.discipline}. ${site.availability}
+
+## Links
+- [Resume](${siteUrl.origin}${site.resumePath})
+${site.social.map((s) => `- [${s.label}](${s.url})`).join('\n')}
+- [Email](mailto:${site.email})
+
+## Projects
+${projects.map((p) => `- [${p.title}](${p.links.live ?? p.links.demo ?? p.links.github ?? `${siteUrl.origin}/#project-${p.id}`}): ${p.summary}`).join('\n')}
+
+## Education
+- ${site.education.degree}, ${site.education.institution} (${site.education.status})
+`
+if (/\u2014|Lumulus/.test(llms)) throw new Error('prerender: llms.txt contains an em dash or "Lumulus"')
+writeFileSync(resolve('dist/llms.txt'), llms)
 rmSync('dist-ssr', { recursive: true, force: true })
-console.log('prerender: dist/index.html, 404.html, sitemap.xml written')
+console.log('prerender: dist/index.html, 404.html, sitemap.xml, .well-known/security.txt, llms.txt written')

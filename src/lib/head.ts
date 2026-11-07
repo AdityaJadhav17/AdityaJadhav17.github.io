@@ -5,7 +5,7 @@ const ORIGIN = 'https://adityajadhav.dev/'
 // Describes public/og-image.png. Keep in step with the image text.
 const OG_ALT =
   'Dark card with an AJ monogram and the line "I build AI systems and find where they break." Below it: Aditya Jadhav, adityajadhav.dev, and "Graduating June 2027, open to new-grad roles".'
-const TITLE = `${site.name} | Software Engineer`
+const TITLE = `${site.name} | Software Engineer, AI & Security`
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;')
 
@@ -17,17 +17,30 @@ export function jsonLdScript(data: unknown): string {
 // role kept reading as current). Generated at build time from content now.
 export function buildHead(): string {
   const d = esc(site.description)
-  const jsonLd = {
-    '@context': 'https://schema.org',
+  const person = {
     '@type': 'Person',
+    '@id': ORIGIN + '#person',
     name: site.name,
     url: ORIGIN,
-    jobTitle: currentRoles.map((r) => r.split(' @ ')[0]),
+    image: ORIGIN + 'portrait-1200.webp',
+    description: site.description,
+    email: 'mailto:' + site.email,
+    // Same base title as the <title> tag, plus any current role.
+    jobTitle: ['Software Engineer', ...currentRoles.map((r) => r.split(' @ ')[0])],
+    knowsAbout: site.capabilities,
     sameAs: site.social.map((s) => s.url),
     // schema.org allows alumniOf for a current student; affiliation stays too.
     alumniOf: { '@type': 'CollegeOrUniversity', name: site.education.institution },
     affiliation: { '@type': 'CollegeOrUniversity', name: site.education.institution },
   }
+  const website = {
+    '@type': 'WebSite',
+    '@id': ORIGIN + '#website',
+    url: ORIGIN,
+    name: site.name,
+    about: { '@id': ORIGIN + '#person' },
+  }
+  const jsonLd = { '@context': 'https://schema.org', '@graph': [person, website] }
   return [
     `<title>${esc(TITLE)}</title>`,
     `<meta name="description" content="${d}" />`,

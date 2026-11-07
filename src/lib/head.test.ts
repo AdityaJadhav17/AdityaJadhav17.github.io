@@ -1,6 +1,8 @@
 import { expect, test, vi } from 'vitest'
 import { buildHead, jsonLdScript } from './head'
-import { currentRoles } from '@/content/site'
+import { currentRoles, site } from '@/content/site'
+
+const ldGraph = (head: string) => JSON.parse(head.match(/application\/ld\+json">(.*?)<\/script>/)![1])['@graph']
 
 test('head is generated from content and never mentions an ended role', () => {
   const head = buildHead()
@@ -16,9 +18,22 @@ test('image alt text and alumniOf are present', () => {
   const head = buildHead()
   expect(head).toMatch(/<meta property="og:image:alt" content="[^"]*I build AI systems and find where they break\.[^"]*"/)
   expect(head).toMatch(/<meta name="twitter:image:alt" content="[^"]*adityajadhav\.dev[^"]*"/)
-  const ld = JSON.parse(head.match(/application\/ld\+json">(.*?)<\/script>/)![1])
+  const ld = ldGraph(head).find((n: { '@type': string }) => n['@type'] === 'Person')
   expect(ld.alumniOf).toEqual({ '@type': 'CollegeOrUniversity', name: 'UC San Diego' })
   expect(ld.affiliation).toEqual(ld.alumniOf)
+})
+
+test('title, Person and WebSite nodes carry the discoverability fields', () => {
+  const head = buildHead()
+  expect(head).toContain('Software Engineer, AI &amp; Security')
+  const graph = ldGraph(head)
+  const person = graph.find((n: { '@type': string }) => n['@type'] === 'Person')
+  expect(person.image).toMatch(/portrait-1200\.webp$/)
+  expect(person.description).toBe(site.description)
+  expect(person.email).toBe('mailto:' + site.email)
+  expect(person.knowsAbout).toEqual(site.capabilities)
+  expect(person.jobTitle).toContain('Software Engineer')
+  expect(graph.some((n: { '@type': string }) => n['@type'] === 'WebSite')).toBe(true)
 })
 
 test('JSON-LD cannot be broken out of its script tag', () => {
