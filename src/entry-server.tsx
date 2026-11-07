@@ -3,6 +3,7 @@ import { renderToString } from 'react-dom/server'
 import App from './App'
 export { buildHead } from './lib/head'
 export { site } from './content/site'
+export { projects } from './content/projects'
 
 export function render(): string {
   return renderToString(
