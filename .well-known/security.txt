@@ -1,0 +1,4 @@
+Contact: mailto:aditya.jadhav7910@gmail.com
+Expires: 2027-11-07T23:55:15.713Z
+Preferred-Languages: en
+Canonical: https://adityajadhav.dev/.well-known/security.txt

@@ -1,0 +1,22 @@
+# Aditya Jadhav
+
+> Aditya Jadhav builds AI systems and finds where they break. Software engineering and security work. Graduating June 2027 and open to new-grad roles.
+
+Software engineer, AI systems and security. Graduating June 2027. Open to new-grad software engineering roles.
+
+## Links
+- [Resume](https://adityajadhav.dev/Aditya_Jadhav_Resume.pdf)
+- [GitHub](https://github.com/AdityaJadhav17)
+- [LinkedIn](https://www.linkedin.com/in/adityajadhav17/)
+- [Email](mailto:aditya.jadhav7910@gmail.com)
+
+## Projects
+- [Talk-to-Robot](https://github.com/YangLin14/Talk-to-Robot): Tested where a language model goes wrong when it turns spoken robot commands into target positions, separately from the robot's own controller.
+- [WatchTower](https://cse110-sp26-group09.github.io/Watchtower-Course-Project/): A lightweight tool that shows web teams the errors, slowdowns and user activity on their live site.
+- [TravelAGNTCY](https://youtu.be/T0EkJ9J_IQU): A travel planner where separate AI agents for flights, hotels and activities work together on one plan.
+- [Stockroom](https://github.com/AdityaJadhav17/Stockroom): A shared inventory and purchasing app that records who approved what, and when.
+- [Synthetic-to-Real Object Detection](https://www.kaggle.com/competitions/synthetic-2-real-object-detection-challenge): An object detector trained only on synthetic images, built to work on real photos.
+- [Personal Tracker](https://github.com/AdityaJadhav17/Personal-Tracker): One app for deadlines, courses, notes and goals that runs entirely in the browser, with no account or server.
+
+## Education
+- B.S. Computer Science, UC San Diego (Expected June 2027)
