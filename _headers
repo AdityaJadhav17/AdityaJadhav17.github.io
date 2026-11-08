@@ -1,0 +1,9 @@
+# Cloudflare Pages response headers. GitHub Pages ignores this file.
+# HSTS matches what GitHub Pages sends today, so moving hosts loses nothing.
+/*
+  Strict-Transport-Security: max-age=31556952
+
+# Vite puts a content hash in every file name here, so a changed file gets a
+# new URL and these can be cached for a year.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
