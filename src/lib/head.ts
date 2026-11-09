@@ -1,3 +1,4 @@
+import { certifications } from '@/content/certifications'
 import { currentRoles, site } from '@/content/site'
 import { PORTRAIT_SIZES, srcSet } from './portrait'
 
@@ -32,6 +33,13 @@ export function buildHead(): string {
     // schema.org allows alumniOf for a current student; affiliation stays too.
     alumniOf: { '@type': 'CollegeOrUniversity', name: site.education.institution },
     affiliation: { '@type': 'CollegeOrUniversity', name: site.education.institution },
+    hasCredential: certifications.map((c) => ({
+      '@type': 'EducationalOccupationalCredential',
+      name: c.title,
+      credentialCategory: 'certification',
+      url: c.verify,
+      recognizedBy: { '@type': 'Organization', name: c.issuer },
+    })),
   }
   const website = {
     '@type': 'WebSite',
@@ -40,7 +48,16 @@ export function buildHead(): string {
     name: site.name,
     about: { '@id': ORIGIN + '#person' },
   }
-  const jsonLd = { '@context': 'https://schema.org', '@graph': [person, website] }
+  // Google's profile page markup: the page is about one person.
+  const profilePage = {
+    '@type': 'ProfilePage',
+    '@id': ORIGIN + '#profilepage',
+    url: ORIGIN,
+    name: TITLE,
+    isPartOf: { '@id': ORIGIN + '#website' },
+    mainEntity: { '@id': ORIGIN + '#person' },
+  }
+  const jsonLd = { '@context': 'https://schema.org', '@graph': [profilePage, person, website] }
   return [
     `<title>${esc(TITLE)}</title>`,
     `<meta name="description" content="${d}" />`,

@@ -1,5 +1,6 @@
 import { expect, test, vi } from 'vitest'
 import { buildHead, jsonLdScript } from './head'
+import { certifications } from '@/content/certifications'
 import { currentRoles, site } from '@/content/site'
 
 const ldGraph = (head: string) => JSON.parse(head.match(/application\/ld\+json">(.*?)<\/script>/)![1])['@graph']
@@ -34,6 +35,10 @@ test('title, Person and WebSite nodes carry the discoverability fields', () => {
   expect(person.knowsAbout).toEqual(site.capabilities)
   expect(person.jobTitle).toContain('Software Engineer')
   expect(graph.some((n: { '@type': string }) => n['@type'] === 'WebSite')).toBe(true)
+  const profile = graph.find((n: { '@type': string }) => n['@type'] === 'ProfilePage')
+  expect(profile.mainEntity).toEqual({ '@id': person['@id'] })
+  expect(person.hasCredential.map((c: { name: string }) => c.name)).toEqual(certifications.map((c) => c.title))
+  expect(person.hasCredential[0].url).toMatch(/^https:\/\/www\.credly\.com\//)
 })
 
 test('JSON-LD cannot be broken out of its script tag', () => {
