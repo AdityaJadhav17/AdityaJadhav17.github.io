@@ -1,4 +1,4 @@
-import { ChevronDown, ExternalLink, FileText } from 'lucide-react'
+import { BookOpen, ChevronDown, ExternalLink, FileText } from 'lucide-react'
 import { FaGithub, FaYoutube } from 'react-icons/fa'
 import type { Project } from '@/content/projects'
 import { TierChart } from '@/components/TierChart'
@@ -14,6 +14,8 @@ type ProjectCardProps = {
   // treatment. The hierarchy between featured and grid reads from layout, not
   // from a heavier border or shadow.
   layout?: 'stacked' | 'wide'
+  // The project's own page, when it has one: the title and a "Case study" link go there.
+  pageHref?: string
 }
 
 // One shape for every project card. Collapsed it is poster, title, context,
@@ -39,6 +41,9 @@ const SIZES = {
     '(min-width: 1200px) 497px, (min-width: 1024px) calc(45vw - 43px), (min-width: 768px) calc(45vw - 29px), calc(100vw - 66px)',
   stacked:
     '(min-width: 1200px) 514px, (min-width: 1024px) calc(50vw - 86px), (min-width: 768px) calc(50vw - 70px), (min-width: 640px) calc(50vw - 58px), calc(100vw - 66px)',
+  // A 'phone' frame screen in a wide slot: 40% of the slot from md, 55% below.
+  phone:
+    '(min-width: 1200px) 199px, (min-width: 1024px) calc(18vw - 17px), (min-width: 768px) calc(18vw - 12px), calc(55vw - 36px)',
 }
 const tagClass =
   'rounded-md border border-border bg-muted px-2 py-0.5 font-mono text-xs text-muted-foreground'
@@ -47,7 +52,7 @@ const tagClass =
 const linkClass =
   "relative inline-flex items-center gap-1.5 font-sans text-sm font-medium text-foreground underline underline-offset-4 transition-colors duration-200 after:absolute after:-inset-x-2 after:-inset-y-3 after:content-[''] hover:decoration-2"
 
-export function ProjectCard({ project, className, layout = 'stacked' }: ProjectCardProps) {
+export function ProjectCard({ project, className, layout = 'stacked', pageHref }: ProjectCardProps) {
   const isWide = layout === 'wide'
   // Featured posters are 4:3 on phones (a taller crop keeps the text legible), 16:10 from md.
   const ratio = isWide ? 'aspect-[4/3] md:aspect-[16/10]' : 'aspect-[2/1]'
@@ -106,7 +111,23 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
           isWide && 'md:w-[45%] md:border-0 md:bg-transparent md:p-0',
         )}
       >
-        {project.chart ? (
+        {project.image?.frame === 'phone' ? (
+          // A whole phone screen on the muted ground, top-aligned, its foot cut
+          // by the slot: the app reads as an app at any slot size.
+          <div className={cn('flex justify-center overflow-hidden bg-muted pt-6 ring-1 ring-border', isWide ? 'rounded-md md:rounded-lg' : 'rounded-md', ratio)}>
+            <img
+              src={project.image.src}
+              srcSet={project.image.srcSet}
+              sizes={SIZES.phone}
+              alt={project.image.alt}
+              width={project.image.width}
+              height={project.image.height}
+              loading="lazy"
+              decoding="async"
+              className="h-auto w-[55%] self-start rounded-t-2xl shadow-xl ring-1 ring-border md:w-[40%] dark:brightness-[.85]"
+            />
+          </div>
+        ) : project.chart ? (
           <TierChart
             alt={project.chart.alt}
             className={cn('w-full bg-card ring-1 ring-border', isWide ? 'rounded-md md:rounded-lg' : 'rounded-md', ratio)}
@@ -159,7 +180,14 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
       <div className={cn('flex flex-1 flex-col gap-4 p-6', isWide && 'md:p-0')}>
         <div className="space-y-1">
           <h3 className={cn('font-heading text-xl font-semibold text-card-foreground', isWide && 'md:text-2xl')}>
-            {project.title}
+            {pageHref ? (
+              // ::after grows the inline box (about 24px) to a 44px+ touch target.
+              <a href={pageHref} className="relative underline-offset-4 after:absolute after:inset-x-0 after:-inset-y-3 after:content-[''] hover:underline">
+                {project.title}
+              </a>
+            ) : (
+              project.title
+            )}
           </h3>
           <p className="text-sm text-muted-foreground">{project.summary}</p>
           {project.context && <p className="label">{project.context}</p>}
@@ -185,8 +213,14 @@ export function ProjectCard({ project, className, layout = 'stacked' }: ProjectC
           )}
         </ul>
 
-        {(codeLink || secondaryLink || paperLink) && (
+        {(pageHref || codeLink || secondaryLink || paperLink) && (
           <div className="mt-auto flex flex-wrap gap-4">
+            {pageHref && (
+              <a href={pageHref} className={linkClass}>
+                <BookOpen aria-hidden="true" className="size-4" />
+                Case study<span className="sr-only"> for {project.title}</span>
+              </a>
+            )}
             {codeLink && (
               <a href={codeLink} target="_blank" rel="noopener noreferrer" className={linkClass}>
                 <FaGithub aria-hidden="true" className="size-4" />

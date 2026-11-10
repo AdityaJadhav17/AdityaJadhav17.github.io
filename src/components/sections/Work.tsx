@@ -1,6 +1,9 @@
 import { projects } from '@/content/projects'
 import { ProjectCard } from '@/components/ProjectCard'
 import { Reveal } from '@/components/motion/Reveal'
+import { pagePath, publishedSlugs } from '@/lib/pages'
+
+const pageHref = (slug: string) => (publishedSlugs.includes(slug) ? pagePath(slug) : undefined)
 
 // Featured projects (the four `featured: true` projects, in array order) render full width,
 // one per row; the rest render in a two-column grid. Same collapsed ProjectCard
@@ -24,7 +27,7 @@ export function Work() {
         <div className="mt-8 flex flex-col gap-10 md:mt-12 md:gap-12">
           {featured.map((project) => (
             <Reveal.Item key={project.id}>
-              <ProjectCard project={project} layout="wide" />
+              <ProjectCard project={project} layout="wide" pageHref={pageHref(project.slug)} />
             </Reveal.Item>
           ))}
         </div>
@@ -32,7 +35,7 @@ export function Work() {
         <div className="mt-10 grid gap-6 sm:grid-cols-2 md:mt-12">
           {rest.map((project) => (
             <Reveal.Item key={project.id} className="flex">
-              <ProjectCard project={project} className="flex-1" />
+              <ProjectCard project={project} className="flex-1" pageHref={pageHref(project.slug)} />
             </Reveal.Item>
           ))}
         </div>

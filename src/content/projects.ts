@@ -28,9 +28,12 @@ export type Project = {
     alt: string
     srcSet?: string
     // A 4:3 crop of the same capture for phones (below md), where the 16:10 one
-    // would shrink its text too far. Only the featured projects have one.
+    // would shrink its text too far. Only featured projects with a cropped capture have one.
     mobileSrcSet?: string
     tone: 'light' | 'dark'
+    // 'phone': a whole portrait phone screen, set on a muted ground and never
+    // cropped to fit, so the app reads as an app.
+    frame?: 'phone'
   }
   // The only chart is the Talk-to-Robot tier chart, drawn from tokens by TierChart instead of an <img>.
   chart?: { alt: string }
@@ -62,17 +65,17 @@ export const projects: Project[] = [
       github: 'https://github.com/AdityaJadhav17/coverage-keeper',
       live: 'https://coverage-keeper.vercel.app',
     },
-    // A phone capture (1179 x 1977, the repo's docs/assets/screenshots/light-2-result.png), cropped to the deadline card.
+    // The whole phone capture (1179 x 1977, the repo's docs/assets/screenshots/light-2-result.png),
+    // shown as a screen on the muted ground rather than cropped to the slot.
     image: {
-      src: '/coverage-keeper-1100.webp',
+      src: '/coverage-keeper-screen-960.webp',
       srcSet:
-        '/coverage-keeper-480.webp 480w, /coverage-keeper-640.webp 640w, /coverage-keeper-960.webp 960w, /coverage-keeper-1100.webp 1100w',
-      mobileSrcSet:
-        '/coverage-keeper-m-480.webp 480w, /coverage-keeper-m-640.webp 640w, /coverage-keeper-m-780.webp 780w, /coverage-keeper-m-1080.webp 1080w',
-      width: 1100,
-      height: 688,
+        '/coverage-keeper-screen-240.webp 240w, /coverage-keeper-screen-360.webp 360w, /coverage-keeper-screen-480.webp 480w, /coverage-keeper-screen-640.webp 640w, /coverage-keeper-screen-960.webp 960w, /coverage-keeper-screen-1179.webp 1179w',
+      width: 960,
+      height: 1610,
       alt: "Coverage Keeper's result screen: the deadline Feb 15, 2027 with 5 days left, above the highlighted line from the letter it was read from",
       tone: 'light',
+      frame: 'phone',
     },
     featured: true,
     context: 'Team of 3: with Woosik Kim and Waleed Alghaithi',
