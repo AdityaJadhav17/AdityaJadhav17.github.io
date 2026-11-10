@@ -63,6 +63,7 @@ for (const { name, ...options } of contexts) {
 const SOURCE_LIMITED: Record<string, string> = {
   'watchtower-light-m': 'awaiting larger original', // phone crop is 780 px native
   'stockroom-m': 'awaiting ≥1280 px owner capture',
+  stockroom: 'awaiting ≥1280 px owner capture', // 920 px master; a grid card at 1440 @2 wants 925
   'personal-tracker': 'awaiting ≥1280 px owner capture', // 1200 px master, 840 px crop
   sim2real: 'awaiting larger original', // 560 px
 }
