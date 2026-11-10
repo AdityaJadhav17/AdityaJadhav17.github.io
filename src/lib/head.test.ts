@@ -106,3 +106,12 @@ test('the homepage lists published pages', () => {
   const list = ld(buildHead({ published: [page] }))['@graph'].find((n: { '@type': string }) => n['@type'] === 'ItemList')
   expect(list.itemListElement[0]).toMatchObject({ position: 1, url: 'https://adityajadhav.dev/projects/watchtower/', name: 'WatchTower' })
 })
+
+test('a project page defines the author and site nodes it points at', () => {
+  const graph = ld(buildHead({ current: page }))['@graph']
+  const node = projectNode(buildHead({ current: page }))
+  const person = graph.find((n: { '@id': string }) => n['@id'] === node.author['@id'])
+  expect(person).toMatchObject({ '@type': 'Person', name: 'Aditya Jadhav' })
+  expect(person).not.toHaveProperty('email')
+  expect(graph.find((n: { '@id': string }) => n['@id'] === node.isPartOf['@id'])['@type']).toBe('WebSite')
+})
