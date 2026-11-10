@@ -6,8 +6,8 @@ import { Reveal } from './Reveal'
 // on a fresh JSDOM window, and src/test-setup.ts stubs only matchMedia). So
 // this suite exercises Reveal's fallback path, which is exactly the safety
 // property worth protecting: content must never be left stranded invisible
-// when no observer exists. If a future edit drops the guard, Motion renders
-// `style="opacity:0"` onto these elements and both assertions below fail.
+// when no observer exists. If a future edit drops the guard, the section gets
+// data-reveal="hidden" with no observer to lift it.
 describe('Reveal without an IntersectionObserver', () => {
   test('renders children visibly and applies no inline styles', () => {
     render(

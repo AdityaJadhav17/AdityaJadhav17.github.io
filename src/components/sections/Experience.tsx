@@ -1,7 +1,7 @@
-import { useRef, useSyncExternalStore } from 'react'
-import { m, useReducedMotion, useScroll, useSpring } from 'motion/react'
+import { useEffect, useRef } from 'react'
 import { experience } from '@/content/experience'
 import { Reveal } from '@/components/motion/Reveal'
+import { railProgress } from '@/lib/motion'
 import { TimelineEntry } from '@/components/sections/TimelineEntry'
 
 // Vertical timeline, newest first (order comes from src/content/experience.ts,
@@ -13,13 +13,6 @@ import { TimelineEntry } from '@/components/sections/TimelineEntry'
 // one continuous track down the whole list, with an accent line drawn over it
 // whose height follows scroll position, because a scrubbed draw needs a single
 // element to scale rather than five independent ones.
-// False on the server and during hydration, true on every client render after.
-// Lets reduced motion switch on only once hydration is done, so the first
-// client render matches the server's.
-const subscribeNever = () => () => {}
-const useHydrated = () =>
-  useSyncExternalStore(subscribeNever, () => true, () => false)
-
 // Paid roles first, then the club roles under a "Leadership" subheading. One
 // rail runs through both lists; the subheading sits in the content column so
 // the rail never strikes through it.
@@ -31,25 +24,25 @@ const groups = [
 export function Experience() {
   const listRef = useRef<HTMLDivElement>(null)
 
-  // Explicit check, deliberately not delegated to the MotionConfig in
-  // App.tsx. That handles animations; the line below is a MotionValue bound
-  // to a style, which MotionConfig does not touch. Under reduced motion the
-  // timeline renders fully drawn and every dot filled, statically. Gated on
-  // hydration: the server cannot know the preference and renders the rail at
-  // scaleY(0), so a reduced-motion client's first render must do the same;
-  // it then swaps to the drawn rail right after hydrating.
-  const hydrated = useHydrated()
-  const reduced = (useReducedMotion() ?? false) && hydrated
-
-  const { scrollYProgress } = useScroll({
-    target: listRef,
-    offset: ['start 0.8', 'end 0.6'],
-  })
-  const progress = useSpring(scrollYProgress, {
-    stiffness: 120,
-    damping: 30,
-    restDelta: 0.001,
-  })
+  // The scroll position drives one CSS variable, --p, on the list wrapper.
+  // The rail and the dots read it in theme.css (.rail-line, .rail-dot), which
+  // also draws everything fully under reduced motion. Scroll events arrive at
+  // most once a frame, and each does one read then one write.
+  useEffect(() => {
+    const node = listRef.current
+    if (!node) return
+    const update = () => {
+      const { top, height } = node.getBoundingClientRect()
+      node.style.setProperty('--p', railProgress(top, height, window.innerHeight).toFixed(3))
+    }
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => {
+      window.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
+  }, [])
 
   return (
     <Reveal as="section" id="experience" className="py-16 md:py-20">
@@ -59,7 +52,7 @@ export function Experience() {
         </Reveal.Item>
 
         {/* Wrapper supplies the positioning context for the track and drawn
-            line and the ref useScroll targets: HTML's content model only
+            line and the ref the scroll handler measures: HTML's content model only
             allows <li> (and script-supporting elements) as direct children
             of an <ol>, so the two decorative spans live here. */}
         <div ref={listRef} className="relative mt-8 md:mt-12">
@@ -72,10 +65,9 @@ export function Experience() {
             aria-hidden="true"
             className="absolute top-2 bottom-2 left-[7px] w-px bg-border lg:left-[calc(8rem+10px)]"
           />
-          <m.span
+          <span
             aria-hidden="true"
-            className="absolute top-2 bottom-2 left-[7px] w-px origin-top bg-accent-signal lg:left-[calc(8rem+10px)]"
-            style={{ scaleY: reduced ? 1 : progress }}
+            className="rail-line absolute top-2 bottom-2 left-[7px] w-px origin-top bg-accent-signal lg:left-[calc(8rem+10px)]"
           />
 
           {groups.map(({ id, entries }) => (
@@ -90,8 +82,6 @@ export function Experience() {
                     entry={entry}
                     index={experience.indexOf(entry)}
                     total={experience.length}
-                    progress={progress}
-                    reduced={reduced}
                   />
                 ))}
               </ol>

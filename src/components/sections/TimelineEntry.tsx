@@ -1,4 +1,4 @@
-import { m, useTransform, type MotionValue } from 'motion/react'
+import type { CSSProperties } from 'react'
 import { Reveal } from '@/components/motion/Reveal'
 import type { Experience } from '@/content/experience'
 
@@ -6,28 +6,13 @@ type TimelineEntryProps = {
   entry: Experience
   index: number
   total: number
-  progress: MotionValue<number>
-  reduced: boolean
 }
 
-// One row of the Experience timeline. This is a separate component because
-// each row needs its own useTransform slice of the shared scroll progress to
-// fill its dot as the drawn line arrives, and hooks cannot be called in a
-// loop inside the parent's map.
-export function TimelineEntry({ entry, index, total, progress, reduced }: TimelineEntryProps) {
+// One row of the Experience timeline.
+export function TimelineEntry({ entry, index, total }: TimelineEntryProps) {
   // Where this dot sits along the line: the first at 0, the last at 1.
-  // The 0.08 lead-in makes the dot fill just as the line reaches it rather
-  // than snapping after it has already passed. Called unconditionally so
-  // hook order stays stable across rows, even though its result is
-  // overridden below for the first entry.
+  // .rail-dot in theme.css fills it as the drawn line arrives.
   const at = total > 1 ? index / (total - 1) : 0
-  const fill = useTransform(progress, [Math.max(at - 0.08, 0), at], [0, 1])
-
-  // The first entry sits at progress 0, so its lead-in range above collapses
-  // to [0, 0]. It has no meaningful "unfilled" state to transition from, so
-  // state that intent plainly instead of relying on how useTransform happens
-  // to resolve a zero-width range.
-  const dotFill = index === 0 ? 1 : fill
 
   // Leadership roles are one step lighter (smaller title, one heading level
   // down under the "Leadership" subheading).
@@ -47,9 +32,9 @@ export function TimelineEntry({ entry, index, total, progress, reduced }: Timeli
     >
       <div aria-hidden="true" className="col-start-1 row-start-1 flex justify-center lg:col-start-2">
         <span className="relative mt-1.5 size-2.5 flex-none rounded-full bg-border ring-4 ring-background">
-          <m.span
-            className="absolute inset-0 rounded-full bg-accent-signal"
-            style={{ scale: reduced ? 1 : dotFill }}
+          <span
+            className="rail-dot absolute inset-0 rounded-full bg-accent-signal"
+            style={{ '--at': at } as CSSProperties}
           />
         </span>
       </div>
