@@ -11,9 +11,16 @@ const viewports = [
   { name: 'desktop', width: 1440, height: 900 },
 ]
 
+// The homepage keeps its original snapshot names; the project page is prefixed.
+const pages = [
+  { path: '/', prefix: '' },
+  { path: '/projects/coverage-keeper/', prefix: 'project-' },
+]
+
+for (const { path, prefix } of pages)
 for (const vp of viewports) {
   for (const colorScheme of ['light', 'dark'] as const) {
-    test(`${vp.name} ${colorScheme}`, async ({ browser, browserName }, testInfo) => {
+    test(`${prefix}${vp.name} ${colorScheme}`, async ({ browser, browserName }, testInfo) => {
       test.skip(testInfo.project.name !== 'chromium' || browserName !== 'chromium', 'chromium only')
       const context = await browser.newContext({
         viewport: { width: vp.width, height: vp.height },
@@ -21,7 +28,7 @@ for (const vp of viewports) {
         reducedMotion: 'reduce',
       })
       const page = await context.newPage()
-      await page.goto('/')
+      await page.goto(path)
       await page.evaluate(() => document.fonts.ready)
 
       // Scroll through so every Reveal has intersected, then return to top.
@@ -35,7 +42,7 @@ for (const vp of viewports) {
       })
       await page.waitForTimeout(800)
 
-      await expect(page).toHaveScreenshot(`${vp.name}-${colorScheme}.png`, {
+      await expect(page).toHaveScreenshot(`${prefix}${vp.name}-${colorScheme}.png`, {
         fullPage: true,
         maxDiffPixelRatio: 0.01,
       })

@@ -24,10 +24,13 @@ const NAV = [
 
 type NavbarProps = {
   sectionIds: string[]
+  // Prefix for section links. '/' on a project page, so they go back to the homepage.
+  base?: string
 }
 
 type NavLinkProps = {
   id: string
+  base: string
   label: string
   active: boolean
   variant?: 'desktop' | 'mobile'
@@ -36,13 +39,13 @@ type NavLinkProps = {
 // Shared by the desktop list and the mobile Sheet list. The only difference
 // between the two is mobile's row padding/hover fill.
 const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(function NavLink(
-  { id, label, active, variant = 'desktop', className, ...props },
+  { id, base, label, active, variant = 'desktop', className, ...props },
   ref,
 ) {
   return (
     <a
       ref={ref}
-      href={`#${id}`}
+      href={`${base}#${id}`}
       aria-current={active ? 'page' : undefined}
       className={cn(
         // Nav is Archivo per MASTER.md's "Heading Font: ... nav" entry.
@@ -68,7 +71,7 @@ const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(function NavLink(
   )
 })
 
-export function Navbar({ sectionIds }: NavbarProps) {
+export function Navbar({ sectionIds, base = '' }: NavbarProps) {
   const active = useActiveSection(sectionIds)
   const [open, setOpen] = useState(false)
   // The Radix Dialog behind the menu loads on first touch of the button. If
@@ -114,8 +117,9 @@ export function Navbar({ sectionIds }: NavbarProps) {
   }
 
   function handleMobileNavigate(event: MouseEvent<HTMLAnchorElement>, id: string) {
-    // Let the browser handle anything that is not a plain left click.
-    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+    // Let the browser handle anything that is not a plain left click, and any
+    // link to another page (the section is not on this one).
+    if (base || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
       return
     }
     event.preventDefault()
@@ -163,7 +167,7 @@ export function Navbar({ sectionIds }: NavbarProps) {
     <header className="sticky top-0 z-40 border-b border-border bg-background">
       <div className="container-site flex h-16 items-center justify-between">
         <a
-          href="#home"
+          href={`${base}#home`}
           className="font-heading text-base font-semibold whitespace-nowrap text-foreground pointer-coarse:py-2.5"
         >
           Aditya Jadhav
@@ -173,7 +177,7 @@ export function Navbar({ sectionIds }: NavbarProps) {
           <ul className="flex items-center gap-6">
             {NAV.map((item) => (
               <li key={item.id}>
-                <NavLink id={item.id} label={item.label} active={active === item.id} />
+                <NavLink id={item.id} base={base} label={item.label} active={active === item.id} />
               </li>
             ))}
           </ul>
@@ -226,6 +230,7 @@ export function Navbar({ sectionIds }: NavbarProps) {
                   <NavLink
                     key={item.id}
                     id={item.id}
+                    base={base}
                     label={item.label}
                     active={active === item.id}
                     variant="mobile"

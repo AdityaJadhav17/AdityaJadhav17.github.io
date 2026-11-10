@@ -29,7 +29,7 @@ const study: CaseStudy = {
   ],
   ogImage: {
     src: '/og/coverage-keeper.png',
-    alt: 'Coverage Keeper: an AI reader for Medicaid letters, by Aditya Jadhav',
+    alt: 'Dark card with an AJ monogram, the title "Coverage Keeper." and the line "Winner, AI in Healthcare track, Solix AI Hackathon 2026". Below it: Aditya Jadhav and adityajadhav.dev.',
   },
   sections: [
     {
