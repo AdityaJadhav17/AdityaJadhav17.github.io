@@ -2,6 +2,8 @@ import { expect, test, vi } from 'vitest'
 import { buildHead, jsonLdScript } from './head'
 import { certifications } from '@/content/certifications'
 import { currentRoles, site } from '@/content/site'
+import { projects } from '@/content/projects'
+import { fixtureStudy } from '@/pages/fixture'
 
 const ldGraph = (head: string) => JSON.parse(head.match(/application\/ld\+json">(.*?)<\/script>/)![1])['@graph']
 
@@ -56,4 +58,51 @@ test('attribute values escape quotes and angle brackets', async () => {
   const { buildHead } = await import('./head')
   expect(buildHead()).toContain('content="a &quot;b&quot; &lt;c&gt; &#39;d&#39; &amp; e"')
   vi.doUnmock('@/content/site')
+})
+
+const page = { project: projects.find((p) => p.id === 'watchtower')!, study: fixtureStudy }
+const ld = (head: string) => JSON.parse(head.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)![1])
+const projectNode = (head: string) => ld(head)['@graph'].find((n: { '@id': string }) => n['@id'].endsWith('#project'))
+
+test('buildHead() is unchanged for the homepage', () => {
+  expect(buildHead()).toBe(buildHead({}))
+  expect(buildHead()).not.toContain('ItemList')
+})
+test('a project page gets its own title, canonical and image', () => {
+  const head = buildHead({ current: page, published: [page] })
+  expect(head).toContain(`<title>${fixtureStudy.title} | Aditya Jadhav</title>`)
+  expect(head).toContain('<link rel="canonical" href="https://adityajadhav.dev/projects/watchtower/" />')
+  expect(head).toContain('content="https://adityajadhav.dev/og/watchtower.png"')
+  expect(head).toContain('<meta property="og:type" content="article" />')
+  expect(head).not.toContain('portrait')
+})
+test('a project page carries a breadcrumb and the project node', () => {
+  const graph = ld(buildHead({ current: page, published: [page] }))['@graph']
+  const crumbs = graph.find((n: { '@type': string }) => n['@type'] === 'BreadcrumbList')
+  expect(crumbs.itemListElement.map((i: { name: string }) => i.name)).toEqual(['Aditya Jadhav', 'Projects', 'WatchTower'])
+  const node = projectNode(buildHead({ current: page, published: [page] }))
+  expect(node['@type']).toBe('SoftwareSourceCode')
+  expect(node.author).toEqual({ '@id': 'https://adityajadhav.dev/#person' })
+  expect(node).not.toHaveProperty('award')
+})
+test('award appears only when the project has one', () => {
+  const awarded = { ...page, project: { ...page.project, award: 'Winner, test track' } }
+  expect(projectNode(buildHead({ current: awarded })).award).toBe('Winner, test track')
+})
+test('a project without a repo is a CreativeWork with no codeRepository', () => {
+  const bare = { ...page, project: { ...page.project, links: {} } }
+  const node = projectNode(buildHead({ current: bare }))
+  expect(node['@type']).toBe('CreativeWork')
+  expect(node).not.toHaveProperty('codeRepository')
+})
+test('hostile text is escaped in tags and JSON-LD', () => {
+  const evil = { ...page, study: { ...fixtureStudy, title: `a<b>&"c' $&`, description: '</script><script>x' } }
+  const head = buildHead({ current: evil })
+  expect(head).toContain('<title>a&lt;b&gt;&amp;&quot;c&#39; $&amp; | Aditya Jadhav</title>')
+  expect(head).not.toContain('</script><script>x')
+  expect(ld(head)['@graph']).toBeTruthy()
+})
+test('the homepage lists published pages', () => {
+  const list = ld(buildHead({ published: [page] }))['@graph'].find((n: { '@type': string }) => n['@type'] === 'ItemList')
+  expect(list.itemListElement[0]).toMatchObject({ position: 1, url: 'https://adityajadhav.dev/projects/watchtower/', name: 'WatchTower' })
 })
