@@ -35,10 +35,11 @@ function writePage(outFile, app, head) {
   mkdirSync(dirname(outFile), { recursive: true })
   writeFileSync(outFile, addCsp(token ? addBeacon(page, token) : page, { analytics: Boolean(token) }))
 }
-writePage(file, ssr.render(), preload + ssr.buildHead())
+const published = ssr.pages.map(({ project, study }) => ({ project, study }))
+writePage(file, ssr.render(), preload + ssr.buildHead({ published }))
 for (const p of ssr.pages) {
-  // buildHead() is still the homepage head; per-page head tags come in a later task.
-  writePage(resolve(`dist${p.path}index.html`), ssr.render(p.path), preload + ssr.buildHead())
+  // No portrait preload on a project page: only the font preload applies.
+  writePage(resolve(`dist${p.path}index.html`), ssr.render(p.path), preload + ssr.buildHead({ current: { project: p.project, study: p.study }, published }))
 }
 // The 404 page is static and JS-free, so it gets the same hashed font by file name.
 const notFound = resolve('dist/404.html')
