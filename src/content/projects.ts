@@ -5,6 +5,8 @@
 
 export type Project = {
   id: string
+  // URL name: /projects/<slug>/. Unlike `id`, it may differ from the anchor id.
+  slug: string
   title: string
   // Plain-English one-liner shown directly under the title.
   summary: string
@@ -34,11 +36,14 @@ export type Project = {
   chart?: { alt: string }
   featured: boolean
   context?: string
+  // Exact award wording, shown on the project page and in its structured data.
+  award?: string
 }
 
 export const projects: Project[] = [
   {
     id: 'talk-to-robot',
+    slug: 'talk-to-robot',
     title: 'Talk-to-Robot',
     summary: "Tested where a language model goes wrong when it turns spoken robot commands into target positions, separately from the robot's own controller.",
     outcome: 'End-to-end success falls from 98% to 50% while policy success holds at 93 to 100%',
@@ -69,6 +74,7 @@ export const projects: Project[] = [
   },
   {
     id: 'watchtower',
+    slug: 'watchtower',
     title: 'WatchTower',
     summary: 'A lightweight tool that shows web teams the errors, slowdowns and user activity on their live site.',
     outcome: 'Led 11 engineers to a deployed SDK, ingest API and live dashboard',
@@ -100,6 +106,7 @@ export const projects: Project[] = [
   },
   {
     id: 'travel-agntcy',
+    slug: 'travel-agntcy',
     title: 'TravelAGNTCY',
     summary: 'A travel planner where separate AI agents for flights, hotels and activities work together on one plan.',
     outcome: "Won Cisco's AGNTCY track at SANDHacks 2026, with ~40% lower inter-service latency",
@@ -131,6 +138,7 @@ export const projects: Project[] = [
   },
   {
     id: 'stockroom',
+    slug: 'stockroom',
     title: 'Stockroom',
     summary: 'A shared inventory and purchasing app that records who approved what, and when.',
     outcome: '156 integration tests and 11 end-to-end cases gate a seven-job CI pipeline',
@@ -159,6 +167,7 @@ export const projects: Project[] = [
   },
   {
     id: 'sim2real',
+    slug: 'synthetic-to-real',
     title: 'Synthetic-to-Real Object Detection',
     summary: 'An object detector trained only on synthetic images, built to work on real photos.',
     outcome: 'Final mAP 0.9175, with 22% better real-world generalization',
@@ -190,6 +199,7 @@ export const projects: Project[] = [
   },
   {
     id: 'personal-tracker',
+    slug: 'margin',
     title: 'Personal Tracker',
     summary: 'One app for deadlines, courses, notes and goals that runs entirely in the browser, with no account or server.',
     outcome: 'In daily use since September 2026, with no runtime dependencies beyond React',

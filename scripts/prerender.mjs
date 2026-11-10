@@ -4,7 +4,7 @@
 import { readFileSync, readdirSync, writeFileSync, rmSync, mkdirSync } from 'node:fs'
 import { execSync } from 'node:child_process'
 import { pathToFileURL } from 'node:url'
-import { resolve } from 'node:path'
+import { dirname, resolve } from 'node:path'
 import { addBeacon, addCsp } from './csp.mjs'
 import { fill, readTokens } from './tokens.mjs'
 
@@ -21,17 +21,25 @@ const archivo = readdirSync('dist/assets').find((f) => /^archivo-latin-wght-norm
 if (!archivo) throw new Error('prerender: Archivo latin woff2 not found in dist/assets')
 const preload = `<link rel="preload" as="font" type="font/woff2" href="/assets/${archivo}" crossorigin>
     `
-const app = ssr.render()
-if (!app) throw new Error('prerender: render() returned an empty string')
 // Function replacers: a string replacement would interpret $&, $' and $` in the content.
 // app-html goes first so a literal placeholder inside the rendered content can never be
 // matched by the app-head replace. The CSP goes in last, so the hash covers the final file.
 // Analytics stay off until site.analytics.cloudflareToken is set: no beacon, CSP unchanged.
 const token = ssr.site.analytics.cloudflareToken
-const page = fill(html, readTokens())
-  .replace('<!--app-html-->', () => app)
-  .replace('<!--app-head-->', () => preload + ssr.buildHead())
-writeFileSync(file, addCsp(token ? addBeacon(page, token) : page, { analytics: Boolean(token) }))
+const tokens = readTokens()
+function writePage(outFile, app, head) {
+  if (!app) throw new Error(`prerender: render() returned an empty string for ${outFile}`)
+  const page = fill(html, tokens)
+    .replace('<!--app-html-->', () => app)
+    .replace('<!--app-head-->', () => head)
+  mkdirSync(dirname(outFile), { recursive: true })
+  writeFileSync(outFile, addCsp(token ? addBeacon(page, token) : page, { analytics: Boolean(token) }))
+}
+writePage(file, ssr.render(), preload + ssr.buildHead())
+for (const p of ssr.pages) {
+  // buildHead() is still the homepage head; per-page head tags come in a later task.
+  writePage(resolve(`dist${p.path}index.html`), ssr.render(p.path), preload + ssr.buildHead())
+}
 // The 404 page is static and JS-free, so it gets the same hashed font by file name.
 const notFound = resolve('dist/404.html')
 writeFileSync(notFound, readFileSync(notFound, 'utf8').replace('{{archivo}}', archivo))
@@ -53,15 +61,17 @@ writeFileSync(
   resolve('dist/sitemap.xml'),
   `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${xmlEscape(siteUrl.origin)}/</loc>
+${['/', ...ssr.pages.map((p) => p.path)]
+  .map((path) => `  <url>
+    <loc>${xmlEscape(siteUrl.origin + path)}</loc>
     <lastmod>${lastmod}</lastmod>
-  </url>
+  </url>`)
+  .join('\n')}
 </urlset>
 `,
 )
 // Expires is a year from the build, so a deploy at least yearly keeps it valid.
-const { site, projects } = ssr
+const { site, projects, pages } = ssr
 mkdirSync(resolve('dist/.well-known'), { recursive: true })
 writeFileSync(
   resolve('dist/.well-known/security.txt'),
@@ -83,7 +93,7 @@ ${site.social.map((s) => `- [${s.label}](${s.url})`).join('\n')}
 - [Email](mailto:${site.email})
 
 ## Projects
-${projects.map((p) => `- [${p.title}](${p.links.live ?? p.links.demo ?? p.links.github ?? `${siteUrl.origin}/#project-${p.id}`}): ${p.summary}`).join('\n')}
+${projects.map((p) => `- [${p.title}](${pages.find((x) => x.project === p)?.path.replace(/^/, siteUrl.origin) ?? p.links.live ?? p.links.demo ?? p.links.github ?? `${siteUrl.origin}/#project-${p.id}`}): ${p.summary}`).join('\n')}
 
 ## Education
 - ${site.education.degree}, ${site.education.institution} (${site.education.status})
@@ -91,4 +101,4 @@ ${projects.map((p) => `- [${p.title}](${p.links.live ?? p.links.demo ?? p.links.
 if (/\u2014|Lumulus/.test(llms)) throw new Error('prerender: llms.txt contains an em dash or "Lumulus"')
 writeFileSync(resolve('dist/llms.txt'), llms)
 rmSync('dist-ssr', { recursive: true, force: true })
-console.log('prerender: dist/index.html, 404.html, sitemap.xml, .well-known/security.txt, llms.txt written')
+console.log(`prerender: dist/index.html, ${pages.length} project page(s), 404.html, sitemap.xml, .well-known/security.txt, llms.txt written`)
