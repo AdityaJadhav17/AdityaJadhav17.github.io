@@ -261,6 +261,50 @@
     }
   }
 
+  /* Section reveals (Reveal.tsx). Reveal sets data-reveal on a section only
+     once JS has run and the section is below the fold, so without JS nothing
+     is ever hidden. Items rise 16px and fade, 60ms apart in document order
+     (--i, set by Reveal). `backwards` holds the start frame through the
+     stagger delay and leaves no transform behind afterwards. Reduced motion:
+     the same fade, no rise; the !important outranks the global guard above,
+     which would otherwise turn the fade into a pop. */
+  @keyframes reveal-in {
+    from { opacity: 0; transform: translateY(16px); }
+  }
+  [data-reveal='hidden'] .reveal-item {
+    opacity: 0;
+  }
+  [data-reveal='visible'] .reveal-item {
+    animation: reveal-in 500ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    animation-delay: calc(var(--i, 0) * 60ms);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    @keyframes reveal-in {
+      from { opacity: 0; }
+    }
+    [data-reveal='visible'] .reveal-item {
+      animation-duration: 500ms !important;
+    }
+  }
+
+  /* Experience timeline. --p is scroll progress, 0 to 1, set on the list by
+     Experience.tsx; --at is each dot's place along the rail, set inline. A dot
+     grows over the last 0.08 of progress before the line reaches it. The short
+     transition smooths the per-frame steps. Without JS --p stays 0. Reduced
+     motion: everything drawn, nothing moves. */
+  .rail-line {
+    transform: scaleY(var(--p, 0));
+    transition: transform 200ms ease-out;
+  }
+  .rail-dot {
+    scale: clamp(0, calc((var(--p, 0) - var(--at, 0)) / 0.08 + 1), 1);
+    transition: scale 200ms ease-out;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rail-line { transform: none; }
+    .rail-dot { scale: none; }
+  }
+
   /* Theme menu (ThemeMenuContent): scales in from the trigger corner, 150 ms,
      strong ease-out. Entrance only; it unmounts on close, which is instant.
      Reduced motion: opacity only. */

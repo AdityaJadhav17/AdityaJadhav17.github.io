@@ -258,12 +258,8 @@ test.describe('no console errors on load', () => {
 test.describe('Experience rail under reduced motion', () => {
   test.use({ contextOptions: { reducedMotion: 'reduce' } })
 
-  // The server renders the rail at scaleY(0), so the first client render must
-  // too; it is drawn fully only after hydration. The hydration mismatch itself
-  // is guarded by src/components/sections/Experience.test.tsx (React only
-  // reports it in development builds, so the console check here is a backstop
-  // that cannot fail alone on this production bundle). What this test proves
-  // is the end state: the rail is fully drawn.
+  // The rail's scale comes from CSS (.rail-line in theme.css), which draws it
+  // fully under reduced motion whatever the scroll position.
   test('Experience rail ends fully drawn under reduced motion', async ({ page }) => {
     const errors = await collectConsoleErrors(page)
     await page.goto('/')
