@@ -93,7 +93,13 @@ ${site.social.map((s) => `- [${s.label}](${s.url})`).join('\n')}
 - [Email](mailto:${site.email})
 
 ## Projects
-${projects.map((p) => `- [${p.title}](${pages.find((x) => x.project === p)?.path.replace(/^/, siteUrl.origin) ?? p.links.live ?? p.links.demo ?? p.links.github ?? `${siteUrl.origin}/#project-${p.id}`}): ${p.summary}`).join('\n')}
+${projects
+  .map((p) => {
+    const page = pages.find((x) => x.project === p)
+    const url = page ? siteUrl.origin + page.path : (p.links.live ?? p.links.demo ?? p.links.github ?? `${siteUrl.origin}/#project-${p.id}`)
+    return `- [${p.title}](${url}): ${p.summary}`
+  })
+  .join('\n')}
 
 ## Education
 - ${site.education.degree}, ${site.education.institution} (${site.education.status})
