@@ -1,4 +1,4 @@
-name: Deploy Vite React App to GitHub Pages
+name: Deploy Vite React App to Cloudflare Pages
 
 on:
   push:
@@ -54,29 +54,9 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-  # Has write access but runs no project code: it only downloads the built
-  # files and hands them to the publish action. No checkout, no npm.
-  publish:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Download site
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
-        with:
-          name: site
-          path: ./dist
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@373f7f263a76c20808c831209c920827a82a2847 # v3.9.3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-
-  # Same built files, published to Cloudflare Pages (adityajadhav-dev.pages.dev).
-  # Runs beside GitHub Pages until the custom domain moves over; then the job
-  # above goes. No GitHub token: the Cloudflare token can only edit Pages.
+  # Runs no project code: it only downloads the built files and uploads them
+  # to Cloudflare Pages, which serves adityajadhav.dev. No GitHub token: the
+  # Cloudflare token can only edit Pages.
   publish-cloudflare:
     needs: build
     runs-on: ubuntu-latest

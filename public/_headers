@@ -1,5 +1,4 @@
-# Cloudflare Pages response headers. GitHub Pages ignores this file.
-# HSTS matches what GitHub Pages sends today, so moving hosts loses nothing.
+# Cloudflare Pages response headers.
 /*
   Strict-Transport-Security: max-age=31556952
 
