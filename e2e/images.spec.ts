@@ -66,7 +66,6 @@ const SOURCE_LIMITED: Record<string, string> = {
   stockroom: 'awaiting ≥1280 px owner capture', // 920 px master; a grid card at 1440 @2 wants 925
   'personal-tracker': 'awaiting ≥1280 px owner capture', // 1200 px master, 840 px crop
   sim2real: 'awaiting larger original', // 560 px
-  'bayt-qareeb': 'awaiting larger original', // the repo's landing.jpg is 800 px
 }
 const stem = (src: string) => src.replace(/-\d+\.\w+$/, '')
 

@@ -189,19 +189,20 @@ export const projects: Project[] = [
       'Team project. I built the backend on Supabase Postgres, the Clerk sign-in that admits only .edu students and the CI/CD pipeline, and reworked the landing page. Waleed Alghaithi built the map UI and Abas Mohamed built the first landing page.',
     stack: ['Next.js', 'TypeScript', 'Supabase', 'Clerk', 'Mapbox', 'Prisma', 'GitHub Actions'],
     result:
-      'Won a $200 prize at the MTC x Replit x Manara West Buildathon. Live with 80 seed listings around seven California campuses, each checked in CI to sit within 5 miles of a campus.',
+      'Live with 80 seed listings around seven California campuses, each checked in CI to sit within 5 miles of a campus.',
     links: {
       github: 'https://github.com/waleedA13/Bayt-Qareeb',
       live: 'https://manara-west.vercel.app',
       demo: 'https://youtu.be/dgyNZPzzhyE',
     },
-    // The repo's docs/screenshots/landing.jpg is 800 x 500, so 800 is the largest width.
+    // Signed-out capture of the live landing page, 1440 x 900 at 2x, taken 2026-11-10.
     image: {
-      src: '/bayt-qareeb-800.webp',
-      srcSet: '/bayt-qareeb-480.webp 480w, /bayt-qareeb-640.webp 640w, /bayt-qareeb-800.webp 800w',
-      width: 800,
-      height: 500,
-      alt: "Bayt Qareeb's landing page: the headline A new city should still feel like home, a search for a sisters' room near UCI with a halal kitchen, and a $1,150 private room in Irvine on the map",
+      src: '/bayt-qareeb-1100.webp',
+      srcSet:
+        '/bayt-qareeb-480.webp 480w, /bayt-qareeb-640.webp 640w, /bayt-qareeb-960.webp 960w, /bayt-qareeb-1100.webp 1100w',
+      width: 1100,
+      height: 688,
+      alt: "Bayt Qareeb's landing page: the headline A new city should still feel like home over a map of Southern California, a search for a sisters' room near UCI with a halal kitchen, a $1,150 private room in Irvine, and a strip naming UCLA, USC, UCR, UCSD, UCI, UC Davis and Stanford",
       tone: 'light',
     },
     featured: false,
