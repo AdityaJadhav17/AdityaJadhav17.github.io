@@ -40,7 +40,7 @@ to change copy, projects, experience entries, or certifications (which render in
 
 ## Getting started
 
-Requires Node 20.
+Requires Node 22.
 
 ```bash
 npm ci
