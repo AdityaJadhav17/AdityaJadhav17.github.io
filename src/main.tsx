@@ -3,14 +3,15 @@ import { createRoot, hydrateRoot } from 'react-dom/client'
 import App from './App'
 import './index.css'
 import { openHashTarget } from './lib/hash'
-import { loadStudy, pageFor, slugFromPath } from './lib/pages'
+import { loadStudy, pageFor, publishedSlugs, slugFromPath } from './lib/pages'
 
 const root = document.getElementById('root')!
 // A project page loads its case study and component lazily, so the homepage never ships them.
+// An unknown slug (a host that serves index.html for any path) gets the homepage, not a throw.
 const slug = slugFromPath(location.pathname)
 async function mount() {
   let page = <App />
-  if (slug) {
+  if (slug && publishedSlugs.includes(slug)) {
     const [study, { ProjectPage }] = await Promise.all([loadStudy(slug), import('./pages/ProjectPage')])
     page = <ProjectPage {...pageFor(study)} />
   }

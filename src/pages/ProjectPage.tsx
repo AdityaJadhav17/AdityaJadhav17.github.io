@@ -20,7 +20,8 @@ import { cn } from '@/lib/utils'
 // Header entrance: the homepage hero's CSS stagger (.hero-in in theme.css).
 const step = (i: number) => ({ '--i': i }) as CSSProperties
 
-const prose = 'max-w-[65ch] text-base leading-relaxed text-pretty text-foreground md:text-[1.0625rem]'
+// lg:col-start-2: from lg every prose block sits in the section's right column.
+const prose = 'max-w-[65ch] text-base leading-relaxed text-pretty text-foreground md:text-[1.0625rem] lg:col-start-2'
 // The card's link style: 14px text, the ::after grows the hit area to 44px.
 const linkClass =
   "relative inline-flex items-center gap-1.5 text-sm font-medium text-foreground underline underline-offset-4 transition-colors duration-200 after:absolute after:-inset-x-2 after:-inset-y-3 after:content-[''] hover:decoration-2"
@@ -35,7 +36,7 @@ function BlockView({ block }: { block: Block }) {
     )
   const { caption, head, rows } = block.table
   return (
-    <figure className="space-y-3">
+    <figure className="space-y-3 lg:col-span-2">
       {/* The caption is shown here, outside the scroll box, so a phone never
           clips it; the table keeps it for screen readers. */}
       <p aria-hidden="true" className="label max-w-[65ch]">{caption}</p>
@@ -219,7 +220,12 @@ export function ProjectPage({ project, study, next }: { project: Project; study:
           <div className="mt-16 space-y-14 md:mt-24 md:space-y-20">
             {study.sections.map((s) => (
               <Reveal as="section" key={s.heading}>
-                <Reveal.Item className="space-y-5">
+                {/* From lg the heading takes a left rail and the prose a 65ch
+                    column ending at the container's right edge, so the article
+                    fills the width; the table spans both. The 17px font size
+                    makes the 65ch track match the prose's own measure. minmax(0,1fr)
+                    below lg keeps the wide table from widening the page. */}
+                <Reveal.Item className="grid grid-cols-[minmax(0,1fr)] gap-y-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,65ch)] lg:gap-x-12 lg:text-[1.0625rem]">
                   <h2 className="font-heading text-2xl font-bold tracking-tight text-balance text-foreground md:text-3xl">
                     {s.heading}
                   </h2>

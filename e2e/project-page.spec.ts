@@ -26,8 +26,8 @@ test('without JS the page has its title, sections and links', async ({ browser }
 // vite preview is not Cloudflare Pages: it answers both URLs below with the
 // homepage index.html (SPA fallback), where Pages redirects the no-slash URL
 // to the slash one and serves dist/404.html for an unknown one. Measured here:
-// the no-slash URL got the homepage canonical, and on the unknown one main.tsx
-// threw "no case study". Task 5 checks both on the live site after deploy.
+// the no-slash URL got the homepage canonical. Task 5 checks the redirect and
+// the 404 status on the live site after deploy.
 
 test('the URL without a trailing slash reaches the page', async ({ page }) => {
   test.skip(true, 'vite preview serves index.html here; checked live in Task 5')
@@ -36,12 +36,19 @@ test('the URL without a trailing slash reaches the page', async ({ page }) => {
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://adityajadhav.dev/projects/coverage-keeper/')
 })
 
-test('an unknown project is a 404 with no script error', async ({ page }) => {
-  test.skip(true, 'vite preview serves index.html here; checked live in Task 5')
+// Any host that answers an unknown project URL with index.html (vite preview
+// does) must still get a working page, never a script error.
+test('an unknown project URL throws no script error', async ({ page }) => {
   const errors = collectErrors(page)
+  await page.goto('/projects/nope/')
+  await page.waitForLoadState('networkidle')
+  expect(errors).toEqual([])
+})
+
+test('an unknown project is a 404', async ({ page }) => {
+  test.skip(true, 'vite preview serves index.html here; checked live in Task 5')
   const res = await page.goto('/projects/nope/')
   if (res!.status() !== 404) await expect(page.getByRole('heading', { level: 1, name: 'Page not found' })).toBeVisible()
-  expect(errors).toEqual([])
 })
 
 test('a navbar link goes to the homepage section', async ({ page }, ti) => {
@@ -120,3 +127,36 @@ test('the results table scrolls in its own focusable box on a phone', async ({ p
   await page.keyboard.press('ArrowRight')
   await expect.poll(() => box.evaluate((el) => el.scrollLeft)).toBeGreaterThan(0)
 })
+
+// From lg the heading takes a left rail and the prose the right column, so the
+// article uses the width; the results table spans both. Below lg, one column.
+for (const width of [768, 1024, 1280, 1440]) {
+  test(`sections ${width >= 1024 ? 'set heading beside prose' : 'stack'} at ${width}px`, async ({ page }, ti) => {
+    test.skip(ti.project.name !== 'chromium', 'Chromium only')
+    await page.setViewportSize({ width, height: 900 })
+    await page.goto(PAGE)
+    const m = await page.evaluate(() => {
+      const box = (el: Element) => el.getBoundingClientRect()
+      const article = box(document.querySelector('main article')!)
+      const sections = [...document.querySelectorAll('main article section')].map((s) => {
+        const h2 = box(s.querySelector('h2')!)
+        const prose = box(s.querySelector('h2 ~ p, h2 ~ ul, h2 ~ * p, h2 ~ * ul')!)
+        return { gap: prose.left - h2.right, top: prose.top - h2.top, sameLeft: Math.abs(prose.left - h2.left) }
+      })
+      const table = box(document.querySelector('main [role="region"]')!)
+      return { sections, tableSpan: table.width / article.width, right: Math.max(...[...document.querySelectorAll('main article section p')].map((p) => box(p).right)), articleRight: article.right }
+    })
+    expect(m.sections.length).toBe(6)
+    if (width >= 1024) {
+      for (const s of m.sections) {
+        expect(s.gap).toBeGreaterThan(0)
+        expect(Math.abs(s.top)).toBeLessThan(40)
+      }
+      // The prose column reaches the right edge: no blank right half.
+      expect(m.articleRight - m.right).toBeLessThan(80)
+    } else {
+      for (const s of m.sections) expect(s.sameLeft).toBeLessThanOrEqual(1)
+    }
+    expect(m.tableSpan).toBeGreaterThan(0.99)
+  })
+}
