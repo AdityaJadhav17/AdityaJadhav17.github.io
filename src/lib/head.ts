@@ -49,6 +49,9 @@ function projectGraph({ project, study }: HeadPage) {
       ...(project.links.github && { codeRepository: project.links.github }),
       ...(project.award && { award: project.award }),
     },
+    // Minimal stubs so the @id references above resolve within this page's graph.
+    { '@type': 'Person', '@id': ORIGIN + '#person', name: site.name, url: ORIGIN },
+    { '@type': 'WebSite', '@id': ORIGIN + '#website', url: ORIGIN, name: site.name },
   ]
 }
 
