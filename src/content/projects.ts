@@ -31,9 +31,6 @@ export type Project = {
     // would shrink its text too far. Only featured projects with a cropped capture have one.
     mobileSrcSet?: string
     tone: 'light' | 'dark'
-    // 'phone': a whole portrait phone screen, set on a muted ground and never
-    // cropped to fit, so the app reads as an app.
-    frame?: 'phone'
   }
   // The only chart is the Talk-to-Robot tier chart, drawn from tokens by TierChart instead of an <img>.
   chart?: { alt: string }
@@ -65,17 +62,18 @@ export const projects: Project[] = [
       github: 'https://github.com/AdityaJadhav17/coverage-keeper',
       live: 'https://coverage-keeper.vercel.app',
     },
-    // The whole phone capture (1179 x 1977, the repo's docs/assets/screenshots/light-2-result.png),
-    // shown as a screen on the muted ground rather than cropped to the slot.
+    // The result screen in the laptop layout (the repo's docs/assets/screenshots/portfolio-result-desktop.png,
+    // 1440 x 900 at 2x, mocked letter), cropped to the summary, due date and checklist.
     image: {
-      src: '/coverage-keeper-screen-960.webp',
+      src: '/coverage-keeper-1100.webp',
       srcSet:
-        '/coverage-keeper-screen-240.webp 240w, /coverage-keeper-screen-360.webp 360w, /coverage-keeper-screen-480.webp 480w, /coverage-keeper-screen-640.webp 640w, /coverage-keeper-screen-960.webp 960w, /coverage-keeper-screen-1179.webp 1179w',
-      width: 960,
-      height: 1610,
-      alt: "Coverage Keeper's result screen: the deadline Feb 15, 2027 with 5 days left, above the highlighted line from the letter it was read from",
+        '/coverage-keeper-480.webp 480w, /coverage-keeper-640.webp 640w, /coverage-keeper-960.webp 960w, /coverage-keeper-1100.webp 1100w',
+      mobileSrcSet:
+        '/coverage-keeper-m-480.webp 480w, /coverage-keeper-m-640.webp 640w, /coverage-keeper-m-780.webp 780w, /coverage-keeper-m-1080.webp 1080w',
+      width: 1100,
+      height: 688,
+      alt: "Coverage Keeper's result screen: a plain summary of the letter, the due date Feb 15, 2027 with 57 days left beside the highlighted line it was read from, and a checklist of papers to send",
       tone: 'light',
-      frame: 'phone',
     },
     featured: true,
     context: 'Team of 3: with Woosik Kim and Waleed Alghaithi',
@@ -186,10 +184,12 @@ export const projects: Project[] = [
     metric: '$200',
     problem:
       'Students moving to a new campus find housing through scattered group chats, and Muslim students also need details generic listing sites leave out, such as brothers-only or sisters-only houses and a halal kitchen.',
-    // Roles as Aditya set them in the design spec; the repo README's Team
-    // section is out of date. Never publish the README's judge sign-in.
+    // Roles from the repo's merged pull requests and commits (see waleedA13/Bayt-Qareeb#30):
+    // Aditya #20, #24, #27 and the AI search; Waleed the initial MVP, map UI and CI.
+    // Abas's landing design reached the team outside git, so that part is Aditya's account.
+    // Never publish the README's judge sign-in.
     contribution:
-      'Team project. I built the backend on Supabase Postgres, the Clerk sign-in that admits only .edu students and the CI/CD pipeline, and reworked the landing page. Waleed Alghaithi built the map UI and Abas Mohamed built the first landing page.',
+      'Team project. I moved the app to Supabase Postgres and built the Clerk sign-in that admits only .edu students, the post-a-room flow and the AI search, then reworked the landing page. Waleed Alghaithi built the first version of the app, the map UI and the CI pipeline, and Abas Mohamed designed the first landing page.',
     stack: ['Next.js', 'TypeScript', 'Supabase', 'Clerk', 'Mapbox', 'Prisma', 'GitHub Actions'],
     result:
       'Live with 80 seed listings around seven California campuses, each checked in CI to sit within 5 miles of a campus.',

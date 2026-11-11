@@ -4,7 +4,6 @@ import { ProjectPage } from './ProjectPage'
 import { fixtureStudy } from './fixture'
 import { pageFor } from '@/lib/pages'
 import { site } from '@/content/site'
-import { projects } from '@/content/projects'
 
 const props = pageFor(fixtureStudy)
 
@@ -53,7 +52,7 @@ test('ends with résumé, contact and next-project links', () => {
 })
 
 test('the screenshot loads first, with its size reserved', () => {
-  for (const project of [props.project, projects.find((p) => p.image?.frame === 'phone')!]) {
+  for (const project of [props.project]) {
     const { unmount } = render(<ProjectPage {...props} project={project} />)
     const img = screen.getByAltText(project.image!.alt)
     expect(img).not.toHaveAttribute('loading', 'lazy')

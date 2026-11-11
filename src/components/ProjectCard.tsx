@@ -41,9 +41,6 @@ const SIZES = {
     '(min-width: 1200px) 497px, (min-width: 1024px) calc(45vw - 43px), (min-width: 768px) calc(45vw - 29px), calc(100vw - 66px)',
   stacked:
     '(min-width: 1200px) 514px, (min-width: 1024px) calc(50vw - 86px), (min-width: 768px) calc(50vw - 70px), (min-width: 640px) calc(50vw - 58px), calc(100vw - 66px)',
-  // A 'phone' frame screen in a wide slot: 40% of the slot from md, 55% below.
-  phone:
-    '(min-width: 1200px) 199px, (min-width: 1024px) calc(18vw - 17px), (min-width: 768px) calc(18vw - 12px), calc(55vw - 36px)',
 }
 const tagClass =
   'rounded-md border border-border bg-muted px-2 py-0.5 font-mono text-xs text-muted-foreground'
@@ -111,23 +108,7 @@ export function ProjectCard({ project, className, layout = 'stacked', pageHref }
           isWide && 'md:w-[45%] md:border-0 md:bg-transparent md:p-0',
         )}
       >
-        {project.image?.frame === 'phone' ? (
-          // A whole phone screen on the muted ground, top-aligned, its foot cut
-          // by the slot: the app reads as an app at any slot size.
-          <div className={cn('flex justify-center overflow-hidden bg-muted pt-6 ring-1 ring-border', isWide ? 'rounded-md md:rounded-lg' : 'rounded-md', ratio)}>
-            <img
-              src={project.image.src}
-              srcSet={project.image.srcSet}
-              sizes={SIZES.phone}
-              alt={project.image.alt}
-              width={project.image.width}
-              height={project.image.height}
-              loading="lazy"
-              decoding="async"
-              className="h-auto w-[55%] self-start rounded-t-2xl shadow-xl ring-1 ring-border md:w-[40%] dark:brightness-[.85]"
-            />
-          </div>
-        ) : project.chart ? (
+        {project.chart ? (
           <TierChart
             alt={project.chart.alt}
             className={cn('w-full bg-card ring-1 ring-border', isWide ? 'rounded-md md:rounded-lg' : 'rounded-md', ratio)}
