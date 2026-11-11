@@ -68,6 +68,14 @@ test('the homepage card links to the page', async ({ page }) => {
   expect(await page.locator(`#project-coverage-keeper a[href="${PAGE}"]`).count()).toBeGreaterThanOrEqual(1)
 })
 
+// The next project is the next published page in homepage order, wrapping.
+for (const [from, to] of [['coverage-keeper', 'watchtower'], ['watchtower', 'coverage-keeper']]) {
+  test(`${from} links to ${to} as the next project`, async ({ page }) => {
+    await page.goto(`/projects/${from}/`)
+    await expect(page.locator('main a', { hasText: 'Next project' })).toHaveAttribute('href', `/projects/${to}/`)
+  })
+}
+
 test('no console or CSP errors, and hydration is clean', async ({ page }) => {
   const errors = collectErrors(page)
   await page.addInitScript(() => {
