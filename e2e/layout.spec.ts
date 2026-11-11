@@ -29,9 +29,11 @@ for (const width of [390, 768, 1440]) {
 
 // Closed cards keep the page short: the full story is behind <details>. The
 // 390 cap allows for the featured cards' phone chrome and 4:3 posters.
+// Raised for the eighth project (two grid cards: Bayt Qareeb, Stockroom moved
+// out of the featured rows) from measured 7143 and 11190 at the time.
 for (const [width, height, max] of [
-  [1440, 900, 6720],
-  [390, 844, 10200],
+  [1440, 900, 7200],
+  [390, 844, 11300],
 ] as const) {
   test(`page stays under ${max}px tall at ${width}px with details closed`, async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
@@ -273,7 +275,7 @@ test('experience dates sit beside their content at 1440px', async ({ page }, tes
   ])
 })
 
-// On a phone all six project cards share one treatment; featured cards keep
+// On a phone all eight project cards share one treatment; featured cards keep
 // their bare layout only from md up.
 test.describe('work cards on a phone', () => {
   test.use({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true })
@@ -287,7 +289,7 @@ test.describe('work cards on a phone', () => {
         return [s.borderTopWidth, s.borderTopColor, s.backgroundColor, s.borderRadius].join(' | ')
       }),
     )
-    expect(styles).toHaveLength(6)
+    expect(styles).toHaveLength(8)
     expect(new Set(styles).size, styles.join(', ')).toBe(1)
     expect(styles[0]).not.toMatch(/^0px/)
   })
@@ -365,7 +367,7 @@ for (const width of [320, 390, 768, 1440]) {
 }
 
 // The first phone screen carries the whole pitch: the claim, the résumé button
-// and all three figures, without a scroll. 664 and 667 are the short viewports
+// and all four figures, without a scroll. 664 and 667 are the short viewports
 // (a phone with browser chrome showing), and 390 is where the claim must not
 // need a fourth line.
 for (const [width, height] of [

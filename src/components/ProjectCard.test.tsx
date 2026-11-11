@@ -57,6 +57,25 @@ describe('ProjectCard', () => {
     expect(screen.getByText('+3')).toBeVisible()
   })
 
+  it('links to the case study only when it has a page', () => {
+    const p = byId('coverage-keeper')
+    const { unmount } = render(<ProjectCard project={p} pageHref="/projects/coverage-keeper/" />)
+    expect(screen.getByRole('link', { name: /case study/i })).toHaveAttribute('href', '/projects/coverage-keeper/')
+    expect(screen.getByRole('link', { name: p.title })).toHaveAttribute('href', '/projects/coverage-keeper/')
+    unmount()
+    render(<ProjectCard project={p} />)
+    expect(screen.queryByRole('link', { name: /case study/i })).toBeNull()
+  })
+
+  it('sets a phone screen on a muted ground instead of cropping it to the slot', () => {
+    const p = byId('coverage-keeper')
+    expect(p.image!.frame).toBe('phone')
+    render(<ProjectCard project={p} layout="wide" />)
+    const img = screen.getByAltText(p.image!.alt)
+    expect(img).not.toHaveClass('object-cover')
+    expect(img.parentElement).toHaveClass('bg-muted')
+  })
+
   it('shows no +N item when the stack fits', () => {
     render(<ProjectCard project={byId('sim2real')} />)
     expect(screen.queryByText(/^\+\d/)).toBeNull()

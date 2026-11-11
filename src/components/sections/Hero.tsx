@@ -51,7 +51,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="container-site relative grid min-h-[calc(100dvh-4rem-1px)] grid-cols-1 content-start gap-y-6 overflow-hidden pt-8 pb-16 lg:grid-cols-4 lg:content-stretch lg:gap-x-8 lg:grid-rows-[auto_auto_auto_auto_1fr] lg:gap-y-0 lg:py-12"
+      className="container-site relative grid min-h-[calc(100dvh-4rem-1px)] grid-cols-1 content-start gap-y-5 sm:gap-y-6 overflow-hidden pt-8 pb-16 lg:grid-cols-4 lg:content-stretch lg:gap-x-8 lg:grid-rows-[auto_auto_auto_auto_1fr] lg:gap-y-0 lg:py-12"
     >
       {/* Identity */}
       <div style={step(0)} className="hero-in relative z-10 lg:col-span-2 lg:col-start-1 lg:row-start-1">
@@ -112,7 +112,8 @@ export function Hero() {
 
       {/* Proof. A recruiter who reads nothing else should still leave with a
           number. Phone: one row per figure, so no label wraps past two lines, and it
-          sits right under the actions so all three show in the first screen.
+          sits right under the actions so all four show in the first screen
+          (the phone-only gap-y-5 on the section is what makes the fourth fit at 664px).
           Left two columns at lg, for the same reason as availability. */}
       <ul
         style={step(4)}
