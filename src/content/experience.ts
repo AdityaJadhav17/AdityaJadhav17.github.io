@@ -30,7 +30,7 @@ export type Experience = {
 export const experience: Experience[] = [
   {
     organization: 'UC San Diego (ITS)',
-    role: 'IT Security Programmer',
+    role: 'Security Engineer',
     id: 'uc-san-diego-its',
     group: 'work',
     start: 'Dec 2025',
