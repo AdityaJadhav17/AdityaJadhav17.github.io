@@ -85,7 +85,7 @@ export const site: Site = {
   // surfaced where a recruiter actually reads them. Every one is verifiable
   // from a linked repository or the experience entries below.
   proof: [
-    { value: '11', label: 'engineers led on WatchTower', href: '#project-watchtower' },
+    { value: '11', label: 'person team led on WatchTower', href: '#project-watchtower' },
     { value: '15 to 20 min', label: 'task cut to under 5 min at Lumulus', href: '#experience-lumulus' },
     { value: '0.9175', label: 'mAP, Kaggle sim-to-real detection', href: '#project-sim2real' },
     // Exactly the three projects with an `award` in projects.ts.
