@@ -120,22 +120,6 @@ function Screenshot({ project }: { project: Project }) {
   if (!image) return null
   // Light captures are dimmed in dark theme so they do not glare, as on the cards.
   const dim = image.tone === 'light' && 'dark:brightness-[.85]'
-  if (image.frame === 'phone')
-    // The whole phone screen at its own shape, on the muted ground, never cropped.
-    return (
-      <div className="mt-10 flex justify-center rounded-xl bg-muted px-6 py-8 md:mt-12 md:py-12">
-        <img
-          src={image.src}
-          srcSet={image.srcSet}
-          sizes="(min-width: 493px) 20rem, 65vw"
-          alt={image.alt}
-          width={image.width}
-          height={image.height}
-          fetchPriority="high"
-          className={cn('h-auto w-[65vw] max-w-[20rem] rounded-[1.5rem] shadow-xl ring-1 ring-border', dim)}
-        />
-      </div>
-    )
   return (
     <picture className="mt-10 block md:mt-12">
       {image.mobileSrcSet && <source media="(width < 48rem)" srcSet={image.mobileSrcSet} sizes="calc(100vw - 40px)" />}
