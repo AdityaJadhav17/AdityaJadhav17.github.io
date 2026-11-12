@@ -220,15 +220,15 @@ export const projects: Project[] = [
     slug: 'stockroom',
     title: 'Stockroom',
     summary: 'A shared inventory and purchasing app that records who approved what, and when.',
-    outcome: '156 integration tests and 11 end-to-end cases gate a seven-job CI pipeline',
-    metric: '156',
+    outcome: '178 integration tests and 11 end-to-end cases gate a seven-job CI pipeline',
+    metric: '178',
     problem:
       'Shared inventory and purchase approvals usually live in a spreadsheet, where nobody can reconstruct who approved what, or when.',
     contribution:
       "Built in C# on ASP.NET Core Razor Pages with Entity Framework Core over SQLite. Member and manager roles run through ASP.NET Core Identity, with every permission check resolved against the database rather than trusted from the session, and logout terminating all sessions for an account. Each stock movement carries an audit record with actor, UTC timestamp, quantity change and reason.",
     stack: ['C#', 'ASP.NET Core', 'Entity Framework Core', 'SQLite', 'xUnit', 'Playwright', 'GitHub Actions'],
     result:
-      '156 xUnit integration cases covering business rules, authorization, transactions and race conditions, plus 11 Chromium end-to-end cases, gated by a seven-job pipeline running on Ubuntu and Windows with CodeQL scanning.',
+      '178 xUnit integration cases covering business rules, authorization, transactions and race conditions, plus 11 Chromium end-to-end cases, gated by a seven-job pipeline running on Ubuntu and Windows with CodeQL scanning.',
     links: {
       github: 'https://github.com/AdityaJadhav17/Stockroom',
     },

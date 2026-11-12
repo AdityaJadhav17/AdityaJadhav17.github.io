@@ -78,3 +78,15 @@ test('navbar section links point back to the homepage', () => {
   expect(hrefs.length).toBeGreaterThan(0)
   for (const href of hrefs) expect(href).toMatch(/^\/#/)
 })
+
+test('only a project with a phone crop is boxed to 4:3 on phones; others keep their own shape', () => {
+  const withCrop = projects.find((p) => p.image?.mobileSrcSet)!
+  const noCrop = projects.find((p) => p.slug === 'stockroom')!
+  expect(noCrop.image!.mobileSrcSet).toBeUndefined()
+  const { unmount } = render(<ProjectPage {...props} project={withCrop} />)
+  expect(screen.getByAltText(withCrop.image!.alt)).toHaveClass('aspect-[4/3]', 'object-cover')
+  unmount()
+  render(<ProjectPage {...props} project={noCrop} />)
+  const img = screen.getByAltText(noCrop.image!.alt)
+  expect(img.className).not.toMatch(/aspect-|object-cover/)
+})

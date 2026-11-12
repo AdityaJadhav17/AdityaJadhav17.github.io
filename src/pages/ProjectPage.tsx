@@ -136,7 +136,12 @@ function Screenshot({ project }: { project: Project }) {
         width={image.width}
         height={image.height}
         fetchPriority="high"
-        className={cn('aspect-[4/3] h-auto w-full rounded-xl object-cover ring-1 ring-border md:aspect-[16/10]', dim)}
+        className={cn(
+          'h-auto w-full rounded-xl ring-1 ring-border',
+          // Only a project with a phone crop is boxed; any other image keeps its own shape at every width.
+          image.mobileSrcSet && 'aspect-[4/3] object-cover md:aspect-[16/10]',
+          dim,
+        )}
       />
     </picture>
   )
