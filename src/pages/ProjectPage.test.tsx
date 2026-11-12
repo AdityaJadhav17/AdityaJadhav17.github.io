@@ -4,6 +4,7 @@ import { ProjectPage } from './ProjectPage'
 import { fixtureStudy } from './fixture'
 import { pageFor } from '@/lib/pages'
 import { site } from '@/content/site'
+import { projects } from '@/content/projects'
 
 const props = pageFor(fixtureStudy)
 
@@ -61,6 +62,13 @@ test('the screenshot loads first, with its size reserved', () => {
     expect(img).toHaveAttribute('height', String(project.image!.height))
     unmount()
   }
+})
+
+test('a project with a chart and no screenshot shows the tier chart in its place', () => {
+  const ttr = projects.find((p) => p.slug === 'talk-to-robot')!
+  expect(ttr.image).toBeUndefined()
+  render(<ProjectPage {...props} project={ttr} />)
+  expect(screen.getByRole('img', { name: ttr.chart!.alt })).toBeInTheDocument()
 })
 
 test('navbar section links point back to the homepage', () => {
