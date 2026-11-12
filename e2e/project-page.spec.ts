@@ -69,7 +69,11 @@ test('the homepage card links to the page', async ({ page }) => {
 })
 
 // The next project is the next published page in homepage order, wrapping.
-for (const [from, to] of [['coverage-keeper', 'watchtower'], ['watchtower', 'coverage-keeper']]) {
+for (const [from, to] of [
+  ['coverage-keeper', 'watchtower'],
+  ['watchtower', 'travel-agntcy'],
+  ['travel-agntcy', 'coverage-keeper'],
+]) {
   test(`${from} links to ${to} as the next project`, async ({ page }) => {
     await page.goto(`/projects/${from}/`)
     await expect(page.locator('main a', { hasText: 'Next project' })).toHaveAttribute('href', `/projects/${to}/`)

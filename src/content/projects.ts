@@ -117,15 +117,15 @@ export const projects: Project[] = [
     slug: 'travel-agntcy',
     title: 'TravelAGNTCY',
     summary: 'A travel planner where separate AI agents for flights, hotels and activities work together on one plan.',
-    outcome: "Won Cisco's AGNTCY track at SANDHacks 2026, with ~40% lower inter-service latency",
+    outcome: "Won Cisco's AGNTCY track at SANDHacks 2026, with ~40% lower latency, timed by hand",
     metric: '~40%',
     problem:
       'Travel planning spans flights, hotels, and activities, but stitching those sources into a coherent plan is slow and fragmented.',
     contribution:
-      "A distributed multi-agent travel planner built on Cisco's open-source AGNTCY framework, with a LangGraph supervisor, FastAPI services, and a React/TypeScript UI. Containerized the stack with Docker, used NATS for inter-service messaging, and added Grafana/ClickHouse observability.",
-    stack: ['Python', 'FastAPI', 'LangGraph', 'React', 'TypeScript', 'Docker', 'NATS', 'Grafana'],
+      "A hackathon team project built on CoffeeAGNTCY, the AGNTCY project's sample multi-agent app, with a LangGraph supervisor, FastAPI services and a React/TypeScript UI. At the event I restructured the messages between the supervisor and the flight, hotel and activity agents. Jingi built a first set of trip planner agents and renamed the interface for travel, and Waleed worked on the model configuration. From September to November 2026 I added the CI pipeline, conversation memory, budgets and chat lifecycle recovery.",
+    stack: ['Python', 'FastAPI', 'LangGraph', 'React', 'TypeScript', 'Docker', 'NATS', 'SerpAPI'],
     result:
-      "Won Cisco's AGNTCY track at SANDHacks 2026. Cut inter-service latency by ~40% with containerized microservices and NATS messaging.",
+      "Won Cisco's AGNTCY track at SANDHacks 2026. After the agent messages were restructured, the team timed requests by hand at the event and saw about 40% lower latency.",
     links: {
       github: 'https://github.com/AdityaJadhav17/Travel-Agntcy',
       demo: 'https://youtu.be/T0EkJ9J_IQU',
