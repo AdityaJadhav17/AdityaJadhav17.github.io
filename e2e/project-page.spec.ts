@@ -76,7 +76,8 @@ for (const [from, to] of [
   ['talk-to-robot', 'bayt-qareeb'],
   ['bayt-qareeb', 'stockroom'],
   ['stockroom', 'margin'],
-  ['margin', 'coverage-keeper'],
+  ['margin', 'synthetic-to-real'],
+  ['synthetic-to-real', 'coverage-keeper'],
 ]) {
   test(`${from} links to ${to} as the next project`, async ({ page }) => {
     await page.goto(`/projects/${from}/`)
