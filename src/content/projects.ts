@@ -84,8 +84,8 @@ export const projects: Project[] = [
     slug: 'watchtower',
     title: 'WatchTower',
     summary: 'A lightweight tool that shows web teams the errors, slowdowns and user activity on their live site.',
-    outcome: 'Led a team of 11 to a deployed SDK, ingest API and live dashboard',
-    metric: 'team of 11',
+    outcome: 'Led 11 engineers to a deployed SDK, ingest API and live dashboard',
+    metric: '11 engineers',
     problem:
       'Web teams need lightweight production visibility for JS errors, latency, and user activity without a heavyweight vendor agent.',
     contribution:
@@ -108,7 +108,8 @@ export const projects: Project[] = [
       live: 'https://cse110-sp26-group09.github.io/Watchtower-Course-Project/',
     },
     featured: true,
-    // 2026-11-11: the README's role table lists 11 members including Aditya, so "team of 11", not "11 engineers".
+    // Owner, 2026-10-06: he led 11 engineers. "11-person team" contradicted that, so the team size is not stated.
+    // 2026-11-11: the owner re-confirmed this wording after the README's 11-member role table was raised.
     context: 'UC San Diego course project (CSE 110)',
   },
   {

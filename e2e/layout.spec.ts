@@ -206,7 +206,7 @@ test('hero stats link to their sources', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto('/')
   const targets = [
-    [/11 person team led on WatchTower/, '#project-watchtower', true],
+    [/11 engineers led on WatchTower/, '#project-watchtower', true],
     [/15 to 20 min task cut/, '#experience-lumulus', false],
     [/0\.9175 mAP, Kaggle sim-to-real detection/, '#project-sim2real', true],
   ] as const
