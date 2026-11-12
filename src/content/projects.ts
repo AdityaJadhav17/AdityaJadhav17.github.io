@@ -273,18 +273,20 @@ export const projects: Project[] = [
     slug: 'synthetic-to-real',
     title: 'Synthetic-to-Real Object Detection',
     summary: 'An object detector trained only on synthetic images, built to work on real photos.',
-    outcome: 'Final mAP 0.9175, with 22% better real-world generalization',
+    outcome: 'Private leaderboard mAP@50 0.9175, public 0.9074',
     metric: '0.9175',
     problem:
       'Models trained only on synthetic images often fail on real photos; this Kaggle challenge measured that sim-to-real gap directly.',
     contribution:
-      'An end-to-end YOLOv8 detection pipeline with training, augmentation and domain-randomization experiments, inference, and Kaggle submission tooling.',
-    stack: ['Python', 'PyTorch', 'YOLOv8', 'Albumentations'],
-    // 0.9175 is the exact public leaderboard figure. Earlier resume drafts
-    // rounded it to 0.92 for convenience; the precise number is used
-    // everywhere now so the site and the resumes cannot disagree.
+      "Fine-tuned a COCO-pretrained YOLOv8s on the competition's synthetic images, building on the organizers' training, prediction and submission scripts.",
+    stack: ['Python', 'PyTorch', 'YOLOv8'],
+    // Scores are the competition's leaderboard, read 2026-11-12 without
+    // signing in: private 0.91750, public 0.90738. The README's table swaps
+    // the two labels. The competition scores mAP@50 and ranks on the private board.
+    // No source in the repository records the old "22%" figure, and it has no
+    // Albumentations or domain-adaptation code, so those were removed.
     result:
-      'Final mAP 0.9175, with domain adaptation and augmentation improving real-world generalization by 22%.',
+      'mAP@50 of 0.9175 on the private leaderboard, which set the final ranking, and 0.9074 on the public leaderboard.',
     links: {
       github: 'https://github.com/AdityaJadhav17/Synthetic-to-Real-Object-Detection',
       demo: 'https://www.kaggle.com/competitions/synthetic-2-real-object-detection-challenge',
