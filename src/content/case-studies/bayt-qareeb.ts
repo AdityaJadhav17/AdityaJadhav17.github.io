@@ -101,7 +101,6 @@ const study: CaseStudy = {
         {
           ul: [
             'Rooms that students post show the full matched address and a satellite view of the block.',
-            'Geocoding and the AI search have no rate limit.',
             'The five-listing cap counts and then inserts, so two posts at the same moment could both get through.',
             'Posting only accepts Southern California addresses, although the map also covers UC Davis and Stanford.',
             '"Near UCI" in the AI search is a text match on the address and title, not a distance.',
