@@ -18,5 +18,5 @@ test('pageFor finds the project and throws for an unknown slug', () => {
   expect(pageFor(fixtureStudy).project.id).toBe('watchtower')
   expect(() => pageFor({ ...fixtureStudy, slug: 'nope' })).toThrow('pages: no project with slug "nope"')
 })
-test('Coverage Keeper, WatchTower, TravelAGNTCY, Talk-to-Robot, Bayt Qareeb and Stockroom are published', () =>
-  expect(publishedSlugs).toEqual(['bayt-qareeb', 'coverage-keeper', 'stockroom', 'talk-to-robot', 'travel-agntcy', 'watchtower']))
+test('Coverage Keeper, WatchTower, TravelAGNTCY, Talk-to-Robot, Bayt Qareeb, Stockroom and Margin are published', () =>
+  expect(publishedSlugs).toEqual(['bayt-qareeb', 'coverage-keeper', 'margin', 'stockroom', 'talk-to-robot', 'travel-agntcy', 'watchtower']))
