@@ -10,6 +10,7 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { Reveal } from '@/components/motion/Reveal'
 import { Button } from '@/components/ui/button'
+import { TierChart } from '@/components/TierChart'
 import { cn } from '@/lib/utils'
 
 // Layout A from the design spec: one column, facts under the title. Everything
@@ -117,7 +118,11 @@ function ProjectLinks({ project }: { project: Project }) {
 // Eager and high priority: on this page the screenshot is the image that matters.
 function Screenshot({ project }: { project: Project }) {
   const image = project.image
-  if (!image) return null
+  // A project with no screenshot draws its chart here, as its card does.
+  if (!image)
+    return project.chart ? (
+      <TierChart alt={project.chart.alt} className="mt-10 block h-auto w-full rounded-xl bg-card ring-1 ring-border md:mt-12" />
+    ) : null
   // Light captures are dimmed in dark theme so they do not glare, as on the cards.
   const dim = image.tone === 'light' && 'dark:brightness-[.85]'
   return (

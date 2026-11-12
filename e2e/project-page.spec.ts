@@ -72,7 +72,8 @@ test('the homepage card links to the page', async ({ page }) => {
 for (const [from, to] of [
   ['coverage-keeper', 'watchtower'],
   ['watchtower', 'travel-agntcy'],
-  ['travel-agntcy', 'coverage-keeper'],
+  ['travel-agntcy', 'talk-to-robot'],
+  ['talk-to-robot', 'coverage-keeper'],
 ]) {
   test(`${from} links to ${to} as the next project`, async ({ page }) => {
     await page.goto(`/projects/${from}/`)
