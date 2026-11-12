@@ -162,8 +162,9 @@ export function ProjectCard({ project, className, layout = 'stacked', pageHref }
         <div className="space-y-1">
           <h3 className={cn('font-heading text-xl font-semibold text-card-foreground', isWide && 'md:text-2xl')}>
             {pageHref ? (
-              // ::after grows the inline box (about 24px) to a 44px+ touch target.
-              <a href={pageHref} className="relative underline-offset-4 after:absolute after:inset-x-0 after:-inset-y-3 after:content-[''] hover:underline">
+              // ::after grows the box (about 24px) to a 44px+ touch target. inline-block
+              // keeps that box whole when a long title wraps to two lines.
+              <a href={pageHref} className="relative inline-block underline-offset-4 after:absolute after:inset-x-0 after:-inset-y-3 after:content-[''] hover:underline">
                 {project.title}
               </a>
             ) : (
