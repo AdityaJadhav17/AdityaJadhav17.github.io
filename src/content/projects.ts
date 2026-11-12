@@ -155,7 +155,8 @@ export const projects: Project[] = [
     problem:
       'Natural-language robot commands fail when spatial grounding is mixed with control, making it hard to see where LLM understanding breaks.',
     contribution:
-      'Team project (CSE 190) with a decoupled LLM grounder and SAC+HER controller in MuJoCo FetchPush-v4. Benchmarked a regex baseline against zero-shot, few-shot and chain-of-thought prompting across five instruction tiers, from literal coordinates to functional intent, then retrained the controller to test which grounding failures were recoverable.',
+      // Roles from YangLin14/Talk-to-Robot commit authors (no pull requests; the paper has no contribution statement).
+      'Five-person team study (CSE 190). We built a decoupled LLM grounder and SAC+HER controller in MuJoCo FetchPush-v4, benchmarked a regex baseline against zero-shot, few-shot and chain-of-thought prompting across five instruction tiers, and retrained the controller to test which grounding failures were recoverable. My commits are one of the three sets of functional-intent annotations, the final README and the installable package layout.',
     stack: ['Python', 'Gemini', 'MuJoCo', 'Gymnasium', 'Stable-Baselines3 (SAC + HER)'],
     // Figures are Table 1 of the CSE 190 paper, the baseline evaluation,
     // few-shot variant. Note T3: the paper scores that tier at an 8cm
@@ -165,7 +166,7 @@ export const projects: Project[] = [
     // post-retraining table is that stricter-threshold artefact, which the
     // paper itself calls misleading. Do not quote it as the headline result.
     result:
-      'End-to-end success falls from 98% on literal coordinates to 50% on functional intent, while policy success held between 93 and 100%, which places the failures in grounding rather than control. Each tier fails differently rather than degrading smoothly: relative offsets land goals off the table, where a plain regex beat the LLM 85% to 77%; reference objects are off by a consistent 6 cm bias that controller retraining can absorb; and functional intent is not a coordinate problem at all, since annotators disagreed with each other about as much as the model did.',
+      'End-to-end success falls from 98% on literal coordinates to 50% on functional intent, while policy success held between 93 and 100%, which places the failures in grounding rather than control. Each tier fails differently rather than degrading smoothly: relative offsets land goals off the table, where a plain regex beat the LLM 85% to 77%; reference objects are off by a consistent 6 cm bias that controller retraining narrowed but did not close; and functional intent is not a coordinate problem at all, since annotators disagreed with each other about as much as the model did.',
     chart: {
       alt: 'Bar chart of end-to-end success by instruction tier: 98.3% on literal coordinates, 93.3% on named regions, 76.7% on relative offsets, 73.3% on reference objects, and 50% on functional intent',
     },
