@@ -109,6 +109,7 @@ export const projects: Project[] = [
     },
     featured: true,
     // Owner, 2026-10-06: he led 11 engineers. "11-person team" contradicted that, so the team size is not stated.
+    // 2026-11-11: the owner re-confirmed this wording after the README's 11-member role table was raised.
     context: 'UC San Diego course project (CSE 110)',
   },
   {
