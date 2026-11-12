@@ -156,7 +156,8 @@ export const projects: Project[] = [
       'Natural-language robot commands fail when spatial grounding is mixed with control, making it hard to see where LLM understanding breaks.',
     contribution:
       // Roles from YangLin14/Talk-to-Robot commit authors (no pull requests; the paper has no contribution statement).
-      'Five-person team study (CSE 190). We built a decoupled LLM grounder and SAC+HER controller in MuJoCo FetchPush-v4, benchmarked a regex baseline against zero-shot, few-shot and chain-of-thought prompting across five instruction tiers, and retrained the controller to test which grounding failures were recoverable. My commits are one of the three sets of functional-intent annotations, the final README and the installable package layout.',
+      // The paper sections are Aditya's account, 2026-11-12; git cannot show them.
+      "Five-person team study (CSE 190). We built a decoupled LLM grounder and SAC+HER controller in MuJoCo FetchPush-v4, benchmarked a regex baseline against zero-shot, few-shot and chain-of-thought prompting across five instruction tiers, and retrained the controller to test which grounding failures were recoverable. My part was one of the three sets of functional-intent annotations, the final README, the installable package layout, and the paper's sections on the environment and controller and on the five instruction tiers.",
     stack: ['Python', 'Gemini', 'MuJoCo', 'Gymnasium', 'Stable-Baselines3 (SAC + HER)'],
     // Figures are Table 1 of the CSE 190 paper, the baseline evaluation,
     // few-shot variant. Note T3: the paper scores that tier at an 8cm

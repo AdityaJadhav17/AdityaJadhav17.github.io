@@ -4,7 +4,8 @@
 // T3 figure in Table 3 is the 5 cm artefact the paper calls misleading and is
 // not quoted. Roles come from YangLin14/Talk-to-Robot commit authors as of
 // 2026-11-11: the repository has no pull requests and the paper has no
-// contribution statement.
+// contribution statement. Aditya's paper sections (3, environment and
+// controller; 4.1, the tiers) are his account of 2026-11-12, not in git.
 import type { CaseStudy } from '../case-study'
 
 const study: CaseStudy = {
@@ -14,7 +15,7 @@ const study: CaseStudy = {
     'A UC San Diego CSE 190 study of where an LLM breaks when it turns robot commands into goals. End-to-end success falls from 98.3% to 50% over five tiers.',
   facts: {
     result: 'End-to-end success falls from 98.3% to 50% across five tiers',
-    role: 'Co-author; T4 annotator, README and package layout',
+    role: 'Co-author; two paper sections, T4 annotations, README',
     team: '5 people',
   },
   dateCreated: '2026-04',
@@ -52,7 +53,7 @@ const study: CaseStudy = {
       heading: 'What I built',
       body: [
         {
-          p: 'All five of us are authors of the paper: Joseph Warzybok Mckenney, Fong-Yu (Yang) Lin, Waleed Alghaithi, Nasser Al Nasser and me. The paper has no contribution statement and the repository has no pull requests, so commits are the only record of who built what, and nothing shows who wrote which part of the paper. My commits:',
+          p: 'All five of us are authors of the paper: Joseph Warzybok Mckenney, Fong-Yu (Yang) Lin, Waleed Alghaithi, Nasser Al Nasser and me. The paper has no contribution statement and the repository has no pull requests, so commits are the only record of who built what. The paper does not record who wrote which section either; by my own account, I wrote the sections on the environment and controller and on the five instruction tiers. In the repository, my commits are:',
         },
         {
           ul: [
