@@ -77,7 +77,8 @@ test('work controls have 44px touch targets', async ({ page }, testInfo) => {
   expect(count).toBeGreaterThan(0)
   for (let i = 0; i < count; i++) {
     const el = controls.nth(i)
-    await el.scrollIntoViewIfNeeded()
+    // Centred, so a probe 21px out never falls off the viewport edge.
+    await el.evaluate((n) => n.scrollIntoView({ block: 'center', behavior: 'instant' }))
     const misses = await el.evaluate(hitMisses)
     const name = await el.evaluate((n) => n.textContent?.trim())
     expect(misses, `${name} (#${i}) misses at offsets`).toEqual([])
@@ -103,7 +104,7 @@ test('every control has a 44px touch target', async ({ page }, testInfo) => {
         (n) => !!n.closest('p, [aria-hidden="true"]') || n.getBoundingClientRect().width < 2,
       )
       if (skip) continue
-      await el.scrollIntoViewIfNeeded()
+      await el.evaluate((n) => n.scrollIntoView({ block: 'center', behavior: 'instant' }))
       checked++
       const misses = await el.evaluate(hitMisses)
       if (misses.length) {
