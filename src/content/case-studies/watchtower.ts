@@ -15,6 +15,7 @@ const study: CaseStudy = {
     team: '11 people',
   },
   dateCreated: '2026-04',
+  published: '2026-11-12',
   keywords: [
     'WatchTower',
     'web observability',

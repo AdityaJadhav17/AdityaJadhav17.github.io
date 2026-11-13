@@ -17,6 +17,7 @@ const study: CaseStudy = {
     team: '3 people',
   },
   dateCreated: '2026-11',
+  published: '2026-11-12',
   keywords: [
     'Bayt Qareeb',
     'Manara West',

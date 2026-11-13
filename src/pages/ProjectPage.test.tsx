@@ -46,7 +46,8 @@ test('ends with résumé, contact and next-project links', () => {
   render(<ProjectPage {...props} />)
   expect(screen.getByRole('link', { name: /view résumé/i })).toHaveAttribute('href', site.resumePath)
   expect(screen.getByRole('link', { name: /contact me/i })).toHaveAttribute('href', '/#contact')
-  expect(screen.getByRole('link', { name: new RegExp(props.next.title) })).toHaveAttribute(
+  // The next project is also in the More projects list; the first match is the big link.
+  expect(screen.getAllByRole('link', { name: new RegExp(props.next.title) })[0]).toHaveAttribute(
     'href',
     `/projects/${props.next.slug}/`,
   )
@@ -89,4 +90,20 @@ test('only a project with a phone crop is boxed to 4:3 on phones; others keep th
   render(<ProjectPage {...props} project={noCrop} />)
   const img = screen.getByAltText(noCrop.image!.alt)
   expect(img.className).not.toMatch(/aspect-|object-cover/)
+})
+
+test('shows when the page was published, as a machine-readable date', () => {
+  const { container } = render(<ProjectPage {...props} />)
+  const time = container.querySelector('time')!
+  expect(time).toHaveAttribute('datetime', fixtureStudy.published)
+  expect(time.textContent).toBe('1 June 2026')
+})
+
+test('links to every other published project', () => {
+  render(<ProjectPage {...props} />)
+  const nav = screen.getByRole('navigation', { name: 'More projects' })
+  const hrefs = within(nav).getAllByRole('link').map((a) => a.getAttribute('href'))
+  expect(hrefs).toEqual(props.others.map((p) => `/projects/${p.slug}/`))
+  expect(hrefs).not.toContain(`/projects/${props.project.slug}/`)
+  expect(hrefs.length).toBeGreaterThanOrEqual(7)
 })

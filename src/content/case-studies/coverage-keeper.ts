@@ -14,6 +14,7 @@ const study: CaseStudy = {
     team: '3 people',
   },
   dateCreated: '2026-10',
+  published: '2026-11-11',
   keywords: [
     'Coverage Keeper',
     'Medicaid letter',

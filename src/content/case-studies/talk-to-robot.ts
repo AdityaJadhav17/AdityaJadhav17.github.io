@@ -19,6 +19,7 @@ const study: CaseStudy = {
     team: '5 people',
   },
   dateCreated: '2026-04',
+  published: '2026-11-12',
   keywords: [
     'Talk-to-Robot',
     'LLM spatial grounding',

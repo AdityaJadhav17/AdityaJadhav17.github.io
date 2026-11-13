@@ -22,6 +22,7 @@ const study: CaseStudy = {
     team: 'Solo',
   },
   dateCreated: '2025-08',
+  published: '2026-11-13',
   keywords: [
     'Synthetic to Real Object Detection Challenge',
     'sim-to-real',

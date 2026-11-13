@@ -19,6 +19,7 @@ const study: CaseStudy = {
     team: 'Solo',
   },
   dateCreated: '2026-10',
+  published: '2026-11-12',
   keywords: [
     'Stockroom',
     'audit trail',

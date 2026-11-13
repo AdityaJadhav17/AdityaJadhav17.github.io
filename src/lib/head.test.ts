@@ -115,3 +115,11 @@ test('a project page defines the author and site nodes it points at', () => {
   expect(person).not.toHaveProperty('email')
   expect(graph.find((n: { '@id': string }) => n['@id'] === node.isPartOf['@id'])['@type']).toBe('WebSite')
 })
+test('a project page carries its published and modified dates', () => {
+  const head = buildHead({ current: page })
+  expect(projectNode(head)).toMatchObject({ datePublished: '2026-06-01', dateModified: '2026-06-01' })
+  expect(head).toContain('<meta property="article:published_time" content="2026-06-01" />')
+  const later = { ...page, study: { ...fixtureStudy, updated: '2026-07-04' } }
+  expect(projectNode(buildHead({ current: later })).dateModified).toBe('2026-07-04')
+  expect(buildHead({ current: later })).toContain('<meta property="article:modified_time" content="2026-07-04" />')
+})

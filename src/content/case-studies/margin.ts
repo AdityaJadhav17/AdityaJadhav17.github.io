@@ -20,6 +20,7 @@ const study: CaseStudy = {
     team: 'Solo',
   },
   dateCreated: '2026-09',
+  published: '2026-11-12',
   keywords: [
     'Margin',
     'local-first app',
