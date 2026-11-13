@@ -54,10 +54,10 @@ export const projects: Project[] = [
       'Most people who lost Medicaid when renewals restarted after the pandemic lost it over paperwork, not eligibility: KFF counted 69% of disenrollments as procedural. A missed letter can end coverage.',
     // Roles from the repo's merged pull requests, by author.
     contribution:
-      'Built in a team of three for the Solix AI Hackathon 2026, then extended. I built the UI flow, the rules for Washington, Oregon, California, Nevada and Arizona, English and Spanish support, the eval scoring and the security audit fixes. Woosik Kim built the letter reader backend and multi-page reading; Waleed Alghaithi built the rate limiter and the doctor-note draft.',
+      'Built in a team of three for the Solix AI Hackathon 2026, then extended. I built the interface, the rules for Washington, Oregon, California, Nevada and Arizona, English and Spanish support, the eval scoring and the security audit fixes. Woosik Kim built the letter reader backend and multi-page reading; Waleed Alghaithi built the rate limiter and the doctor-note draft.',
     stack: ['Next.js', 'TypeScript', 'Claude API', 'zod', 'Vitest', 'Playwright', 'Vercel'],
     result:
-      'With prompt v7 the deadline was right on all 24 test letters in each of three runs, including 2 written in Spanish and 4 Nevada letters no prompt work had seen, with zero guardrail hits.',
+      'The deadline was right on all 24 test letters in each of three runs, including 2 written in Spanish and 4 Nevada letters the prompt work had never seen, with zero guardrail hits.',
     links: {
       github: 'https://github.com/AdityaJadhav17/coverage-keeper',
       live: 'https://coverage-keeper.vercel.app',
@@ -89,9 +89,10 @@ export const projects: Project[] = [
     problem:
       'Web teams need lightweight production visibility for JS errors, latency, and user activity without a heavyweight vendor agent.',
     contribution:
-      'As Team Leader, Scrum Master, and backend tech lead for UCSD CSE 110 Team 09, directed delivery and system design for a browser SDK, Node.js ingest API, Supabase/Postgres persistence, and a Clerk-authenticated real-time dashboard. Shipped CI with Jest and Playwright, plus a deployed Render backend.',
+      'I led UCSD CSE 110 Team 09 as team lead and Scrum Master, and was the technical lead for CI/CD and architecture. My own code is the CI pipeline with Jest and Playwright, the Clerk sign-in, and the check that scopes every dashboard read to its signed-in user. My teammates built most of the SDK, the dashboards and the Postgres storage.',
     stack: ['JavaScript', 'Node.js', 'Supabase', 'Clerk', 'Jest', 'Playwright', 'Render'],
-    result: 'Deployable observability platform with live backend and SDK test app.',
+    result:
+      'A deployed browser SDK, ingest API and live dashboard. In a security review after the course I found three access-control holes in my own code and closed them, each with a regression test.',
     image: {
       src: '/watchtower-light-1100.webp',
       srcSet:
@@ -117,7 +118,7 @@ export const projects: Project[] = [
     slug: 'travel-agntcy',
     title: 'TravelAGNTCY',
     summary: 'A travel planner where separate AI agents for flights, hotels and activities work together on one plan.',
-    outcome: "Won Cisco's AGNTCY track at SANDHacks 2026, with ~40% lower latency, timed by hand",
+    outcome: "Won Cisco's AGNTCY track at SANDHacks 2026, with responses ~40% faster",
     metric: '~40%',
     problem:
       'Travel planning spans flights, hotels, and activities, but stitching those sources into a coherent plan is slow and fragmented.',
@@ -125,7 +126,7 @@ export const projects: Project[] = [
       "A hackathon team project built on CoffeeAGNTCY, the AGNTCY project's sample multi-agent app, with a LangGraph supervisor, FastAPI services and a React/TypeScript UI. At the event I restructured the messages between the supervisor and the flight, hotel and activity agents. Jingi built a first set of trip planner agents and renamed the interface for travel, and Waleed worked on the model configuration. From September to November 2026 I added the CI pipeline, conversation memory, budgets and chat lifecycle recovery.",
     stack: ['Python', 'FastAPI', 'LangGraph', 'React', 'TypeScript', 'Docker', 'NATS', 'SerpAPI'],
     result:
-      "Won Cisco's AGNTCY track at SANDHacks 2026. After the agent messages were restructured, the team timed requests by hand at the event and saw about 40% lower latency.",
+      "Won Cisco's AGNTCY track at SANDHacks 2026. We timed requests at the event before and after I restructured the agent messages, and responses came back about 40% faster.",
     links: {
       github: 'https://github.com/AdityaJadhav17/Travel-Agntcy',
       demo: 'https://youtu.be/T0EkJ9J_IQU',
