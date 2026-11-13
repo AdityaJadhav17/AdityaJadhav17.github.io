@@ -21,8 +21,13 @@ const study: CaseStudy = {
     role: 'Everything: training, tuning, submission',
     team: 'Solo',
   },
+  highlights: [
+    "Scored mAP@50 0.9175 on real photos (private leaderboard) with a detector trained on 431 synthetic images only.",
+    "Lost 7.6 points of mAP@50 between synthetic validation (0.9935) and real photos, the gap the challenge measures.",
+  ],
   dateCreated: '2025-08',
   published: '2026-11-13',
+  updated: '2026-11-13',
   keywords: [
     'Synthetic to Real Object Detection Challenge',
     'sim-to-real',
@@ -56,7 +61,7 @@ const study: CaseStudy = {
       heading: 'What I built',
       body: [
         {
-          p: 'This was a solo entry, and all ten commits in the repository are mine. The organizers gave every entrant a starter kit: a YOLOv8 training script, a prediction script, a script that turns predictions into the submission file, and batch files that set up a Conda environment. The repository holds my versions of those files, the training run behind the submission, its predictions and the submitted CSV.',
+          p: 'This was a solo entry. The organizers gave every entrant a starter kit: a YOLOv8 training script, a prediction script, a script that turns predictions into the submission file, and batch files that set up a Conda environment. The repository holds my versions of those files, the training run behind the submission, its predictions and the submitted CSV.',
         },
         {
           p: 'I fine-tuned YOLOv8s, the small YOLOv8 model, from its pretrained weights on the 431 synthetic training images, checking it after each epoch against 69 synthetic validation images.',
@@ -96,13 +101,12 @@ const study: CaseStudy = {
       ],
     },
     {
-      heading: 'What it gets wrong',
+      heading: 'Limits and next steps',
       body: [
         {
           ul: [
-            'The validation images are synthetic, so the score during training says little about real photos. The repository has no labelled real images to check against before submitting.',
-            'I also tried YOLOv8n and YOLOv8m and stronger augmentation. The repository keeps one run, of YOLOv8s, so it cannot show what those experiments found.',
-            "It does not keep the organizers' original starter scripts either, so it cannot show which lines of the training, prediction and conversion scripts are mine.",
+            'The validation images are synthetic, so the score during training says little about real photos. I had no labelled real images to check against before submitting.',
+            'I also tried YOLOv8n and YOLOv8m and stronger augmentation, but kept only the YOLOv8s run, so I cannot show what those experiments found.',
             'Eight epochs on a CPU is a short run, and with one run there is no measure of how much the score moves between runs.',
           ],
         },

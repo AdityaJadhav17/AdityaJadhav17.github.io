@@ -18,7 +18,7 @@ test('without JS the page has its title, sections and links', async ({ browser }
   await page.goto(PAGE)
   await expect(page.locator('h1')).toHaveText('Coverage Keeper')
   const h2s = await page.locator('main h2').allTextContents()
-  expect(h2s).toEqual(expect.arrayContaining(['The problem', 'What it gets wrong']))
+  expect(h2s).toEqual(expect.arrayContaining(['The problem', 'Limits and next steps']))
   await expect(page.locator('main a[href="/#contact"]')).toHaveCount(1)
   await context.close()
 })

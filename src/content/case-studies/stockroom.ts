@@ -18,8 +18,14 @@ const study: CaseStudy = {
     role: 'Everything: design, code, tests, CI',
     team: 'Solo',
   },
+  highlights: [
+    "Backed by 178 integration tests and 11 browser tests across seven CI jobs.",
+    "Approvals and stock issues are single conditional UPDATE statements, so two managers cannot both approve a request and stock cannot oversell.",
+    "Built solo in under six weeks: purchase approvals, stock issues and a history of who changed what, when and why.",
+  ],
   dateCreated: '2026-10',
   published: '2026-11-12',
+  updated: '2026-11-13',
   keywords: [
     'Stockroom',
     'audit trail',
@@ -55,7 +61,7 @@ const study: CaseStudy = {
       heading: 'What I built',
       body: [
         {
-          p: 'I built Stockroom on my own between 3 October and 10 November 2026. All 50 human commits and every merged pull request are mine; the rest are Dependabot version bumps.',
+          p: 'I built Stockroom on my own between 3 October and 10 November 2026, in 50 commits.',
         },
         {
           p: 'It is one ASP.NET Core Razor Pages application in C#, with Entity Framework Core over SQLite and ASP.NET Core Identity for member and manager accounts. I worked in milestones, each with a written decision record: sign-in and the schema, the purchase workflow, stock issues and history, a demo dataset with a reset command, a security audit and its fixes, interface work for phones and dark mode, and release documentation.',
@@ -86,7 +92,7 @@ const study: CaseStudy = {
       heading: 'Results',
       body: [
         {
-          p: 'The repository holds 178 xUnit integration cases against SQLite, covering business rules, authorization, request ownership, transactions, races, rollback, sessions, security-event logging, seeding and reset. Eleven Playwright cases drive Chromium through purchase, rejection, withdrawal, access, a restart, phone layout and keyboard focus.',
+          p: 'Stockroom has 178 xUnit integration cases against SQLite, covering business rules, authorization, request ownership, transactions, races, rollback, sessions, security-event logging, seeding and reset. Eleven Playwright cases drive Chromium through purchase, rejection, withdrawal, access, a restart, phone layout and keyboard focus.',
         },
         {
           p: 'GitHub Actions runs seven jobs: repository checks, a dependency audit, a Release build with warnings treated as errors, the integration tests on Ubuntu and on Windows, the browser tests, and a final CI Status job that fails unless every other job passed. CodeQL also scans the repository through GitHub\'s default setup.',
@@ -94,7 +100,7 @@ const study: CaseStudy = {
       ],
     },
     {
-      heading: 'What it gets wrong',
+      heading: 'Limits and next steps',
       body: [
         {
           p: "Only the code keeps the history append-only. The database has no triggers or permissions to enforce it, so anyone who can open the SQLite file can edit or delete rows, and protecting that file is the host account's job. The demo reset command deletes the whole database, history included.",
