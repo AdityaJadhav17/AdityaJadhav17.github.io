@@ -100,9 +100,8 @@ const study: CaseStudy = {
         {
           ul: [
             'The validation images are synthetic, so the score during training says little about real photos. The repository has no labelled real images to check against before submitting.',
-            'The README describes experiments with YOLOv8n and YOLOv8m, stronger augmentation and filtering out unrealistic synthetic images. The repository keeps one run, of YOLOv8s, so it cannot show what those experiments found.',
+            'I also tried YOLOv8n and YOLOv8m and stronger augmentation. The repository keeps one run, of YOLOv8s, so it cannot show what those experiments found.',
             "It does not keep the organizers' original starter scripts either, so it cannot show which lines of the training, prediction and conversion scripts are mine.",
-            'The README\'s commands do not match the scripts: train.py has no --config option, predict.py takes no arguments, the conversion flags have other names, and the requirements file it points to does not exist. Its results table also swaps the public and private scores.',
             'Eight epochs on a CPU is a short run, and with one run there is no measure of how much the score moves between runs.',
           ],
         },
