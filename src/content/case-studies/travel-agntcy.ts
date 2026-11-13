@@ -16,6 +16,7 @@ const study: CaseStudy = {
     team: '3 people',
   },
   dateCreated: '2026-01',
+  published: '2026-11-12',
   keywords: [
     'TravelAGNTCY',
     'SANDHacks 2026',

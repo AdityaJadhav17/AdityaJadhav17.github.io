@@ -62,17 +62,17 @@ writeFileSync(
   resolve('dist/sitemap.xml'),
   `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${['/', ...ssr.pages.map((p) => p.path)]
-  .map((path) => `  <url>
-    <loc>${xmlEscape(siteUrl.origin + path)}</loc>
-    <lastmod>${lastmod}</lastmod>
+${[{ path: '/', lastmod }, ...ssr.pages.map((p) => ({ path: p.path, lastmod: p.study.updated ?? p.study.published }))]
+  .map((u) => `  <url>
+    <loc>${xmlEscape(siteUrl.origin + u.path)}</loc>
+    <lastmod>${u.lastmod}</lastmod>
   </url>`)
   .join('\n')}
 </urlset>
 `,
 )
 // Expires is a year from the build, so a deploy at least yearly keeps it valid.
-const { site, projects, pages } = ssr
+const { site, projects, pages, currentRoles } = ssr
 mkdirSync(resolve('dist/.well-known'), { recursive: true })
 writeFileSync(
   resolve('dist/.well-known/security.txt'),
@@ -82,11 +82,13 @@ Preferred-Languages: en
 Canonical: ${siteUrl.origin}/.well-known/security.txt
 `,
 )
+// Job titles only: the employer's name stays out of this file (see the guard below).
+const roles = currentRoles.map((r) => r.split(' @ ')[0]).join(', ')
 const llms = `# ${site.name}
 
 > ${site.description}
 
-${site.discipline}. ${site.availability}
+${site.discipline}. ${site.availability}${roles && ` Current role: ${roles}.`}
 
 ## Links
 - [Resume](${siteUrl.origin}${site.resumePath})
@@ -101,6 +103,9 @@ ${projects
     return `- [${p.title}](${url}): ${p.summary}`
   })
   .join('\n')}
+
+## Awards
+${projects.filter((p) => p.award).map((p) => `- ${p.title}: ${p.award}`).join('\n')}
 
 ## Education
 - ${site.education.degree}, ${site.education.institution} (${site.education.status})

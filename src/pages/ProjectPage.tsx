@@ -147,7 +147,21 @@ function Screenshot({ project }: { project: Project }) {
   )
 }
 
-export function ProjectPage({ project, study, next }: { project: Project; study: CaseStudy; next: Project }) {
+// 'YYYY-MM-DD' to '1 June 2026'. UTC, so the server and the browser agree.
+const longDate = (iso: string) =>
+  new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
+
+export function ProjectPage({
+  project,
+  study,
+  next,
+  others,
+}: {
+  project: Project
+  study: CaseStudy
+  next: Project
+  others: Project[]
+}) {
   const { facts } = study
   return (
     <>
@@ -228,6 +242,16 @@ export function ProjectPage({ project, study, next }: { project: Project; study:
               </Reveal>
             ))}
           </div>
+
+          <p className="mt-14 text-sm text-muted-foreground md:mt-20">
+            Published <time dateTime={study.published}>{longDate(study.published)}</time>
+            {study.updated && (
+              <>
+                {', updated '}
+                <time dateTime={study.updated}>{longDate(study.updated)}</time>
+              </>
+            )}
+          </p>
         </article>
 
         <Reveal className="mt-20 border-t border-border pt-12 md:mt-32 md:pt-16">
@@ -252,6 +276,22 @@ export function ProjectPage({ project, study, next }: { project: Project; study:
                 </span>
                 <span className="mt-1 block text-sm text-muted-foreground">{next.summary}</span>
               </a>
+            </Reveal.Item>
+          )}
+          {others.length > 0 && (
+            <Reveal.Item className="mt-12 md:mt-16">
+              <nav aria-label="More projects">
+                <p className="label">More projects</p>
+                <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-4">
+                  {others.map((p) => (
+                    <li key={p.slug}>
+                      <a href={pagePath(p.slug)} className={linkClass}>
+                        {p.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
             </Reveal.Item>
           )}
         </Reveal>

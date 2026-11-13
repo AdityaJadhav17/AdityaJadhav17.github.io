@@ -7,6 +7,7 @@ export const fixtureStudy: CaseStudy = {
   description: 'Fixture description for tests only.',
   facts: { result: 'Fixture result', role: 'Fixture role', team: 'Fixture team' },
   dateCreated: '2026-06',
+  published: '2026-06-01',
   keywords: ['fixture', 'test'],
   ogImage: { src: '/og/watchtower.png', alt: 'Fixture share image' },
   sections: [

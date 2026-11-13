@@ -6,7 +6,7 @@ import type { CaseStudy } from './content/case-study'
 import type { Project } from './content/projects'
 import { pageFor, pagePath } from './lib/pages'
 export { buildHead } from './lib/head'
-export { site } from './content/site'
+export { currentRoles, site } from './content/site'
 export { projects } from './content/projects'
 
 const studies = import.meta.glob<{ default: CaseStudy }>('./content/case-studies/*.ts', { eager: true })

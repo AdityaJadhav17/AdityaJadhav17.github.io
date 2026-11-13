@@ -27,6 +27,8 @@ test('no em dashes, no NDA name, no test login', () => {
 test('every case study is sized for search and matches a project', () => {
   for (const s of studies) {
     expect(projects.some((p) => p.slug === s.slug)).toBe(true)
+    expect(s.published).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+    if (s.updated) expect(s.updated >= s.published).toBe(true)
     expect(`${s.title} | Aditya Jadhav`.length).toBeLessThanOrEqual(65)
     expect(s.description.length).toBeGreaterThanOrEqual(110)
     expect(s.description.length).toBeLessThanOrEqual(160)
