@@ -8,6 +8,7 @@ export type CaseStudy = {
   title: string // goes before " | Aditya Jadhav" in <title>
   description: string // meta description
   facts: { result: string; role: string; team: string }
+  highlights?: string[] // two to four lines a skimming reader should not miss, shown under the facts
   dateCreated: string // 'YYYY-MM', when the project was built
   published: string // 'YYYY-MM-DD', when this page went live
   updated?: string // 'YYYY-MM-DD', set when the page's content changes

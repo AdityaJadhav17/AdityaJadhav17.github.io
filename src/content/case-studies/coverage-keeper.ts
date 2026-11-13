@@ -13,8 +13,14 @@ const study: CaseStudy = {
     role: 'UI, state rules, Spanish, eval scoring, security fixes',
     team: '3 people',
   },
+  highlights: [
+    "Read the deadline correctly on 24 of 24 test letters, in English and in Spanish, with 0 guardrail hits.",
+    "Won the AI in Healthcare track at the Solix AI Hackathon 2026 as a team of three.",
+    "Built the interface, the rules for five states and the Spanish version, then closed the findings of a security audit.",
+  ],
   dateCreated: '2026-10',
   published: '2026-11-11',
+  updated: '2026-11-13',
   keywords: [
     'Coverage Keeper',
     'Medicaid letter',
@@ -50,14 +56,14 @@ const study: CaseStudy = {
         {
           p: 'Three of us built Coverage Keeper for the Solix AI Hackathon 2026, where it won the AI in Healthcare track, and I kept working on it after we submitted. You photograph or upload a Medicaid letter. The app shows a plain-language summary, the deadline with the days left and the line it read the date from, a checklist of documents to send, and a phone number to call.',
         },
-        { p: 'My merged work:' },
+        { p: 'My part:' },
         {
           ul: [
-            'The UI flow from the consent screen to the result, then the mobile polish, dark mode and the laptop and tablet layout.',
-            'Rules data for Washington, Oregon, California, Nevada and Arizona, detection of the state that sent the letter (prompt v3), and exemption screening that starts from that state.',
-            'English and Spanish: a Spanish interface, Spanish guardrail and rules wording, and letters read in either language (prompt v4).',
-            "Prompts v6 and v7, plus the eval work around them: scoring the sending state, adding the Spanish-language and Nevada letters, and fairer scoring of a letter's required action.",
-            'The fixes from a November 2026 security audit: a cap on PDF pages, closed guardrail gaps, chunked uploads and security headers.',
+            'Built the interface from the consent screen to the result, then the mobile polish, dark mode and the laptop and tablet layout.',
+            'Wrote the rules data for Washington, Oregon, California, Nevada and Arizona, taught the reader to detect which state sent a letter, and started exemption screening from that state.',
+            'Made it work in English and Spanish: a Spanish interface, Spanish guardrail and rules wording, and letters read in either language.',
+            "Wrote the two latest versions of the reading prompt, v6 and v7, and the evaluation around them: scoring the sending state, adding the Spanish-language and Nevada letters, and fairer scoring of a letter's required action.",
+            'Closed the findings of a November 2026 security audit: a cap on PDF pages, guardrail gaps, chunked uploads and security headers.',
           ],
         },
         {
@@ -87,7 +93,7 @@ const study: CaseStudy = {
         },
         {
           table: {
-            caption: 'Test split, prompt v7, English, mean of 3 runs, from the Coverage Keeper README',
+            caption: 'Test split, prompt v7, English, mean of 3 runs',
             head: ['Metric', 'Page 1, 11 letters', 'Full PDF, 7 letters', 'Written in Spanish, 2 letters', 'Nevada (new), 4 letters', 'v6 page 1 / full PDF'],
             rows: [
               ['Deadline correct (printed or none)', '11 of 11', '7 of 7', '2 of 2', '4 of 4', '11 of 11 / 6 of 7'],
@@ -106,7 +112,7 @@ const study: CaseStudy = {
       ],
     },
     {
-      heading: 'What it gets wrong',
+      heading: 'Limits and next steps',
       body: [
         {
           ul: [

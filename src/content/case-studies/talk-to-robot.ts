@@ -15,11 +15,17 @@ const study: CaseStudy = {
     'A UC San Diego CSE 190 study of where an LLM breaks when it turns robot commands into goals. End-to-end success falls from 98.3% to 50% over five tiers.',
   facts: {
     result: 'End-to-end success falls from 98.3% to 50% across five tiers',
-    role: 'Co-author; two paper sections, T4 annotations, README',
+    role: 'Co-author: two paper sections, target annotations, README',
     team: '5 people',
   },
+  highlights: [
+    "End-to-end success fell from 98.3% to 50% across five tiers of 100 instructions while the controller held at 93.3% or better, so the language model was what failed.",
+    "A plain regex beat the language model on relative offsets, 85.0% to 76.7%.",
+    "I wrote the paper sections on the environment and controller and on the five instruction tiers, and one of the three sets of human target annotations.",
+  ],
   dateCreated: '2026-04',
   published: '2026-11-12',
+  updated: '2026-11-13',
   keywords: [
     'Talk-to-Robot',
     'LLM spatial grounding',
@@ -54,17 +60,17 @@ const study: CaseStudy = {
       heading: 'What I built',
       body: [
         {
-          p: 'All five of us are authors of the paper: Joseph Warzybok Mckenney, Fong-Yu (Yang) Lin, Waleed Alghaithi, Nasser Al Nasser and me. The paper has no contribution statement and the repository has no pull requests, so commits are the only record of who built what. The paper does not record who wrote which section either; by my own account, I wrote the sections on the environment and controller and on the five instruction tiers. In the repository, my commits are:',
+          p: 'Five of us wrote the paper: Joseph Warzybok Mckenney, Fong-Yu (Yang) Lin, Waleed Alghaithi, Nasser Al Nasser and me. I wrote its sections on the environment and controller and on the five instruction tiers. In the code, my part was:',
         },
         {
           ul: [
-            'One of the three sets of targets for the 20 functional-intent instructions. Joseph, Waleed and I each picked a target for every instruction, and the ground truth is the average of our three picks.',
-            'The final README: tiers, key results, failure modes, setup and reproduction steps.',
-            'The installable package layout: the code under src/talk_to_robot with a pyproject.toml.',
+            'Annotated one of the three sets of targets for the 20 functional-intent instructions. Joseph, Waleed and I each picked a target for every instruction, and the ground truth is the average of our three picks.',
+            'Wrote the final README: tiers, key results, failure modes, setup and reproduction steps.',
+            'Set up the installable package layout: the code under src/talk_to_robot with a pyproject.toml.',
           ],
         },
         {
-          p: "The rest is my teammates' work, by commit. Yang set up the repository and the environment guide, trained the SAC+HER policy, first ran the whole pipeline and added rollout video recording. Nasser wrote the regex baseline and the Gemini grounding package: client, prompts, output parser and failure classifier. Joseph built the evaluation harness and the instruction set, ran the T0 to T3 results and wrote the retraining. Waleed fixed the regex T0 parsing and the T2 cube position in the harness, ran the zero-shot T4 evaluation and reorganized the results.",
+          p: "My teammates built the rest. Yang set up the repository and the environment guide, trained the SAC+HER policy, first ran the whole pipeline and added rollout video recording. Nasser wrote the regex baseline and the Gemini grounding package: client, prompts, output parser and failure classifier. Joseph built the evaluation harness and the instruction set, ran the T0 to T3 results and wrote the retraining. Waleed fixed the regex T0 parsing and the T2 cube position in the harness, ran the zero-shot T4 evaluation and reorganized the results.",
         },
       ],
     },
@@ -89,11 +95,11 @@ const study: CaseStudy = {
       heading: 'Results',
       body: [
         {
-          p: 'Few-shot numbers from Table 1 of the paper, as drawn in the chart above. The regex baseline does not handle T3 or T4.',
+          p: 'These are the few-shot numbers, as drawn in the chart above. The regex baseline does not handle T3 or T4.',
         },
         {
           table: {
-            caption: 'Success by instruction tier, few-shot prompting (paper, Table 1)',
+            caption: 'Success by instruction tier, few-shot prompting',
             head: ['Tier', 'Tolerance', 'Grounder success', 'Policy success', 'End-to-end success', 'Regex end-to-end'],
             rows: [
               ['T0 Literal coordinates', '5 cm', '100.0%', '100.0%', '98.3%', '98.3%'],
@@ -120,14 +126,14 @@ const study: CaseStudy = {
       ],
     },
     {
-      heading: 'What it gets wrong',
+      heading: 'Limits and next steps',
       body: [
         {
           ul: [
             'Twenty instructions per tier is a small sample. The paper treats any gap under about 10 percentage points as suggestive only.',
-            "T3's score depends on the tolerance: 73.3% end to end at 8 cm, while at 5 cm the 6 cm offset alone fails every grounding. The retraining table uses 5 cm for T3, which the paper calls misleading, so this page does not quote it.",
+            "T3's score depends on the tolerance: 73.3% end to end at 8 cm, while at 5 cm the 6 cm offset alone fails every grounding. The retraining comparison used 5 cm for T3, which is misleading, so I leave it out here.",
             "T2's true target moves with the block's random start, so its changes after retraining are noise.",
-            "We scored T4 against three annotators' average, so a reasonable corner can count as a miss. The paper says T4 needs rework.",
+            "We scored T4 against three annotators' average, so a reasonable corner can count as a miss. T4 scoring needs rework.",
             'Everything ran in one simulated environment. The paper makes no sim-to-real claim.',
           ],
         },

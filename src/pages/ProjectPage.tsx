@@ -221,6 +221,22 @@ export function ProjectPage({
                 <ProjectLinks project={project} />
               </Fact>
             </dl>
+
+            {study.highlights && (
+              // A labelled list, not a section with an h2: the page's h2s stay the article's own headings.
+              <div style={step(5)} className="hero-in mt-8 md:mt-10">
+                <p id="highlights" className="label">
+                  Highlights
+                </p>
+                <ul aria-labelledby="highlights" className="mt-3 grid gap-x-8 gap-y-4 md:grid-cols-3">
+                  {study.highlights.map((h) => (
+                    <li key={h} className="border-l-2 border-accent-signal pl-4 text-base leading-snug text-pretty text-foreground">
+                      {h}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </header>
 
           <Screenshot project={project} />

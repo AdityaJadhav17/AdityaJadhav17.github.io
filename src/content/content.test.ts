@@ -35,7 +35,10 @@ test('every case study is sized for search and matches a project', () => {
     const words = JSON.stringify(s.sections).split(/\s+/).length
     expect(words).toBeGreaterThanOrEqual(300)
     expect(words).toBeLessThanOrEqual(900)
-    expect(s.sections.map((x) => x.heading)).toEqual(expect.arrayContaining(['The problem', 'What I built', 'How it works', 'What it gets wrong']))
+    const headings = s.sections.map((x) => x.heading)
+    expect(headings).toEqual(expect.arrayContaining(['The problem', 'What I built', 'How it works', 'Limits and next steps']))
+    if (s.highlights) expect(s.highlights.length).toBeGreaterThanOrEqual(2)
+    if (s.highlights) expect(s.highlights.length).toBeLessThanOrEqual(4)
   }
 })
 test('3x hackathon winner is backed by three awards', () => {

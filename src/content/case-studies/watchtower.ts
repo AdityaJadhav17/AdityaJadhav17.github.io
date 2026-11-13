@@ -2,6 +2,9 @@
 // 2026-11-11, its merged pull requests and commit authors, or the WatchTower
 // card in projects.ts. Limits are the constants in src/backend/server.js.
 // GitHub logins map to the README's first names by role and commit names.
+// The README lists Aditya as Technical Lead for CI/CD and architecture; team
+// lead and Scrum Master are his own account. The sources stay in this comment:
+// the page states the facts without citing the README or the pull requests.
 import type { CaseStudy } from '../case-study'
 
 const study: CaseStudy = {
@@ -10,12 +13,18 @@ const study: CaseStudy = {
   description:
     'WatchTower is a web observability tool from UC San Diego CSE 110: a browser SDK, a Node.js ingest API and a Clerk-secured dashboard. I led the team of 11.',
   facts: {
-    result: 'Live Render backend and an SDK test app on GitHub Pages',
-    role: 'Team and technical lead; CI, auth, data scoping',
+    result: 'Deployed browser SDK, ingest API and live dashboard',
+    role: 'Team lead and tech lead: CI, sign-in, data isolation',
     team: '11 people',
   },
+  highlights: [
+    'Led the team of 11 to a deployed product: a browser SDK, an ingest API and a live dashboard.',
+    "Kept each account's data separate by verifying every Clerk session token on the server and scoping every dashboard query to its user.",
+    'Found and closed three access-control holes in my own code in a security review after the course, each with a regression test.',
+  ],
   dateCreated: '2026-04',
   published: '2026-11-12',
+  updated: '2026-11-13',
   keywords: [
     'WatchTower',
     'web observability',
@@ -32,17 +41,17 @@ const study: CaseStudy = {
   ],
   ogImage: {
     src: '/og/watchtower.png',
-    alt: 'Dark card with an AJ monogram, the title "WatchTower." and the line "Live Render backend and an SDK test app on GitHub Pages". Below it: Aditya Jadhav and adityajadhav.dev.',
+    alt: 'Dark card with an AJ monogram, the title "WatchTower." and the line "Deployed browser SDK, ingest API and live dashboard". Below it: Aditya Jadhav and adityajadhav.dev.',
   },
   sections: [
     {
       heading: 'The problem',
       body: [
         {
-          p: 'A team running a web app in production needs to know which errors users hit, how fast pages load, which routes are slow and what users do. The usual answer is a vendor agent. WatchTower is a lightweight observability platform that gives that view from a small script you add to a page and a backend you run yourself.',
+          p: 'A team running a web app in production needs to know which errors users hit, how fast pages load, which routes are slow and what users do. The usual answer is a vendor agent. WatchTower gives that view from a small script you add to a page and a backend you run yourself.',
         },
         {
-          p: 'It was the Spring 2026 course project of Team 09 in CSE 110 at UC San Diego, and we built it to deploy and run as a real product.',
+          p: 'We were Team 09 in CSE 110 at UC San Diego in spring 2026, and we built it to deploy and run as a real product.',
         },
       ],
     },
@@ -50,21 +59,20 @@ const study: CaseStudy = {
       heading: 'What I built',
       body: [
         {
-          p: "There were 11 of us. The README lists me as Technical Lead for CI/CD and architecture, and I also ran the team as team lead and Scrum Master. Most of WatchTower's code is my teammates'. These are the parts the merged pull requests show I wrote:",
+          p: "I led the team of 11 as team lead and Scrum Master, and I was the technical lead for CI/CD and architecture. My own code is the test pipeline, the sign-in, and the rule that each account sees only its own data.",
         },
         {
           ul: [
-            'The GitHub Actions CI pipeline, from the first HTML and CSS validators to JavaScript linting, Jest unit tests, Playwright end-to-end tests and JSDoc.',
-            "The first end-to-end backend run: the prototype SDK, server and SQLite event store working together, with unit and Playwright tests. It built on Jason's SQLite integration.",
-            "The Clerk sign-in across the login, signup and landing pages, and the script that writes the browser's Clerk config from CLERK_PUBLISHABLE_KEY. Waleed researched Clerk and first wired it into prototype 3.",
-            "Per-user data: the server verifies each Clerk session JWT against Clerk's public JWKS and scopes every dashboard read to that user, so a new account starts empty and keeps its own data.",
-            'The owner mapping that lets the external test app, which has no sign-in, send events that show up on a demo dashboard.',
-            'The repository restructure into backend, frontend, SDK and shared folders, with the first two prototypes moved to an archive.',
-            'In September and October 2026, after the course, a security review of the deployed app and the fixes it led to.',
+            'Built the GitHub Actions CI pipeline and grew it from HTML and CSS validators to JavaScript linting, Jest unit tests, Playwright end-to-end tests and JSDoc.',
+            "Got the first full path working, from the SDK through the server to a SQLite event store, with unit and Playwright tests. It built on Jason's SQLite integration.",
+            "Added Clerk sign-in across the login, signup and landing pages, building on Waleed's first Clerk integration.",
+            "Isolated each account's data: the server verifies every Clerk session token against Clerk's public keys and scopes every dashboard read to that user, so a new account starts empty and sees only its own events.",
+            'Restructured the repository into backend, frontend, SDK and shared folders, and archived the first two prototypes.',
+            'Reviewed the deployed app for security in September and October 2026, after the course ended, and shipped the fixes.',
           ],
         },
         {
-          p: "My teammates built the rest. Hieu merged the two dashboard candidates into prototype 3 and built its developer and manager views, the landing page and the static dashboard demo. James, Alex, Hemendra and Fahad built the candidate dashboards, login pages, landing page work and privacy dialogs. Woosik added Beacon API delivery and fuller Navigation Timing to the SDK, the first unit tests, and a stored XSS fix. Daniel moved those metrics and Supabase storage into prototype 3, sent alert emails to each signed-in user and wrote most of the architecture decision records. Jason built the Postgres storage on Supabase and the analytics history. Waleed wrote the first event schema and API contract, then built the Gmail alerts for error spikes, the timezone setting and the signed-in profile name. Fahad led product and process, and Josh wrote the requirements, user stories and retrospectives.",
+          p: "Ten teammates wrote most of WatchTower's code. Hieu, James, Alex, Hemendra and Fahad built the dashboards, the landing page and the privacy dialogs. Woosik added Beacon delivery and fuller page timing to the SDK. Jason and Daniel built the Postgres storage and the analytics history, and Waleed wrote the event schema and the alerts. Fahad led product and process, and Josh wrote the requirements and retrospectives.",
         },
       ],
     },
@@ -78,23 +86,23 @@ const study: CaseStudy = {
           p: 'The backend is a plain Node.js HTTP server with no framework, hosted on Render. It caps a request body at 1 MiB, a batch at 100 events and one event at 16 KiB, and rejects JSON nested deeper than 64 levels. Events go to Postgres on Supabase, or to memory when no database is configured, which is how tests and local runs work.',
         },
         {
-          p: 'The dashboard signs people in with Clerk, which holds the accounts, so WatchTower keeps no login secrets. For every dashboard request the server reads the user id from a verified Clerk JWT and returns only that user\'s events: an error feed grouped by signature and deploy version, p95 latency per route, active users and session paths. A developer query box takes a small SQL-like query, returns at most 250 rows and is limited to 60 queries per user per minute. In production the server refuses to start unless JWT verification is on.',
+          p: 'The dashboard signs people in with Clerk, which holds the accounts, so WatchTower keeps no login secrets. For every dashboard request the server reads the user id from a verified Clerk JWT and returns only that user\'s events: an error feed grouped by signature and deploy version, p95 latency per route, active users and session paths.',
         },
         {
-          p: 'A separate test app on GitHub Pages embeds the SDK and sends real cross-origin telemetry to the Render backend, allowed by an explicit CORS list.',
+          p: 'A developer query box takes a small SQL-like query, returns at most 250 rows and allows 60 queries per user per minute. In production the server refuses to start unless JWT verification is on. A separate test app on GitHub Pages embeds the SDK and sends real cross-origin telemetry to the Render backend, allowed by an explicit CORS list.',
         },
       ],
     },
     {
-      heading: 'What it gets wrong',
+      heading: 'Limits and next steps',
       body: [
         {
           ul: [
-            'Ingestion is public. Anyone can post events, and every event from the external test app goes to one demo owner. The fix is a key per monitored app, and it is not built.',
-            "My own June code had holes I found in September. The JWT check kept a switch that trusted a user id header, and the ingest path kept the user id from the event itself, so a stranger could put events on someone else's dashboard. An event stream route also sent every event to every connected client. I removed all three and added regression tests.",
-            'The server uses the Supabase service-role key, which bypasses row-level security. User scoping lives in application code only.',
-            'Email alerts are gone. A Nodemailer advisory was plausibly reachable through a public recipient route, so I removed the Gmail mailer and that route. The README line saying alerting is email-only is out of date.',
-            'There is no full Content Security Policy yet, because Clerk and the dashboard load scripts at run time. The dashboard also polls the API rather than receiving a live stream.',
+            "My September review found three holes in code I wrote in June. A leftover switch trusted a user id header, the ingest path trusted the user id inside an event, and an event stream sent every event to every connected client, so a stranger could put events on someone else's dashboard. I removed all three and added regression tests.",
+            "Ingestion is still public: anyone can post events, and the test app's events all go to one demo owner. The next step is a key per monitored app.",
+            'User scoping lives in application code. The server uses the Supabase service-role key, which bypasses row-level security, so the database would not stop a scoping bug.',
+            'I removed email alerts when a Nodemailer advisory looked reachable through a public route, and they have not come back.',
+            'There is no full Content Security Policy yet, because Clerk and the dashboard load scripts at run time. The dashboard also polls the API instead of receiving a live stream.',
           ],
         },
       ],

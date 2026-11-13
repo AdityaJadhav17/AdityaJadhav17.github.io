@@ -15,12 +15,18 @@ const study: CaseStudy = {
   description:
     'Margin is a React tracker for deadlines, notes, goals and courses that keeps its data in the browser, with notes locked by AES-GCM under a passcode.',
   facts: {
-    result: 'Nine views on two runtime dependencies, React and React DOM',
+    result: 'In daily use since September 2026, on two runtime dependencies',
     role: 'Everything: design, code, tests, CI',
     team: 'Solo',
   },
+  highlights: [
+    "In daily use since September 2026: nine views in 131 commits, with React and React DOM as the only runtime dependencies.",
+    "Locked notes are encrypted in the browser with AES-GCM, under a key derived from the passcode by 600,000 rounds of PBKDF2.",
+    "Covered by 55 unit test files and 82 Playwright specs, including WCAG 2.2 AA accessibility scans.",
+  ],
   dateCreated: '2026-09',
   published: '2026-11-12',
+  updated: '2026-11-13',
   keywords: [
     'Margin',
     'local-first app',
@@ -39,7 +45,7 @@ const study: CaseStudy = {
   ],
   ogImage: {
     src: '/og/margin.png',
-    alt: 'Dark card with an AJ monogram, the title "Margin." and the line "Nine views on two runtime dependencies, React and React DOM". Below it: Aditya Jadhav and adityajadhav.dev.',
+    alt: 'Dark card with an AJ monogram, the title "Margin." and the line "In daily use since September 2026, on two runtime dependencies". Below it: Aditya Jadhav and adityajadhav.dev.',
   },
   sections: [
     {
@@ -57,7 +63,7 @@ const study: CaseStudy = {
       heading: 'What I built',
       body: [
         {
-          p: 'I built Margin on my own, starting on 15 September 2026. All 131 human commits and every merged pull request are mine; the rest are Dependabot updates. The repository started as Personal Tracker and was later renamed.',
+          p: 'I built Margin on my own, starting on 15 September 2026, and it stands at 131 commits.',
         },
         {
           p: 'It is React 18 and TypeScript on Vite, with nine views: Home, Calendar, Goals, Courses, Reflections, Notes, Routine, Trends and Data. The only runtime dependencies are React and React DOM. There is no router (the open view is one piece of state), no state library, no date library and no chart library. The trend charts and icons are inline SVG, and the US holidays on the calendar are worked out from their rules, so nothing is fetched.',
@@ -88,15 +94,15 @@ const study: CaseStudy = {
       heading: 'Results',
       body: [
         {
-          p: 'The repository holds 55 Vitest files of unit and component tests, written with React Testing Library, and 82 Playwright spec files run in Chromium, including axe scans for WCAG 2.2 AA in both colour schemes. GitHub Actions runs typecheck, lint, a format check, the unit tests, the end-to-end tests and the build on every pull request and every push to main. An updater on the laptop deploys a commit from main only after that CI run has passed.',
+          p: 'Margin has 55 Vitest files of unit and component tests, written with React Testing Library, and 82 Playwright spec files run in Chromium, including axe scans for WCAG 2.2 AA in both colour schemes. GitHub Actions runs typecheck, lint, a format check, the unit tests, the end-to-end tests and the build on every pull request and every push to main. An updater on the laptop deploys a commit from main only after that CI run has passed.',
         },
       ],
     },
     {
-      heading: 'What it gets wrong',
+      heading: 'Limits and next steps',
       body: [
         {
-          p: "The lock protects a note's body and nothing else. Its first line stays readable as the title, and every other record, deadlines included, is plain text in localStorage, readable by anyone at the unlocked laptop and by any browser extension. I chose that, judging that full-disk encryption covers the realistic threat, and the repository's decision log records why.",
+          p: "The lock protects a note's body and nothing else. Its first line stays readable as the title, and every other record, deadlines included, is plain text in localStorage, readable by anyone at the unlocked laptop and by any browser extension. I chose that, judging that full-disk encryption covers the realistic threat.",
         },
         {
           ul: [

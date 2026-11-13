@@ -16,8 +16,14 @@ const study: CaseStudy = {
     role: 'Database, .edu sign-in, posting rooms, AI search',
     team: '3 people',
   },
+  highlights: [
+    "Won a $200 prize at the MTC x Replit x Manara West Buildathon as a team of three.",
+    "Locked the app to verified .edu students and moved its data to Postgres with row-level security.",
+    "Built an AI search that turns a sentence into filters and never lets the model see or write a listing.",
+  ],
   dateCreated: '2026-11',
   published: '2026-11-12',
+  updated: '2026-11-13',
   keywords: [
     'Bayt Qareeb',
     'Manara West',
@@ -53,24 +59,21 @@ const study: CaseStudy = {
       heading: 'What I built',
       body: [
         {
-          p: 'Three of us built it: Waleed Alghaithi, Abas Mohamed and me. The repository history runs from 2:55 pm to 7:43 pm on 6 November 2026.',
-        },
-        {
-          p: "Waleed built the first version: the Next.js app with the map, the Prisma schema, the listings API, the first .edu sign-up check and the CI pipeline. He then hardened CI (least-privilege permissions, actions pinned to commits, npm audit, gitleaks, CodeQL and Dependabot) and took the map UI through every version, adding photo tours, home types and the logo. Abas's merged pull request updated the map page UI, and he designed the first landing page, which reached the team as a file outside git, so the history does not show it.",
-        },
-        {
-          p: 'My pull requests:',
+          p: 'Three of us built it at the buildathon on 6 November 2026: Waleed Alghaithi, Abas Mohamed and me. My part:',
         },
         {
           ul: [
             'Moved the app from SQLite to Supabase Postgres, with row-level security on the Listing and User tables so Supabase\'s public Data API cannot read them.',
-            'Clerk sign-in with a .edu gate: only a user whose verified primary email ends in .edu gets in. Anyone else sees a "Students only" screen and the APIs return 403.',
-            'The AI search, which turns a typed sentence into filters.',
-            'The 80 seed listings: 60 around the five Southern California campuses, then 20 around UC Davis and Stanford. The map opens on the signed-in student\'s campus.',
-            "The public landing page and the sign-in and sign-up pages, reworking Abas's design.",
-            'Posting a room: students add, edit and delete their own listings, up to five each.',
-            'Mobile fixes for the public pages, including 44 px tap targets and no sticky hover.',
+            'Added Clerk sign-in with a .edu gate: only a user whose verified primary email ends in .edu gets in. Anyone else sees a "Students only" screen and the APIs return 403.',
+            'Built the AI search, which turns a typed sentence into filters.',
+            'Seeded 80 listings: 60 around the five Southern California campuses, then 20 around UC Davis and Stanford. The map opens on the signed-in student\'s campus.',
+            "Built the public landing page and the sign-in and sign-up pages, reworking Abas's design.",
+            'Built room posting: students add, edit and delete their own listings, up to five each.',
+            'Fixed the public pages for phones, including 44 px tap targets and no sticky hover.',
           ],
+        },
+        {
+          p: 'Waleed built the first version: the Next.js app with the map, the Prisma schema, the listings API, the first .edu sign-up check and the CI pipeline. He then hardened CI and took the map UI through every later version, adding photo tours, home types and the logo. Abas designed the first landing page and updated the map page UI.',
         },
       ],
     },
@@ -94,10 +97,10 @@ const study: CaseStudy = {
       ],
     },
     {
-      heading: 'What it gets wrong',
+      heading: 'Limits and next steps',
       body: [
         {
-          p: 'After launch the app went down when a UI change shipped ahead of the database schema. The evening\'s last feature, photo tours and home types, added two columns to the Listing table: photos and propertyType. The schema file changed with the code, and the pull request said the columns had to be added to Supabase. Nothing in the pipeline does that: the build runs next build, and a schema change reaches the database only when someone runs prisma db push by hand. Once the change deployed, Prisma asked the database for two columns it did not have, and the app stopped working. I added the two columns to the database and the app worked again. That fix was to the database, not the code, so it is not in the history. Running the schema step as part of the deploy would stop it happening again, and the project does not do that yet.',
+          p: 'After launch the app went down when a UI change shipped ahead of the database schema. The evening\'s last feature, photo tours and home types, added two columns to the Listing table: photos and propertyType. The schema file changed with the code, and its description said the columns had to be added to Supabase. Nothing in the pipeline does that: the build runs next build, and a schema change reaches the database only when someone runs prisma db push by hand. Once the change deployed, Prisma asked the database for two columns it did not have, and the app stopped working. I added the two columns to the database and the app worked again. Running the schema step as part of the deploy would stop it happening again, and the project does not do that yet.',
         },
         {
           ul: [
