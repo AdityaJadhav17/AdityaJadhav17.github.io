@@ -69,7 +69,7 @@ export function Hero() {
           as one composition rather than a photo with a caption. */}
       <p
         style={step(1)}
-        className="hero-in relative z-10 font-heading text-[clamp(2rem,5vw,4rem)] lg:text-[clamp(3.5rem,5.2vw,5rem)] leading-[0.95] font-bold tracking-tight text-balance text-foreground uppercase lg:col-span-2 lg:col-start-1 lg:row-start-2 lg:mt-8 lg:max-w-[14ch]"
+        className="hero-in relative z-10 font-heading text-[clamp(2rem,5vw,4rem)] lg:text-[clamp(3.5rem,5.2vw,4.2rem)] leading-[0.95] font-bold tracking-tight text-balance text-foreground uppercase lg:col-span-2 lg:col-start-1 lg:row-start-2 lg:mt-8 lg:max-w-[14ch]"
       >
         {site.positioning}
       </p>

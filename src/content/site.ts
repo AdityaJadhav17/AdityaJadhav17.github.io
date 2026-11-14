@@ -51,7 +51,7 @@ export const site: Site = {
   // LLM grounding breaks, Synthetic-to-Real measures where models fail on
   // real data, WatchTower catches production errors, and the UC San Diego
   // role is authorized penetration testing and control-gap assessment.
-  positioning: 'I build AI systems and find where they break.',
+  positioning: 'I build software and find where it breaks.',
 
   // The framing that sits under the name, the way a studio states its
   // discipline. Narrower than the roles list, broader than any single project.
@@ -76,7 +76,7 @@ export const site: Site = {
 
   // Also the meta description: src/lib/head.ts generates the head tags from it.
   description:
-    'Aditya Jadhav builds AI systems and finds where they break. Software engineering and security work. Graduating June 2027 and open to new-grad roles.',
+    'Aditya Jadhav builds software and finds where it breaks. Software engineering and security work. Graduating June 2027 and open to new-grad roles.',
 
   // Senior year, so this is new-grad recruiting rather than internships.
   availability: 'Graduating June 2027. Open to new-grad software engineering roles.',

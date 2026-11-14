@@ -19,7 +19,7 @@ test('head is generated from content and never mentions an ended role', () => {
 
 test('image alt text and alumniOf are present', () => {
   const head = buildHead()
-  expect(head).toMatch(/<meta property="og:image:alt" content="[^"]*I build AI systems and find where they break\.[^"]*"/)
+  expect(head).toMatch(/<meta property="og:image:alt" content="[^"]*I build software and find where it breaks\.[^"]*"/)
   expect(head).toMatch(/<meta name="twitter:image:alt" content="[^"]*adityajadhav\.dev[^"]*"/)
   const ld = ldGraph(head).find((n: { '@type': string }) => n['@type'] === 'Person')
   expect(ld.alumniOf).toEqual({ '@type': 'CollegeOrUniversity', name: 'UC San Diego' })
