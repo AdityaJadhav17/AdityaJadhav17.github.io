@@ -8,12 +8,13 @@ import {
   type ComponentProps,
   type MouseEvent,
 } from 'react'
-import { Menu } from 'lucide-react'
+import { Download, Menu } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import type { MobileSheet } from '@/components/layout/MobileSheet'
 import { ThemeMenu } from '@/components/layout/ThemeMenu'
 import { useActiveSection } from '@/hooks/useActiveSection'
+import { site } from '@/content/site'
 
 const NAV = [
   { id: 'work', label: 'Work' },
@@ -51,7 +52,12 @@ const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(function NavLink(
         // Nav is Archivo per MASTER.md's "Heading Font: ... nav" entry.
         'relative font-heading text-sm font-medium transition-colors',
         active ? 'text-foreground' : 'text-muted-foreground hover:text-foreground',
-        variant === 'mobile' && 'rounded-md px-3 py-2 hover:bg-muted pointer-coarse:py-3',
+        variant === 'mobile'
+          ? 'rounded-md px-3 py-2 hover:bg-muted pointer-coarse:py-3'
+          : // The text is 15px tall; the pseudo-element grows the hit area to 43px
+            // without moving the text or the underline. Gap is 24px, so the 8px
+            // side extents never overlap a neighbour.
+            "after:absolute after:-inset-x-2 after:-inset-y-3.5 after:content-['']",
         className,
       )}
       {...props}
@@ -165,7 +171,7 @@ export function Navbar({ sectionIds, base = '' }: NavbarProps) {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background">
-      <div className="container-site flex h-16 items-center justify-between">
+      <div className="container-site relative flex h-16 items-center justify-between">
         <a
           href={`${base}#home`}
           className="font-heading text-base font-semibold whitespace-nowrap text-foreground pointer-coarse:py-2.5"
@@ -173,7 +179,9 @@ export function Navbar({ sectionIds, base = '' }: NavbarProps) {
           Aditya Jadhav
         </a>
 
-        <nav aria-label="Primary" className="hidden md:block">
+        {/* Centred on the header rather than on the leftover flex space, so the
+            résumé button on the right does not push the links off-centre. */}
+        <nav aria-label="Primary" className="hidden md:absolute md:left-1/2 md:block md:-translate-x-1/2">
           <ul className="flex items-center gap-6">
             {NAV.map((item) => (
               <li key={item.id}>
@@ -184,6 +192,12 @@ export function Navbar({ sectionIds, base = '' }: NavbarProps) {
         </nav>
 
         <div className="flex items-center gap-2">
+          <Button asChild variant="outline" className="hidden md:inline-flex">
+            <a href={site.resumePath} download>
+              <Download aria-hidden="true" className="icon-nudge transition-transform duration-200 group-hover/button:translate-y-0.5" />
+              Résumé
+            </a>
+          </Button>
           <ThemeMenu />
 
           <Button
@@ -238,6 +252,14 @@ export function Navbar({ sectionIds, base = '' }: NavbarProps) {
                   />
                 ))}
               </nav>
+              <div className="mx-4 mt-4 border-t border-border pt-4">
+                <Button asChild variant="outline" className="w-full">
+                  <a href={site.resumePath} download onClick={() => setOpen(false)}>
+                    <Download aria-hidden="true" className="icon-nudge transition-transform duration-200 group-hover/button:translate-y-0.5" />
+                    Résumé
+                  </a>
+                </Button>
+              </div>
             </Sheet>
           )}
         </div>

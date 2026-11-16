@@ -86,7 +86,7 @@ export const site: Site = {
   // from a linked repository or the experience entries below.
   proof: [
     { value: '11', label: 'engineers led on WatchTower', href: '#project-watchtower' },
-    { value: '15 to 20 min', label: 'task cut to under 5 min at Lumulus', href: '#experience-lumulus' },
+    { value: 'Under 5 min', label: 'for a 15 to 20 min task at Lumulus', href: '#experience-lumulus' },
     { value: '0.9175', label: 'mAP, Kaggle sim-to-real detection', href: '#project-sim2real' },
     // Exactly the three projects with an `award` in projects.ts.
     { value: '3x', label: 'hackathon winner', href: '#work' },

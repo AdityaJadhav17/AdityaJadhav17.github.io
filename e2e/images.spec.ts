@@ -47,7 +47,7 @@ for (const { name, ...options } of contexts) {
     const light = await load(browser, options, 'light')
     const dark = await load(browser, options, 'dark')
     console.table(light)
-    expect(light.length).toBeGreaterThanOrEqual(4) // one per project with a screenshot
+    expect(light.length).toBeGreaterThanOrEqual(4) // portrait + featured screenshots (grid posters are hidden below md)
     expect(dark.map((r) => r.src)).toEqual(light.map((r) => r.src))
     for (const rows of [light, dark]) {
       expect(rows.filter((r) => r.chosen > 1.5 * r.shown * r.dpr + 1)).toEqual([])
