@@ -32,7 +32,7 @@ export function Footer() {
               action here that is NOT duplicated in Contact, which makes it a
               genuine last chance rather than an echo. */}
           <div className="flex flex-wrap items-center gap-4">
-            <Button asChild variant="outline" size="sm">
+            <Button asChild variant="outline" size="lg">
               <a href={site.resumePath} download>
                 <Download aria-hidden="true" className="icon-nudge transition-transform duration-200 group-hover/button:translate-y-0.5" />
                 Résumé

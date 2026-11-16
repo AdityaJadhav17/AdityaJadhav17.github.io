@@ -14,6 +14,6 @@ export default defineConfig({
     // specs; Vitest's default include pattern would otherwise pick them up
     // and fail, since they call Playwright's test.describe() outside of a
     // Playwright test run.
-    exclude: [...configDefaults.exclude, 'e2e/**'],
+    exclude: [...configDefaults.exclude, 'e2e/**', '.claude/**'],
   },
 })

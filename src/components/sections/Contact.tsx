@@ -276,21 +276,25 @@ export function Contact() {
                 )}
               </div>
 
-              <Button type="submit" size="lg" disabled={submitting}>
+              <Button type="submit" size="lg" disabled={submitting} className="mb-0">
                 {submitting && <Loader2 aria-hidden="true" className="size-4 animate-spin" />}
                 {submitting ? 'Sending…' : 'Send message'}
               </Button>
 
-              {result === 'success' && (
-                <p
-                  role="status"
-                  aria-live="polite"
-                  className="flex items-start gap-2 rounded-md border border-border bg-muted p-4 text-base font-medium text-foreground"
-                >
-                  <Check aria-hidden="true" className="mt-0.5 size-5 shrink-0" />
-                  Sent. I&apos;ll reply to the email address you entered.
-                </p>
-              )}
+              {/* Always mounted and filled on success: a status region that is
+                  inserted with its text already inside is often not announced
+                  (VoiceOver especially). It carries its own top margin only when
+                  filled, and the button opts out of the space-y gap (mb-0), so an
+                  empty region adds no height. role="status" is already a polite
+                  live region, so no aria-live here. */}
+              <div role="status" className="mt-5 empty:mt-0">
+                {result === 'success' && (
+                  <p className="flex items-start gap-2 rounded-md border border-border bg-muted p-4 text-base font-medium text-foreground">
+                    <Check aria-hidden="true" className="mt-0.5 size-5 shrink-0" />
+                    Sent. I&apos;ll reply to the email address you entered.
+                  </p>
+                )}
+              </div>
               {result === 'error' && (
                 <p role="alert" className="text-sm text-destructive">
                   Something went wrong sending your message. Please try again, or{' '}
