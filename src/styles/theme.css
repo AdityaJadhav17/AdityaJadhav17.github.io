@@ -275,7 +275,7 @@
     opacity: 0;
   }
   [data-reveal='visible'] .reveal-item {
-    animation: reveal-in 500ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    animation: reveal-in 350ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
     animation-delay: calc(var(--i, 0) * 60ms);
   }
   @media (prefers-reduced-motion: reduce) {
@@ -283,7 +283,7 @@
       from { opacity: 0; }
     }
     [data-reveal='visible'] .reveal-item {
-      animation-duration: 500ms !important;
+      animation-duration: 350ms !important;
     }
   }
 

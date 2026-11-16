@@ -90,6 +90,21 @@ describe('Contact', () => {
     })
   })
 
+  it('trims whitespace around the email and sends the trimmed values', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true })
+    vi.stubGlobal('fetch', fetchMock)
+    render(<Contact />)
+    const user = userEvent.setup()
+    await user.type(screen.getByLabelText(/name/i), 'Test Person')
+    // Non-breaking spaces: type="email" already strips ASCII spaces itself, so
+    // those would pass without the trim. A paste from rich text brings these.
+    await user.type(screen.getByLabelText(/email/i), ' a@b.co ')
+    await user.type(screen.getByLabelText(/message/i), 'Hello there')
+    await user.click(screen.getByRole('button', { name: /send/i }))
+    await waitFor(() => expect(screen.getByRole('status')).toBeInTheDocument())
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body).email).toBe('a@b.co')
+  })
+
   it('announces failure as an alert and keeps the entered values', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false }))
     render(<Contact />)
@@ -128,8 +143,8 @@ describe('Contact', () => {
       // re-renders, so wait for it rather than asserting synchronously (a slow
       // CI runner lost that race).
       await waitFor(() => expect(live).toHaveTextContent('Copied'))
-      // The accessible name stays put; only the live region speaks.
-      expect(screen.getByRole('button', { name: 'Copy email' })).toBeInTheDocument()
+      // The visible label swaps to "Copied" for the window.
+      expect(screen.getByRole('button', { name: 'Copied' })).toBeInTheDocument()
 
       // A second click inside the window re-announces: the region is emptied first.
       const texts: string[] = []
@@ -138,7 +153,7 @@ describe('Contact', () => {
         characterData: true,
         subtree: true,
       })
-      await user.click(screen.getByRole('button', { name: 'Copy email' }))
+      await user.click(screen.getByRole('button', { name: 'Copied' }))
       await waitFor(() => expect(texts).toContain(''))
       await waitFor(() => expect(live).toHaveTextContent('Copied'))
 

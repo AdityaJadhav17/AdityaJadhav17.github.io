@@ -19,7 +19,7 @@ const buttonVariants = cva(
         default:
           "h-8 gap-1.5 px-2.5",
         sm: "h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] [&_svg:not([class*='size-'])]:size-3.5",
-        lg: "h-9 gap-1.5 px-2.5",
+        lg: "h-10 gap-1.5 px-2.5",
         icon: "size-8 pointer-coarse:min-w-11",
         "icon-sm":
           "size-7 pointer-coarse:min-w-11 rounded-[min(var(--radius-md),12px)]",
