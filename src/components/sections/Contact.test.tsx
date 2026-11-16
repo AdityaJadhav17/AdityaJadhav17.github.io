@@ -101,7 +101,7 @@ describe('Contact', () => {
     await user.type(screen.getByLabelText(/email/i), ' a@b.co ')
     await user.type(screen.getByLabelText(/message/i), 'Hello there')
     await user.click(screen.getByRole('button', { name: /send/i }))
-    await waitFor(() => expect(screen.getByRole('status')).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/Sent/))
     expect(JSON.parse(fetchMock.mock.calls[0][1].body).email).toBe('a@b.co')
   })
 
