@@ -72,7 +72,8 @@ export function Contact() {
     formRef.current!.noValidate = true
   }, [])
 
-  // "Copy email": the button's name never changes; the live region speaks.
+  // "Copy email": the label swaps to "Copied" for the 2 s window and the live
+  // region speaks too.
   // Without the clipboard API (or when it refuses), select the address so
   // Ctrl/Cmd+C works and say so.
   const addressRef = useRef<HTMLSpanElement>(null)
@@ -112,7 +113,14 @@ export function Contact() {
     e.preventDefault()
     setResult(null)
 
-    const nextErrors = validate(values)
+    // Trim once, here, not per keystroke (that would block typing spaces in
+    // the message). Validate and send the trimmed values.
+    const trimmed: FormValues = {
+      name: values.name.trim(),
+      email: values.email.trim(),
+      message: values.message.trim(),
+    }
+    const nextErrors = validate(trimmed)
     setErrors(nextErrors)
 
     const firstInvalid = FIELD_ORDER.find((field) => nextErrors[field])
@@ -140,7 +148,7 @@ export function Contact() {
       const res = await fetch(FORMSPREE_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...values, _gotcha: '' }),
+        body: JSON.stringify({ ...trimmed, _gotcha: '' }),
       })
       if (!res.ok) throw new Error('Form submission failed')
       setResult('success')
@@ -268,13 +276,18 @@ export function Contact() {
                 )}
               </div>
 
-              <Button type="submit" disabled={submitting}>
+              <Button type="submit" size="lg" disabled={submitting}>
                 {submitting && <Loader2 aria-hidden="true" className="size-4 animate-spin" />}
                 {submitting ? 'Sending…' : 'Send message'}
               </Button>
 
               {result === 'success' && (
-                <p role="status" aria-live="polite" className="text-sm text-foreground">
+                <p
+                  role="status"
+                  aria-live="polite"
+                  className="flex items-start gap-2 rounded-md border border-border bg-muted p-4 text-base font-medium text-foreground"
+                >
+                  <Check aria-hidden="true" className="mt-0.5 size-5 shrink-0" />
                   Sent. I&apos;ll reply to the email address you entered.
                 </p>
               )}
@@ -302,7 +315,22 @@ export function Contact() {
                   ) : (
                     <Copy aria-hidden="true" className="size-4" />
                   )}
-                  Copy email
+                  {/* Both labels share one grid cell so the button keeps the
+                      wider label's width and nothing shifts on swap. */}
+                  <span className="grid">
+                    <span
+                      className={`col-start-1 row-start-1 ${announcement === 'Copied' ? 'invisible' : ''}`}
+                      aria-hidden={announcement === 'Copied' || undefined}
+                    >
+                      Copy email
+                    </span>
+                    <span
+                      className={`col-start-1 row-start-1 ${announcement === 'Copied' ? '' : 'invisible'}`}
+                      aria-hidden={announcement !== 'Copied' || undefined}
+                    >
+                      Copied
+                    </span>
+                  </span>
                 </Button>
                 <span aria-live="polite" className="sr-only">
                   {announcement}

@@ -44,7 +44,8 @@ test('copy email is as tall as the contact buttons', async ({ page }, testInfo) 
   const heights = await page.evaluate(() =>
     [...document.querySelectorAll('#contact .flex-wrap button, #contact .flex-wrap a')]
       .filter((el) => !el.closest('form') && el.textContent)
-      .map((el) => [el.textContent!.trim(), el.getBoundingClientRect().height]),
+      // innerText, not textContent: the copy button also holds its hidden "Copied" label.
+      .map((el) => [(el as HTMLElement).innerText.trim(), el.getBoundingClientRect().height]),
   )
   expect(heights.map(([name]) => name)).toEqual(['Copy email', 'Email', 'GitHub', 'LinkedIn'])
   expect(new Set(heights.map(([, h]) => h)).size, JSON.stringify(heights)).toBe(1)

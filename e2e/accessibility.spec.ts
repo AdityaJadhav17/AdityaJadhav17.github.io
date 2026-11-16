@@ -79,7 +79,7 @@ async function sampleRevealEntrance(page: Page) {
     const samples: string[] = []
 
     wrapper.scrollIntoView()
-    // 45 frames is roughly 750ms at 60fps, comfortably past the 500ms
+    // 45 frames is roughly 750ms at 60fps, comfortably past the 350ms
     // reveal, so the entrance is fully covered and settled by the end.
     // scrollIntoView() itself inherits the page's CSS scroll-behavior,
     // which is smooth without a motion preference and forced instant under
