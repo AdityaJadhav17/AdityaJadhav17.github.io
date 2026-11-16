@@ -10,8 +10,8 @@ type ProjectCardProps = {
   // 'stacked' is the grid card: poster above the text, inside a bordered card.
   // 'wide' is the featured treatment from md up: no card chrome at all, the
   // poster at 45% of the container width with the text beside it. Below md it
-  // is the same carded, stacked card as every grid card, so a phone sees one
-  // treatment. The hierarchy between featured and grid reads from layout, not
+  // is a carded, stacked card that keeps its poster; grid cards drop theirs
+  // there. The hierarchy between featured and grid reads from layout, not
   // from a heavier border or shadow.
   layout?: 'stacked' | 'wide'
   // The project's own page, when it has one: the title and a "Case study" link go there.
@@ -104,8 +104,10 @@ export function ProjectCard({ project, className, layout = 'stacked', pageHref }
           // Grid cards: the padding and muted ground frame the screenshot as
           // an artefact instead of a white slab running edge to edge.
           // Featured: from md the image stands alone at 45% width.
+          // Grid cards: below md the poster is display:none (text-only), so a
+          // phone does not scroll past four more screenshots; lazy images in it never load.
           'shrink-0 border-b border-border bg-muted p-3',
-          isWide && 'md:w-[45%] md:border-0 md:bg-transparent md:p-0',
+          isWide ? 'md:w-[45%] md:border-0 md:bg-transparent md:p-0' : 'hidden md:block',
         )}
       >
         {project.chart ? (

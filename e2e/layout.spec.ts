@@ -31,9 +31,11 @@ for (const width of [390, 768, 1440]) {
 // 390 cap allows for the featured cards' phone chrome and 4:3 posters.
 // Raised for the eighth project (two grid cards: Bayt Qareeb, Stockroom moved
 // out of the featured rows) from measured 7143 and 11190 at the time.
+// Then: taller contact inputs and message box (7183 at 1440), and grid cards
+// lost their posters below md (10433 at 390), so the phone cap came down.
 for (const [width, height, max] of [
-  [1440, 900, 7200],
-  [390, 844, 11300],
+  [1440, 900, 7250],
+  [390, 844, 10600],
 ] as const) {
   test(`page stays under ${max}px tall at ${width}px with details closed`, async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
@@ -208,7 +210,7 @@ test('hero stats link to their sources', async ({ page }, testInfo) => {
   await page.goto('/')
   const targets = [
     [/11 engineers led on WatchTower/, '#project-watchtower', true],
-    [/15 to 20 min task cut/, '#experience-lumulus', false],
+    [/Under 5 min for a 15 to 20 min task/, '#experience-lumulus', false],
     [/0\.9175 mAP, Kaggle sim-to-real detection/, '#project-sim2real', true],
   ] as const
   for (const [name, hash, hasDetails] of targets) {
@@ -350,7 +352,8 @@ for (const hash of ['work', 'main']) {
 }
 
 // The name sits at the left of the header at every width and never overlaps
-// the theme or menu buttons.
+// the theme or menu buttons. From md the centred nav sits between the name
+// and the header's résumé download without touching either.
 for (const width of [320, 390, 768, 1440]) {
   test(`header name clears the buttons at ${width}px`, async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'chromium', 'Chromium only')
@@ -364,6 +367,12 @@ for (const width of [320, 390, 768, 1440]) {
     )
     expect(buttons.length).toBeGreaterThan(0)
     expect(nameBox.x + nameBox.width).toBeLessThanOrEqual(Math.min(...buttons) - 4)
+    if (width >= 768) {
+      const nav = (await page.locator('header nav[aria-label="Primary"]').boundingBox())!
+      const resume = (await page.locator('header a[download]:visible').boundingBox())!
+      expect(nameBox.x + nameBox.width).toBeLessThanOrEqual(nav.x - 16)
+      expect(nav.x + nav.width).toBeLessThanOrEqual(resume.x - 16)
+    }
   })
 }
 
